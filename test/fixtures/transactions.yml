@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  transaction_source_type: MyString
+  transaction_source_id: 1
+  account_type: MyString
+  store_id: 1
+  comment: MyText
+  sn: MyString
+  money: 1.5
+  money_sign: MyString
+
+two:
+  transaction_source_type: MyString
+  transaction_source_id: 1
+  account_type: MyString
+  store_id: 1
+  comment: MyText
+  sn: MyString
+  money: 1.5
+  money_sign: MyString
