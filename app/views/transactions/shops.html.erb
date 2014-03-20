@@ -1,0 +1,21 @@
+<h1>Listing shops</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>id</th>
+      <th>name</th>
+      <th>identity_no</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @shops.each do |shop| %>
+      <tr>
+        <td><%= shop.manufacturer_id %></td>
+        <td><%= link_to shop.name, action: :shop, id: shop.id %></td>
+        <td><%= shop.identity_no %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

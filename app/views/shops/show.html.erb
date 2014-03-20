@@ -1,0 +1,77 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+	<strong>Name:</strong>
+	<%= @shop.name %>
+</p>
+
+<p>
+	<strong>Image:</strong>
+	<%= @shop.image %>
+	<img src='<%="#{MEIDIA_SERVER}/#{BUCKET_NAME}/#{SHOP_FOLDER}#{@shop.manufacturer_id}/usr-#{@shop.manufacturer_id}.jpg"%>' />
+	<img src='<%="#{MEIDIA_SERVER}/#{BUCKET_NAME}/#{SHOP_FOLDER}#{@shop.manufacturer_id}/sfz-#{@shop.manufacturer_id}.jpg"%>' />
+	<img src='<%="#{MEIDIA_SERVER}/#{BUCKET_NAME}/#{SHOP_FOLDER}#{@shop.manufacturer_id}/sfz_cp_#{@shop.manufacturer_id}_1.jpg"%>' />
+	<img src='<%="#{MEIDIA_SERVER}/#{BUCKET_NAME}/#{SHOP_FOLDER}#{@shop.manufacturer_id}/sfz_cp_#{@shop.manufacturer_id}_2.jpg"%>' />
+</p>
+
+<p>
+	<strong>Identity no:</strong>
+	<%= @shop.identity_no %>
+</p>
+
+<p>
+	<strong>Business rego no:</strong>
+	<%= @shop.business_rego_no %>
+</p>
+
+<p>
+	<strong>Business name:</strong>
+	<%= @shop.business_name %>
+</p>
+
+<p>
+	<strong>Organization no:</strong>
+	<%= @shop.organization_no %>
+</p>
+
+<p>
+	<strong>Register type:</strong>
+	<%= @shop.register_type %>
+</p>
+
+<p>
+	<strong>Shipping option:</strong>
+	<%= @shop.shipping_option_id %>
+</p>
+
+<% if @shop.close? %>
+<a class="closed" data-id="<%= @shop.manufacturer_id %>">Allow</a>
+<% else %>
+<a class="allowed" data-id="<%= @shop.manufacturer_id %>">Close</a>
+<% end %>
+
+<script type="text/javascript">
+
+$('.allowed').bind('click', function(){
+	var id = $(this).data('id');
+	$.ajax({
+		url: '/shops/close',
+		data: {id: id},
+		dataType: 'json'
+	}).done(function(){
+		window.location.reload();
+	});
+});
+
+$('.closed').bind('click', function(){
+	var id = $(this).data('id');
+	$.ajax({
+		url: '/shops/allow',
+		data: {id: id},
+		dataType: 'json'
+	}).done(function(){
+		window.location.reload();
+	});
+});
+
+</script>

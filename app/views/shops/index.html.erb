@@ -1,0 +1,79 @@
+<h1>Listing shops</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>ID</th>
+      <th>Name</th>
+      <th>Image</th>
+      <th>Identity no</th>
+      <th>Business rego no</th>
+      <th>企业名称</th>
+      <th>组织机构代码</th>
+      <th>Register type</th>
+      <th>Shipping option</th>
+      <th>Date Added</th>
+      <th>状态</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @shops.each do |shop| %>
+      <tr>
+		  	<td><%= shop.manufacturer_id %></td>
+        <td><%= shop.name %></td>
+        <td><%= shop.image %></td>
+        <td><%= shop.identity_no %></td>
+        <td><%= shop.business_rego_no %></td>
+        <td><%= shop.business_name %></td>
+        <td><%= shop.organization_no %></td>
+        <td><%= shop.register_type %></td>
+        <td><%= shop.shipping_option_id %></td>
+				<td><%= shop.date_added.strftime('%Y-%m-%d') %></td>
+        <td><%= shop.status %></td>
+        <td><%= link_to 'Show', shop %></td>
+        <td><%#= link_to 'Edit', edit_shop_path(shop) %></td>
+        <td>
+					<% if shop.close? %>
+						<a class="closed" data-id="<%= shop.manufacturer_id %>">Allow</a>
+					<% else %>
+						<a class="allowed" data-id="<%= shop.manufacturer_id %>">Close</a>
+					<% end %>
+					<%#= link_to 'Destroy', shop, method: :delete, data: { confirm: 'Are you sure?' } %>
+				</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= will_paginate @shops %>
+
+<script type="text/javascript">
+
+$('.allowed').bind('click', function(){
+	var id = $(this).data('id');
+	$.ajax({
+		url: '/shops/close',
+		data: {id: id},
+		dataType: 'json'
+	}).done(function(){
+		window.location.reload();
+	});
+});
+
+$('.closed').bind('click', function(){
+	var id = $(this).data('id');
+	$.ajax({
+		url: '/shops/allow',
+		data: {id: id},
+		dataType: 'json'
+	}).done(function(){
+		window.location.reload();
+	});
+});
+
+</script>

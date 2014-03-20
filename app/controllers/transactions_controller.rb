@@ -1,10 +1,10 @@
 class TransactionsController < ApplicationController
-  before_action :set_transaction, only: [:show, :edit, :update, :destroy]
+  before_action :set_transaction, only: [:show, :edit, :update, :destroy, :pay]
 
   # GET /transactions
   # GET /transactions.json
   def index
-    @transactions = Transaction.all
+    @transactions = Transaction.paginate page: params[:page], per_page: 20
   end
 
   # GET /transactions/1
@@ -12,30 +12,50 @@ class TransactionsController < ApplicationController
   def show
   end
 
-  # # GET /transactions/new
-  # def new
-  #   @transaction = Transaction.new
-  # end
-
   # GET /transactions/1/edit
   def edit
   end
+  
+  def shops
+    @shops = Shop.paginate page: params[:page], per_page: 20, order: 'manufacturer_id DESC'
+  end
+  
+  def paid_with_shop
+    @transactions = Transaction.where(store_id: params[:id], status: 'Paid').paginate page: params[:page], per_page: 20
+    render :index
+  end
+  
+  def unpaid_with_shop
+    @transactions = Transaction.where(store_id: params[:id], status: 'Unpaid').paginate page: params[:page], per_page: 20
+    render :index
+  end
+  
+  def shop
+    @transactions = Transaction.where(store_id: params[:id]).paginate page: params[:page], per_page: 20
+    render :index
+  end
+  
+  def pay
+    respond_to do |format|
+      if @transaction.pay
+        format.html { render text: 'SUCCESS' }
+        format.json { render json: true.to_json }
+      else
+        format.json { render json: @transaction.errors, status: :unprocessable_entity }
+      end
+    end
+  end
 
-  # # POST /transactions
-  # # POST /transactions.json
-  # def create
-  #   @transaction = Transaction.new(transaction_params)
-  # 
-  #   respond_to do |format|
-  #     if @transaction.save
-  #       format.html { redirect_to @transaction, notice: 'Transaction was successfully created.' }
-  #       format.json { render action: 'show', status: :created, location: @transaction }
-  #     else
-  #       format.html { render action: 'new' }
-  #       format.json { render json: @transaction.errors, status: :unprocessable_entity }
-  #     end
-  #   end
-  # end
+  def unpay
+    respond_to do |format|
+      if @transaction.unpay
+        format.html { render text: 'SUCCESS' }
+        format.json { render json: true.to_json }
+      else
+        format.json { render json: @transaction.errors, status: :unprocessable_entity }
+      end
+    end
+  end
 
   # PATCH/PUT /transactions/1
   # PATCH/PUT /transactions/1.json
