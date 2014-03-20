@@ -31,6 +31,10 @@ class User < ActiveRecord::Base
   has_one :seller_payment
   has_many :transactions, foreign_key: 'store_id'
   
+  has_many :receivables_list, foreign_key: 'receiver_id', class_name: 'Transaction', as: :receiver
+  
+  has_many :pay_list, foreign_key: 'sender_id', class_name: 'Transaction', as: :sender
+  
   
   def set_token
     self.token = Digest::SHA2.hexdigest "#{username}-#{lastvisitDate.to_i}"

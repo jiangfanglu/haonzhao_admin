@@ -17,6 +17,8 @@ class Customer < ActiveRecord::Base
   # has_one :city, foreign_key: 'city', class_name: 'City', through: :address
   # has_one :suburb, through: :address
   
+  has_many :pay_list, foreign_key: 'sender_id', class_name: 'Transaction', as: :sender
+  
   has_many :orders
 
   def initialize args={}

@@ -8,11 +8,21 @@ class TransactionObserver < ActiveRecord::Observer
   
   private
   def unactivate_fees_for transaction
-    Transaction.update_all("status = 'Activated'",transaction_source_type: 'Fee', transaction_source_id: transaction.transaction_source_id, store_id: transaction.store_id)
+    Transaction.update_all("status = 'Paid'",
+    transaction_source_type: 'Fee',
+    transaction_source_id: transaction.transaction_source_id,
+    sender_type: 'hnz',
+    receiver: transaction.sender
+    )
   end
   
   def activate_fees_for transaction
-    Transaction.update_all("status = 'Unactivated'",transaction_source_type: 'Fee', transaction_source_id: transaction.transaction_source_id, store_id: transaction.store_id)
+    Transaction.update_all("status = 'Unpaid'",
+    transaction_source_type: 'Fee',
+    transaction_source_id: transaction.transaction_source_id,
+    sender_type: 'hnz',
+    receiver: transaction.sender
+    )
   end
   
 end
