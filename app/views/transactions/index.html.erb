@@ -3,10 +3,12 @@
 <table>
   <thead>
     <tr>
-      <th>Transaction source type</th>
-      <th>Transaction source</th>
+      <th>ID</th>
+      <th>来源</th>
+      <th>来源ID</th>
       <th>Account type</th>
-      <th>Store</th>
+			<th>付款人</th>
+			<th>收款人</th>
       <th>Comment</th>
       <th>Sn</th>
       <th>Money</th>
@@ -21,10 +23,18 @@
   <tbody>
     <% @transactions.each do |transaction| %>
       <tr>
+				<td><%= transaction.id %></td>
         <td><%= transaction.transaction_source_type %></td>
         <td><%= transaction.transaction_source_id %></td>
         <td><%= transaction.account_type %></td>
-        <td><%= transaction.store_id %></td>
+				<td>
+					<%= transaction.sender_type %>
+					<%= " : " + transaction.sender.name if transaction.sender %>
+				</td>
+				<td>
+					<%= transaction.receiver_type %>
+					<%= " : " + transaction.receiver.name if transaction.receiver %>
+				</td>
         <td><%= transaction.comment %></td>
         <td><%= transaction.sn %></td>
         <td><%= transaction.money %></td>
@@ -34,12 +44,13 @@
         <td><%= link_to 'Edit', edit_transaction_path(transaction) %></td>
         <td>
 					<!-- <a href='/transactions/pay?id=<%= transaction.id %>'>Pay</a> -->
-					<% if transaction.paid? %>
-						<a class="paid" data-id="<%= transaction.id %>">Upaid</a>
-					<% else %>
-						<a class="unpaid" data-id="<%= transaction.id %>">paid</a>
+					<% unless transaction.fee? %>
+						<% if transaction.paid? %>
+							<a class="paid" data-id="<%= transaction.id %>">Upaid</a>
+						<% else %>
+							<a class="unpaid" data-id="<%= transaction.id %>">paid</a>
+						<% end %>
 					<% end %>
-					
 			<%#= link_to 'Destroy', transaction, method: :delete, data: { confirm: 'Are you sure?' } %>
 		</td>
       </tr>

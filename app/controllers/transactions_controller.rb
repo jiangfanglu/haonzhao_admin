@@ -4,7 +4,7 @@ class TransactionsController < ApplicationController
   # GET /transactions
   # GET /transactions.json
   def index
-    @transactions = Transaction.where("status <> 'Unactivated'").paginate page: params[:page], per_page: 20
+    @transactions = Transaction.all.paginate page: params[:page], per_page: 20, order: 'transaction_source_id, created_at DESC'
   end
 
   # GET /transactions/1
@@ -21,17 +21,17 @@ class TransactionsController < ApplicationController
   end
   
   def paid_with_shop
-    @transactions = Transaction.where(store_id: params[:id], status: 'Paid').paginate page: params[:page], per_page: 20
+    @transactions = Transaction.paid_with_shop(params[:id]).paginate page: params[:page], per_page: 20, order: 'transaction_source_id, created_at DESC'
     render :index
   end
   
   def unpaid_with_shop
-    @transactions = Transaction.where(store_id: params[:id], status: 'Unpaid').paginate page: params[:page], per_page: 20
+    @transactions = Transaction.unpaid_with_shop(params[:id]).paginate page: params[:page], per_page: 20, order: 'transaction_source_id, created_at DESC'
     render :index
   end
   
   def shop
-    @transactions = Transaction.where("status <> 'Unactivated' AND store_id = ?", params[:id]).paginate page: params[:page], per_page: 20
+    @transactions = Transaction.by_user(params[:id]).paginate page: params[:page], per_page: 20, order: 'transaction_source_id, created_at DESC'
     render :index
   end
   
