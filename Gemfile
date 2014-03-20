@@ -9,6 +9,8 @@ gem 'mysql2'
 gem 'will_paginate'
 gem 'aliyun-oss'
 
+gem 'rails-observers'
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
 

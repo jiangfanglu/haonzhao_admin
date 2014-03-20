@@ -6,6 +6,10 @@ class Transaction < ActiveRecord::Base
     update_attribute :status, 'Paid'
   end
   
+  def fee?
+    
+  end
+  
   def paid?
     status == 'Paid'
   end

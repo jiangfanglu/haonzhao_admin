@@ -1,10 +1,10 @@
 class TransactionsController < ApplicationController
-  before_action :set_transaction, only: [:show, :edit, :update, :destroy, :pay]
+  before_action :set_transaction, only: [:show, :edit, :update, :pay, :unpay]
 
   # GET /transactions
   # GET /transactions.json
   def index
-    @transactions = Transaction.paginate page: params[:page], per_page: 20
+    @transactions = Transaction.where("status <> 'Unactivated'").paginate page: params[:page], per_page: 20
   end
 
   # GET /transactions/1
@@ -31,7 +31,7 @@ class TransactionsController < ApplicationController
   end
   
   def shop
-    @transactions = Transaction.where(store_id: params[:id]).paginate page: params[:page], per_page: 20
+    @transactions = Transaction.where("status <> 'Unactivated' AND store_id = ?", params[:id]).paginate page: params[:page], per_page: 20
     render :index
   end
   
@@ -71,15 +71,6 @@ class TransactionsController < ApplicationController
     end
   end
 
-  # DELETE /transactions/1
-  # DELETE /transactions/1.json
-  def destroy
-    @transaction.destroy
-    respond_to do |format|
-      format.html { redirect_to transactions_url }
-      format.json { head :no_content }
-    end
-  end
 
   private
     # Use callbacks to share common setup or constraints between actions.

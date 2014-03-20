@@ -35,9 +35,9 @@
         <td>
 					<!-- <a href='/transactions/pay?id=<%= transaction.id %>'>Pay</a> -->
 					<% if transaction.paid? %>
-						<a class="" data-id="<%= transaction.id %>"></a>
+						<a class="paid" data-id="<%= transaction.id %>">Upaid</a>
 					<% else %>
-						<a class="" data-id="<%= transaction.id %>"></a>
+						<a class="unpaid" data-id="<%= transaction.id %>">paid</a>
 					<% end %>
 					
 			<%#= link_to 'Destroy', transaction, method: :delete, data: { confirm: 'Are you sure?' } %>
@@ -50,3 +50,29 @@
 <br>
 
 <%= will_paginate @transactions %>
+
+<script type="text/javascript">
+
+$('.paid').bind('click', function(){
+	var id = $(this).data('id');
+	$.ajax({
+		url: '/transactions/unpay',
+		data: {id: id},
+		dataType: 'json'
+	}).done(function(){
+		window.location.reload();
+	});
+});
+
+$('.unpaid').bind('click', function(){
+	var id = $(this).data('id');
+	$.ajax({
+		url: '/transactions/pay',
+		data: {id: id},
+		dataType: 'json'
+	}).done(function(){
+		window.location.reload();
+	});
+});
+
+</script>

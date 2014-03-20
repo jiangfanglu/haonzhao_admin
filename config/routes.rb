@@ -9,7 +9,7 @@ HaonzhaoAdmin::Application.routes.draw do
   resources :transactions do
     
     collection do
-      get :shop, :shops, :pay, :paid_with_shop, :unpaid_with_shop
+      get :shop, :shops, :pay, :unpay, :paid_with_shop, :unpaid_with_shop
     end
   end
 
