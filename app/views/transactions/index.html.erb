@@ -40,15 +40,15 @@
         <td><%= transaction.money %></td>
         <td><%= transaction.money_sign %></td>
         <td><%= transaction.status %></td>
-        <td><%= link_to 'Show', transaction %></td>
-        <td><%= link_to 'Edit', edit_transaction_path(transaction) %></td>
+        <td><%= link_to '查看', transaction %></td>
+        <td><%= link_to '编辑', edit_transaction_path(transaction) %></td>
         <td>
 					<!-- <a href='/transactions/pay?id=<%= transaction.id %>'>Pay</a> -->
 					<% unless transaction.fee? %>
 						<% if transaction.paid? %>
-							<a class="paid" data-id="<%= transaction.id %>">Upaid</a>
+							<a class="paid btn btn-default" data-id="<%= transaction.id %>">拒付</a>
 						<% else %>
-							<a class="unpaid" data-id="<%= transaction.id %>">paid</a>
+							<a class="unpaid btn btn-default" data-id="<%= transaction.id %>">支付</a>
 						<% end %>
 					<% end %>
 			<%#= link_to 'Destroy', transaction, method: :delete, data: { confirm: 'Are you sure?' } %>
@@ -66,24 +66,30 @@
 
 $('.paid').bind('click', function(){
 	var id = $(this).data('id');
-	$.ajax({
-		url: '/transactions/unpay',
-		data: {id: id},
-		dataType: 'json'
-	}).done(function(){
-		window.location.reload();
-	});
+	var answer = window.confirm('确认拒付 ?');
+	if(answer == true){
+		$.ajax({
+			url: '/transactions/unpay',
+			data: {id: id},
+			dataType: 'json'
+		}).done(function(){
+			window.location.reload();
+		});
+	}
 });
 
 $('.unpaid').bind('click', function(){
 	var id = $(this).data('id');
-	$.ajax({
-		url: '/transactions/pay',
-		data: {id: id},
-		dataType: 'json'
-	}).done(function(){
-		window.location.reload();
-	});
+	var answer = window.confirm('确认支付 ?');
+	if(answer == true){
+		$.ajax({
+			url: '/transactions/pay',
+			data: {id: id},
+			dataType: 'json'
+		}).done(function(){
+			window.location.reload();
+		});
+	}
 });
 
 </script>
