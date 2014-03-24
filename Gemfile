@@ -6,12 +6,16 @@ gem 'rails', '4.0.3'
 # Use mysql as the database for Active Record
 gem 'mysql2'
 
+gem 'thin'
+
 gem 'will_paginate'
 gem 'aliyun-oss'
 
 gem 'activerecord-session_store'
 
 gem 'protected_attributes'
+
+gem 'therubyracer'
 
 gem 'rails-i18n', '~> 4.0.0' 
 

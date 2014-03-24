@@ -14,28 +14,25 @@
 ActiveRecord::Schema.define(version: 20140324080513) do
 
   create_table "admins", force: true do |t|
-    t.string    "name",                      default: "",                    null: false
-    t.string    "username",      limit: 150, default: "",                    null: false
-    t.string    "email",         limit: 100, default: "",                    null: false
-    t.string    "password",      limit: 100, default: "",                    null: false
-    t.integer   "block",         limit: 1,   default: 0,                     null: false
-    t.integer   "sendEmail",     limit: 1,   default: 0
-    t.timestamp "registerDate",              default: '2014-02-01 00:00:00', null: false
-    t.timestamp "lastvisitDate",             default: '2014-02-01 00:00:00', null: false
-    t.string    "activation",    limit: 100, default: "",                    null: false
-    t.text      "params",                                                    null: false
-    t.timestamp "lastResetTime",             default: '2014-02-01 00:00:00', null: false
-    t.integer   "resetCount",                default: 0,                     null: false
-    t.string    "usertype",      limit: 45,                                  null: false
-    t.integer   "thumbnail",                 default: 0
-    t.string    "token"
-    t.string    "salt"
+    t.string   "name"
+    t.string   "username"
+    t.string   "email"
+    t.string   "password"
+    t.string   "activation"
+    t.string   "usertype"
+    t.string   "token"
+    t.string   "salt"
+    t.integer  "block"
+    t.integer  "sendEmail"
+    t.integer  "resetCount"
+    t.integer  "thumbnail"
+    t.datetime "registerDate"
+    t.datetime "lastvisitDate"
+    t.datetime "lastResetTime"
+    t.text     "params"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
-
-  add_index "admins", ["block"], name: "idx_block", using: :btree
-  add_index "admins", ["email"], name: "email", using: :btree
-  add_index "admins", ["name"], name: "idx_name", using: :btree
-  add_index "admins", ["username"], name: "username", using: :btree
 
   create_table "sessions", force: true do |t|
     t.string   "session_id", null: false
