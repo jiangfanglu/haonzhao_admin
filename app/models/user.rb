@@ -1,5 +1,6 @@
 #encoding: utf-8
 class User < ActiveRecord::Base
+  establish_connection :haonzhao
   self.table_name = 'z2act_users'
   
   #attr_accessible :name, :email, :id

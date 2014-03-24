@@ -1,7 +1,8 @@
 class Transaction < ActiveRecord::Base
+  establish_connection :haonzhao
     
-  belongs_to :sender, :polymorphic => true 
-  belongs_to :receiver, :polymorphic => true 
+  belongs_to :sender, polymorphic: true 
+  belongs_to :receiver, polymorphic: true 
   
   scope :by_user, lambda {|user_id|{
     conditions: ["(receiver_id = ? AND receiver_type = 'User') OR (sender_id = ? AND sender_type = 'User')", user_id, user_id]

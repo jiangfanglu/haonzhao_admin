@@ -9,6 +9,10 @@ gem 'mysql2'
 gem 'will_paginate'
 gem 'aliyun-oss'
 
+gem 'activerecord-session_store'
+
+gem 'protected_attributes'
+
 gem 'rails-i18n', '~> 4.0.0' 
 
 gem 'rails-observers'

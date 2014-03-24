@@ -1,5 +1,6 @@
 class Shop < ActiveRecord::Base
   # attr_accessible :title, :body
+  establish_connection :haonzhao
   validates :manufacturer_id, :identity_no, :name, :register_type, presence: true
   validates :manufacturer_id, uniqueness: true
   self.table_name = 'oc_manufacturer'

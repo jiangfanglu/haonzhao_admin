@@ -1,5 +1,6 @@
 require 'application_helper'
 class Customer < ActiveRecord::Base
+  establish_connection :haonzhao
   include ApplicationHelper
   attr_accessible :email, :firstname, :ip
   self.table_name = 'oc_customer'

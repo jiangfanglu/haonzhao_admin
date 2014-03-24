@@ -2,7 +2,8 @@ HaonzhaoAdmin::Application.routes.draw do
   resources :shops do
     
     collection do
-      get :close, :allow
+      get :close, :allow, :login
+      post :login_check
     end
   end
 

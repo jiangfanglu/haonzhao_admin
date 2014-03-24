@@ -1,4 +1,5 @@
 class Fee < ActiveRecord::Base
+  establish_connection :haonzhao
   attr_accessible :fee_type, :rate, :service_type
   
   has_many :services

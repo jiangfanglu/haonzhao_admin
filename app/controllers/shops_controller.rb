@@ -1,5 +1,7 @@
 class ShopsController < ApplicationController
+  include ApplicationHelper
   before_action :set_shop, only: [:show, :edit, :update, :destroy, :close, :allow]
+  skip_before_filter :login?, only: [:login, :login_check]
 
   # GET /shops
   # GET /shops.json
@@ -14,6 +16,18 @@ class ShopsController < ApplicationController
 
   # GET /shops/1/edit
   def edit
+  end
+  
+  def login
+    @admin = Admin.new
+  end
+  
+  def login_check
+    @user = Admin.find_by_email params[:admin][:email]
+    url = {action: :index}
+    authenticate(@user, params[:admin][:password]) ? session[:user] = @user.id : url = {action: :login}
+    
+    redirect_to url
   end
   
   def close

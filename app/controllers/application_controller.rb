@@ -3,7 +3,9 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
   
-  before_filter :aliyunoss_authenticate
+  before_filter :aliyunoss_authenticate, :login?
+  
+  helper_method :current_user
   
   #require "aliyun-oss"
 
@@ -19,5 +21,10 @@ class ApplicationController < ActionController::Base
     #   :secret_access_key => "e8iglZEc1rKeIv3KbepxnvftGoY7Q7"
     # )
   end
+  
+  def login?
+    return redirect_to controller: :shops, action: :login unless current_user
+  end
+  
   
 end
