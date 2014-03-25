@@ -1,5 +1,5 @@
 class ShopsController < ApplicationController
-  include ApplicationHelper
+  # include ApplicationHelper
   before_action :set_shop, only: [:show, :edit, :update, :destroy, :close, :allow]
   skip_before_filter :login?, only: [:login, :login_check]
 
