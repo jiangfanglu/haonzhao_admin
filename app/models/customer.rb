@@ -55,4 +55,8 @@ class Customer < ActiveRecord::Base
     !user_id.blank?
   end
   
+  def name
+    firstname
+  end
+  
 end

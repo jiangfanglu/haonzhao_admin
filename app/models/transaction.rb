@@ -19,17 +19,21 @@ class Transaction < ActiveRecord::Base
   def pay
     update_attribute :status, 'Paid'
   end
+
+  def unpay
+    update_attribute :status, 'Unpaid'
+  end
   
   def fee?
     transaction_source_type == 'Fee'
   end
   
+  def order?
+    transaction_source_type == 'Order'
+  end
+  
   def paid?
     status == 'Paid'
-  end
-
-  def unpay
-    update_attribute :status, 'Unpaid'
   end
 
   

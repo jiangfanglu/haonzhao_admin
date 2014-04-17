@@ -6,7 +6,8 @@ class Shop < ActiveRecord::Base
   self.table_name = 'oc_manufacturer'
   
   has_many :transactions, foreign_key: "store_id"
-
+  
+  scope :transact, -> { joins('INNER JOIN (transactions) ON (transactions.receiver_id = oc_manufacturer.manufacturer_id AND transactions.transaction_source_type = "Order")').where('transactions.status = "Paid" AND transactions.receiver_type = "User"').order('transactions.created_at DESC').group('oc_manufacturer.manufacturer_id') } 
 
   def close
     update_attribute :status, 'Closed'
@@ -19,5 +20,5 @@ class Shop < ActiveRecord::Base
   def allow
     update_attribute :status, 'Allowed'
   end
-  
+    
 end

@@ -1,6 +1,13 @@
 HaonzhaoAdmin::Application.routes.draw do
+
+  resources :transact do
+    collection do
+      
+    end
+  end
+
+
   resources :shops do
-    
     collection do
       get :close, :allow, :login
       post :login_check
