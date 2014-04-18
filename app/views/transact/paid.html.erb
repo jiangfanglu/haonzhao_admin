@@ -1,3 +1,6 @@
 <%= render partial: 'show' %>
 
-<>
+<%#= link_to '结算',  %>
+<a href='/transact/create_settlement?ids=<%= @transactions.collect{|tran|tran.id}.join('_') %>'>
+	结算
+</a>

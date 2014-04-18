@@ -8,6 +8,9 @@
 	<% @transactions.each do |transaction| %>
 	<tr>
 		<td>
+			<%= transaction.id %>
+		</td>
+		<td>
 			<%= transaction.transaction_source_type %>
 		</td>
 		<td>
