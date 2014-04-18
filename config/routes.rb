@@ -2,7 +2,7 @@ HaonzhaoAdmin::Application.routes.draw do
 
   resources :transact do
     collection do
-      
+      get :paid_by_shop, :unpaid_by_shop
     end
   end
 

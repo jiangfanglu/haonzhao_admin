@@ -1,7 +1,14 @@
 class TransactionObserver < ActiveRecord::Observer
   
   def after_update transaction
-    transaction.paid? ? activate_fees_for(transaction) : unactivate_fees_for(transaction) if transaction.order?
+    if transaction.order?
+      case transaction.transaction_source_type
+      when 'Paid'
+        activate_fees_for(transaction)
+      when 'Unpaid'
+        unactivate_fees_for(transaction)
+      end
+    end
   end
   
   private

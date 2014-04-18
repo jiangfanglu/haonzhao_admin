@@ -1,7 +1,7 @@
 <div>
 	<% @shops.each do |shop| %>
 	<p>
-		<%= shop.name %>
+		<%= link_to shop.name, action: :show, id: shop.manufacturer_id %>
 	</p>
 	<% end %>
 </div>

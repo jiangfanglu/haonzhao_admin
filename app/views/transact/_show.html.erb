@@ -1,0 +1,34 @@
+<h1><%= @shop.name %></h1>
+
+<%= link_to 'Paid', action: :paid_by_shop, id: @shop.id %>
+<%= link_to 'Unpaid', action: :unpaid_by_shop, id: @shop.id %>
+
+
+<table>
+	<% @transactions.each do |transaction| %>
+	<tr>
+		<td>
+			<%= transaction.transaction_source_type %>
+		</td>
+		<td>
+			<%= transaction.transaction_source_id %>
+		</td>
+		<td>
+			<%= transaction.sn %>
+		</td>
+		<td>
+			<%= transaction.money_sign %>
+		</td>
+		<td>
+			<%= transaction.money %>
+		</td>
+		<td>
+			<%= transaction.comment %>
+		</td>
+		<td>
+			<%= transaction.status %>
+		</td>
+		
+	</tr>
+	<% end %>
+</table>
