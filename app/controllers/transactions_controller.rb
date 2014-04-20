@@ -4,7 +4,7 @@ class TransactionsController < ApplicationController
   # GET /transactions
   # GET /transactions.json
   def index
-    @transactions = Transaction.all.paginate page: params[:page], per_page: 20, order: 'created_at DESC, transaction_source_id'
+    @transactions = Transaction.paginate(page: params[:page], per_page: 20).order('created_at DESC, transaction_source_id')
   end
 
   # GET /transactions/1

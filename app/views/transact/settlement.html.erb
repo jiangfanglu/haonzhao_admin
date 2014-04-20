@@ -1,7 +1,41 @@
+<%= form_for(@settlement, url: {action: :update_settlement}) do |f| %>
+	<%= f.hidden_field :id %>
 <p>
-	<%= @settlement.title %>
+	<%= f.text_field :title %>
 </p>
 
 <p>
-	<%= @settlement.comment %>
+	<%= f.text_area :comment %>
 </p>
+
+<p>
+	<%= f.submit '提交' %>
+</p>
+
+<% end %>
+
+<div>
+	<table>
+	<% @settlement.transactions.each do |transaction| %>
+	<tr>
+				<td><%= transaction.id %></td>
+        <td><%= transaction.transaction_source_type %></td>
+        <td><%= transaction.transaction_source_id %></td>
+        <td><%= transaction.account_type %></td>
+				<td>
+					<%= transaction.sender_type %>
+					<%= " : " + transaction.sender.name if transaction.sender %>
+				</td>
+				<td>
+					<%= transaction.receiver_type %>
+					<%= " : " + transaction.receiver.name if transaction.receiver %>
+				</td>
+        <td><%= transaction.comment %></td>
+        <td><%= transaction.sn %></td>
+        <td><%= transaction.money %></td>
+        <td><%= transaction.money_sign %></td>
+        <td><%= transaction.status %></td>
+	</tr>
+	<% end %>
+</table>
+</div>

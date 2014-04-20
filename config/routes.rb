@@ -3,17 +3,17 @@ HaonzhaoAdmin::Application.routes.draw do
   resources :transact do
     collection do
       get :paid_by_shop, :unpaid_by_shop, :create_settlement, :show_settlement
+      patch :update_settlement
     end
   end
-
-
+  
   resources :shops do
     collection do
       get :close, :allow, :login
       post :login_check
     end
   end
-
+  
   resources :transactions do
     
     collection do
@@ -25,7 +25,7 @@ HaonzhaoAdmin::Application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'shops#index'
+  # root 'shops#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
