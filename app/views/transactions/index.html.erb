@@ -6,6 +6,7 @@
       <th>ID</th>
       <th>来源</th>
       <th>来源ID</th>
+			<th>相关店铺</th>
       <th>Account type</th>
 			<th>付款人</th>
 			<th>收款人</th>
@@ -14,8 +15,8 @@
       <th>Money</th>
       <th>Money sign</th>
       <th>Status</th>
-      <th></th>
-      <th></th>
+      <!-- <th></th>
+      <th></th> -->
       <th></th>
     </tr>
   </thead>
@@ -23,9 +24,10 @@
   <tbody>
     <% @transactions.each do |transaction| %>
       <tr>
-				<td><%= transaction.id %></td>
+				<td><%= link_to transaction.id, transaction %></td>
         <td><%= transaction.transaction_source_type %></td>
         <td><%= transaction.transaction_source_id %></td>
+				<td><%= transaction.order.shop.name %></td>
         <td><%= transaction.account_type %></td>
 				<td>
 					<%= transaction.sender_type %>
@@ -40,8 +42,8 @@
         <td><%= transaction.money %></td>
         <td><%= transaction.money_sign %></td>
         <td><%= transaction.status %></td>
-        <td><%= link_to '查看', transaction %></td>
-        <td><%= link_to '编辑', edit_transaction_path(transaction) %></td>
+        <!-- <td><%= link_to '查看', transaction %></td>
+        <td><%= link_to '编辑', edit_transaction_path(transaction) %></td> -->
         <td>
 					<!-- <a href='/transactions/pay?id=<%= transaction.id %>'>Pay</a> -->
 					<% unless transaction.hnz_receive? || transaction.settlement? || transaction.complete? %>
