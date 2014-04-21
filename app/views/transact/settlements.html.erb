@@ -19,7 +19,9 @@
 			<td><%= settlement.money %></td>
 			<td data-id='<%= settlement.id %>'><%= settlement.status %></td>
 			<td>
+				<% unless settlement.complete? %>
 				<button data-id='<%= settlement.id %>'>完成</button>
+				<% end %>
 			</td>
 		</tr>
 		<% end %>

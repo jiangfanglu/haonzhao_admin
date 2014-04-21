@@ -4,4 +4,9 @@ class Settlement < ActiveRecord::Base
   
   has_many :transactions
   belongs_to :shop
+  
+  def complete?
+    status == 'Complete'
+  end
+  
 end

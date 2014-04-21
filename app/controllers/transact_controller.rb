@@ -27,6 +27,7 @@ class TransactController < ApplicationController
       @settlement.money += transaction.money
       transaction.update_attribute(:status, 'Settlement')
     end
+    @settlement.shop_id = @settlement.transactions.select{|t|t.transaction_source_type == 'Order'}.first.receiver_id
     redirect_to action: :settlement, id: @settlement.id if !@settlement.transactions.blank? && @settlement.save
   end
   
