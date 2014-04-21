@@ -22,6 +22,10 @@ class Transaction < ActiveRecord::Base
   def complete
     update_attribute :status, 'Complete' if paid?
   end
+
+  def complete?
+    status == 'Complete'
+  end
   
   def fee?
     transaction_source_type == 'Fee'
@@ -35,9 +39,12 @@ class Transaction < ActiveRecord::Base
     status == 'Paid'
   end
 
-  def complete?
-    status == 'Complete'
+  def settlement?
+    status == 'Settlement'
   end
-
+  
+  def hnz_receive?
+    receiver_type == 'hnz'
+  end
   
 end

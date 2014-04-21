@@ -1,0 +1,39 @@
+<div>
+	<table>
+		<head>
+			<th>ID</th>
+			<th>Title</th>
+			<th>Comment</th>
+			<th>Money Sign</th>
+			<th>Money</th>
+			<th>Status</th>
+			<th>Operation</th>
+		</head>
+		
+		<% @settlements.each do |settlement| %>
+		<tr>
+			<td><%= link_to settlement.id, action: :settlement, id: settlement.id %></td>
+			<td><%= link_to settlement.title, action: :settlement, id: settlement.id %></td>
+			<td><%= link_to settlement.comment, action: :settlement, id: settlement.id %></td>
+			<td><%= settlement.money_sign %></td>
+			<td><%= settlement.money %></td>
+			<td data-id='<%= settlement.id %>'><%= settlement.status %></td>
+			<td>
+				<button data-id='<%= settlement.id %>'>完成</button>
+			</td>
+		</tr>
+		<% end %>
+	</table>
+</div>
+<script>
+$('button').bind('click', function(){
+	var id = $(this).data('id');
+	$.ajax({
+		url: '/transact/complete_settlement',
+		type: 'post',
+		data: {id: id}
+	}).done(function(){
+		window.location.reload();
+	})
+})
+</script>

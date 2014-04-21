@@ -2,7 +2,8 @@ HaonzhaoAdmin::Application.routes.draw do
 
   resources :transact do
     collection do
-      get :paid_by_shop, :unpaid_by_shop, :create_settlement, :show_settlement
+      get :paid_by_shop, :unpaid_by_shop, :create_settlement, :settlement, :settlements
+      post :complete_settlement
       patch :update_settlement
     end
   end

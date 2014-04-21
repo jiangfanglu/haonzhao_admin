@@ -1,5 +1,6 @@
 <h1><%= @shop.name %></h1>
 
+<%= link_to 'All', action: :show, id: @shop.id %>
 <%= link_to 'Paid', action: :paid_by_shop, id: @shop.id %>
 <%= link_to 'Unpaid', action: :unpaid_by_shop, id: @shop.id %>
 

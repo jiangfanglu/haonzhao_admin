@@ -1,7 +1,22 @@
 <div>
-	<% @shops.each do |shop| %>
-	<p>
-		<%= link_to shop.name, action: :show, id: shop.manufacturer_id %>
-	</p>
-	<% end %>
+	<table>
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>店铺名称</th>
+			</tr>
+		</thead>
+		 
+		<% @shops.each do |shop| %>
+		<tr>
+			<td>
+				<%= link_to shop.id, action: :paid_by_shop, id: shop.id %>
+			</td>
+			<td>
+				<%= link_to shop.name, action: :paid_by_shop, id: shop.id %>
+			</td>
+		</tr>
+		<% end %>
+	
+	</table>
 </div>

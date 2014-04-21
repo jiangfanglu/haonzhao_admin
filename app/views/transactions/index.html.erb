@@ -44,7 +44,7 @@
         <td><%= link_to '编辑', edit_transaction_path(transaction) %></td>
         <td>
 					<!-- <a href='/transactions/pay?id=<%= transaction.id %>'>Pay</a> -->
-					<% unless transaction.fee? %>
+					<% unless transaction.hnz_receive? || transaction.settlement? || transaction.complete? %>
 						<% if transaction.paid? %>
 							<a class="paid btn btn-default" data-id="<%= transaction.id %>">拒付</a>
 						<% else %>
