@@ -6,6 +6,7 @@ class Shop < ActiveRecord::Base
   self.table_name = 'oc_manufacturer'
   alias :manufacturer_id :id
   
+  belongs_to :user, foreign_key: :id#'manufacturer_id'
   has_many :transactions, foreign_key: "store_id"
   has_many :settlements
   
