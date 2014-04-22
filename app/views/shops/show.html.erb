@@ -6,15 +6,6 @@
 </p>
 
 <p>
-	<strong>Image:</strong>
-	<%= @shop.image %>
-	<img src='<%="#{MEIDIA_SERVER}/#{BUCKET_NAME}/#{SHOP_FOLDER}#{@shop.manufacturer_id}/usr-#{@shop.manufacturer_id}.jpg"%>' />
-	<img src='<%="#{MEIDIA_SERVER}/#{BUCKET_NAME}/#{SHOP_FOLDER}#{@shop.manufacturer_id}/sfz-#{@shop.manufacturer_id}.jpg"%>' />
-	<img src='<%="#{MEIDIA_SERVER}/#{BUCKET_NAME}/#{SHOP_FOLDER}#{@shop.manufacturer_id}/sfz_cp_#{@shop.manufacturer_id}_1.jpg"%>' />
-	<img src='<%="#{MEIDIA_SERVER}/#{BUCKET_NAME}/#{SHOP_FOLDER}#{@shop.manufacturer_id}/sfz_cp_#{@shop.manufacturer_id}_2.jpg"%>' />
-</p>
-
-<p>
 	<strong>Identity no:</strong>
 	<%= @shop.identity_no %>
 </p>
@@ -54,6 +45,16 @@
 <% else %>
 <a class="allowed" data-id="<%= @shop.manufacturer_id %>">Close</a>
 <% end %>
+
+<p>
+	<strong>Image:</strong>
+	<%= @shop.image %>
+	<img src='<%="#{MEIDIA_SERVER}/#{BUCKET_NAME}/#{SHOP_FOLDER}#{@shop.manufacturer_id}/usr-#{@shop.manufacturer_id}.jpg"%>' />
+	<img src='<%="#{MEIDIA_SERVER}/#{BUCKET_NAME}/#{SHOP_FOLDER}#{@shop.manufacturer_id}/sfz-#{@shop.manufacturer_id}.jpg"%>' />
+	<img src='<%="#{MEIDIA_SERVER}/#{BUCKET_NAME}/#{SHOP_FOLDER}#{@shop.manufacturer_id}/sfz_cp_#{@shop.manufacturer_id}_1.jpg"%>' />
+	<img src='<%="#{MEIDIA_SERVER}/#{BUCKET_NAME}/#{SHOP_FOLDER}#{@shop.manufacturer_id}/sfz_cp_#{@shop.manufacturer_id}_2.jpg"%>' />
+</p>
+
 
 <script type="text/javascript">
 
