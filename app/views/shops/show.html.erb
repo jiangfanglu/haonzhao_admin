@@ -36,6 +36,13 @@
 </p>
 
 <p>
+	<strong>Payment:</strong>
+	<%= @shop.user.seller_payment.payment_type %>,
+	<%= @shop.user.seller_payment.payment_account %>,
+	<%= @shop.user.seller_payment.account_name %>
+</p>
+
+<p>
 	<strong>Shipping option:</strong>
 	<%= @shop.shipping_option_id %>
 </p>
