@@ -37,9 +37,9 @@
 
 <p>
 	<strong>Payment:</strong>
-	<%= @shop.user.seller_payment.payment_type %>,
-	<%= @shop.user.seller_payment.payment_account %>,
-	<%= @shop.user.seller_payment.account_name %>
+	<%= @shop.user.seller_payment.payment_type if @shop.user.seller_payment %>,
+	<%= @shop.user.seller_payment.payment_account if @shop.user.seller_payment %>,
+	<%= @shop.user.seller_payment.account_name if @shop.user.seller_payment %>
 </p>
 
 <p>
