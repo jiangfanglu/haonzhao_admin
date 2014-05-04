@@ -1,0 +1,29 @@
+<h1>分类导航子分类管理</h1>
+
+<table class="table  table-striped">
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Group</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @category_groups.each do |category_group| %>
+      <tr>
+        <td><%= category_group.category_description.name %></td>
+        <td><%= category_group.categorynavgroup.name %></td>
+        <td class="text-right">
+          <%#= link_to '查看', category_group, {:class=>"btn btn-default"} %>
+          <%= link_to '编辑', edit_category_group_path(category_group), {:class=>"btn btn-default"} %>
+          <%= link_to '删除', category_group, method: :delete, data: { confirm: 'Are you sure?' }, :class=>"btn btn-danger" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to '添加', new_category_group_path, {:class=>"btn btn-default"} %>

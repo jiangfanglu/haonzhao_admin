@@ -18,11 +18,16 @@
 	<%= csrf_meta_tags %>
 </head>
 <body>
-	<div style='width: 15%;'>
-		<%= render partial: 'partials/nav' %>
-	</div>
-	<div style='position: relative;top: -80px;left: 15%; width: 85%;'>
-		<%= yield %>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-2 text-center">
+				<h3>菜单</h3>
+				<%= render partial: 'partials/nav' %>
+			</div>
+			<div class="col-lg-10">
+				<%= yield %>
+			</div>
+		</div>
 	</div>
 </body>
 </html>

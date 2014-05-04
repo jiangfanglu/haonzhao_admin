@@ -1,0 +1,27 @@
+<%= form_for(@category_group) do |f| %>
+  <% if @category_group.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@category_group.errors.count, "error") %> prohibited this category_group from being saved:</h2>
+
+      <ul>
+      <% @category_group.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :category_id %><br>
+    <%=select("category_group", "category_id", @category.collect {|p| [ p.name, p.category_id ] }, {:selected => (params[:action] == 'new' ? "" : @category_group.category_id ) ,include_blank: "选择细分类"},{:class => 'form-control',:id=>'category_group_category_id'})%>
+    <%#= f.number_field :category_id %>
+  </div>
+  <div class="field">
+    <%= f.label :group_id %><br>
+    <%=select("category_group", "group_id", @groups.collect {|p| [ p.name, p.id ] }, {:selected => (params[:action] == 'new' ? "" : @category_group.group_id ), include_blank: "选择大类", },{:class => 'form-control',:id=>'category_group_group_id'})%>
+    <%#= f.number_field :group_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

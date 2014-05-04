@@ -1,6 +1,6 @@
 <h1>Listing shops</h1>
 
-<table>
+<table class="table table-bordered  table-striped">
   <thead>
     <tr>
 	  <th>ID</th>
@@ -14,7 +14,7 @@
       <th>Shipping option</th>
       <th>Date Added</th>
       <th>状态</th>
-      <th></th>
+      <!-- <th></th> -->
       <th></th>
     </tr>
   </thead>
@@ -34,7 +34,7 @@
 				<td><%= shop.date_added.strftime('%Y-%m-%d') %></td>
         <td><%= t shop.status %></td>
         <td><%= link_to '查看', shop, class: 'btn btn-default' %></td>
-        <td><%#= link_to 'Edit', edit_shop_path(shop) %></td>
+        <!-- <td><%#= link_to 'Edit', edit_shop_path(shop) %></td> -->
         <td>
 					<% if shop.close? %>
 						<a class="closed btn btn-default" style='color: green;' data-id="<%= shop.manufacturer_id %>">允许</a>
