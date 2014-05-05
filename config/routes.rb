@@ -1,5 +1,9 @@
 HaonzhaoAdmin::Application.routes.draw do
 
+  resources :featured_shops
+
+  resources :featured_products
+
   resources :category_groups
 
   resources :transact do

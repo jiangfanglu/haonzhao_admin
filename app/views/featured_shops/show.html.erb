@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Manufacturer:</strong>
+  <%= @featured_shop.manufacturer_id %>
+</p>
+
+<p>
+  <strong>Store:</strong>
+  <%= @featured_shop.store_id %>
+</p>
+
+<%#= link_to 'Edit', edit_featured_shop_path(@featured_shop), {:class=>"btn btn-default"} %>
+<%= link_to 'Back', featured_shops_path, {:class=>"btn btn-default"} %>
+<%= link_to '继续添加', new_featured_shop_path, {:class=>"btn btn-default"} %>

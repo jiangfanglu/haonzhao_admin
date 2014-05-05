@@ -1,0 +1,26 @@
+<h1>热门商品</h1>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Store</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @featured_products.each do |featured_product| %>
+      <tr>
+        <td><%= featured_product.product_id %></td>
+        <td><%= featured_product.store_id %></td>
+        <td class="text-right">
+          <%= link_to '删除', {:action=>"destroy",:id=>featured_product.product_id}, method: :delete, data: { confirm: 'Are you sure?' }, :class=>"btn btn-danger" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to '添加热门商品', new_featured_product_path , {:class=>"btn btn-default"} %>

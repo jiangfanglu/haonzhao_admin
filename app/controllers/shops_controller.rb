@@ -20,6 +20,7 @@ class ShopsController < ApplicationController
   
   def login
     @admin = Admin.new
+    render :layout=>"blank"
   end
   
   def login_check

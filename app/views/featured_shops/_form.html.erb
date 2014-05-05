@@ -1,0 +1,25 @@
+<%= form_for(@featured_shop) do |f| %>
+  <% if @featured_shop.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@featured_shop.errors.count, "error") %> prohibited this featured_shop from being saved:</h2>
+
+      <ul>
+      <% @featured_shop.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :manufacturer_id %><br>
+    <%= f.number_field :manufacturer_id, :class=>"form-control" %>
+  </div>
+  <div class="field">
+    <%= f.label :store_id %><br>
+    <%= f.number_field :store_id, :class=>"form-control", :value=>0 %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
