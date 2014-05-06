@@ -1,0 +1,35 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  type: 
+  discount: 1.5
+  logged: false
+  shipping: false
+  total: 1.5
+  date_start: 2014-05-05 10:45:32
+  date_end: 2014-05-05 10:45:32
+  uses_total: 1.5
+  uses_customer: MyString
+  integer: MyString
+  status: MyString
+  boolean: MyString
+  date_added: 2014-05-05 10:45:32
+  promotion_id: 1
+
+two:
+  name: MyString
+  type: 
+  discount: 1.5
+  logged: false
+  shipping: false
+  total: 1.5
+  date_start: 2014-05-05 10:45:32
+  date_end: 2014-05-05 10:45:32
+  uses_total: 1.5
+  uses_customer: MyString
+  integer: MyString
+  status: MyString
+  boolean: MyString
+  date_added: 2014-05-05 10:45:32
+  promotion_id: 1

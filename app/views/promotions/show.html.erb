@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @promotion.name %>
+</p>
+
+<p>
+  <strong>Failed at:</strong>
+  <%= @promotion.failed_at %>
+</p>
+
+<p>
+  <strong>发布地址:</strong>
+	<a href='http://haonzhao.com/shop/promotion/<%= @promotion.id %>'>
+		http://haonzhao.com/shop/promotion/<%= @promotion.id %>
+	</a>
+</p>
+
+<%= link_to '创建代金券', controller: :coupons, action: :new, promotion_id: @promotion.id %> |
+<%= link_to 'Edit', edit_promotion_path(@promotion) %> |
+<%= link_to 'Back', promotions_path %>
+
+<div class='coupons'>
+	<span>代金券列表</span>
+	<% @promotion.coupons.each do |coupon| %>
+	<p>
+		<a href='/coupons/<%= coupon.id %>'>
+			<%= coupon.code[0..3].upcase %> - <%= coupon.code[4..7].upcase %> - <%= coupon.code[8..11].upcase %> - <%= coupon.code[12..15].upcase %>  <span style='color: red;'>￥<%= coupon.total %></span>
+		</a>
+	</p>
+	<% end %>
+</div>

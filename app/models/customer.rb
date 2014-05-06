@@ -14,9 +14,6 @@ class Customer < ActiveRecord::Base
   belongs_to :user
   has_many :addresses
   has_many :reviews, :primary_key => "customer_id", :foreign_key=>"customer_id"
-  # has_one :state, foreign_key: 'zone_id', class_name: 'State', through: :address
-  # has_one :city, foreign_key: 'city', class_name: 'City', through: :address
-  # has_one :suburb, through: :address
   
   has_many :pay_list, foreign_key: 'sender_id', class_name: 'Transaction', as: :sender
   

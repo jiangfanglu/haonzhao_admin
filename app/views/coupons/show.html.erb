@@ -1,0 +1,76 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @coupon.name %>
+</p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @coupon.type %>
+</p>
+
+<p>
+  <strong>Discount:</strong>
+  <%= @coupon.discount %>
+</p>
+
+<p>
+  <strong>Logged:</strong>
+  <%= @coupon.logged %>
+</p>
+
+<p>
+  <strong>Shipping:</strong>
+  <%= @coupon.shipping %>
+</p>
+
+<p>
+  <strong>Total:</strong>
+  <%= @coupon.total %>
+</p>
+
+<p>
+  <strong>Date start:</strong>
+  <%= @coupon.date_start.strftime('%Y-%m-%d %H:%M:%S') %>
+</p>
+
+<p>
+  <strong>Date end:</strong>
+  <%= @coupon.date_end.strftime('%Y-%m-%d %H:%M:%S') %>
+</p>
+
+<p>
+  <strong>Uses total:</strong>
+  <%= @coupon.uses_total %>
+</p>
+
+<p>
+  <strong>Uses customer:</strong>
+  <%= @coupon.uses_customer %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @coupon.status %>
+</p>
+
+<p>
+  <strong>Date added:</strong>
+  <%= @coupon.date_added.strftime('%Y-%m-%d %H:%M:%S') %>
+</p>
+
+<p>
+  <strong>Promotion:</strong>
+  <%= @coupon.promotion_id %>
+</p>
+
+<% @coupon.certificates.each do |certificate| %>
+<p>
+	<%= certificate.foo.name %>  <span style='color: red;'>￥<%= certificate.foo.total %></span>, 序号 : <%= certificate.code[0..3].upcase %> - <%= certificate.code[4..7].upcase %> - <%= certificate.code[8..11].upcase %> - <%= certificate.code[12..15].upcase %>
+</p>
+<% end %>
+
+
+<%= link_to 'Edit', edit_coupon_path(@coupon) %> |
+<%= link_to 'Back', coupons_path %>

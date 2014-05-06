@@ -1,5 +1,11 @@
 HaonzhaoAdmin::Application.routes.draw do
 
+  resources :certificates
+
+  resources :promotions
+
+  resources :coupons
+
   resources :featured_shops
 
   resources :featured_products

@@ -1,0 +1,51 @@
+<h1>Listing coupons</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Discount</th>
+      <th>Logged</th>
+      <th>Shipping</th>
+      <th>Total</th>
+      <th>Date start</th>
+      <th>Date end</th>
+      <th>Uses total</th>
+      <th>Uses customer</th>
+      <th>Status</th>
+      <th>Date added</th>
+      <th>Promotion</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @coupons.each do |coupon| %>
+      <tr>
+        <td><%= coupon.name %></td>
+        <td><%= coupon.type %></td>
+        <td><%= coupon.discount %></td>
+        <td><%= coupon.logged %></td>
+        <td><%= coupon.shipping %></td>
+        <td><%= coupon.total %></td>
+        <td><%= coupon.date_start.strftime('%Y%m%d') %></td>
+        <td><%= coupon.date_end.strftime('%Y%m%d') %></td>
+        <td><%= coupon.uses_total %></td>
+        <td><%= coupon.uses_customer %></td>
+        <td><%= coupon.status %></td>
+        <td><%= coupon.date_added.strftime('%Y%m%d') %></td>
+        <td><%= coupon.promotion_id %></td>
+        <td><%= link_to 'Show', coupon %></td>
+        <td><%= link_to 'Edit', edit_coupon_path(coupon) %></td>
+        <td><%= link_to 'Destroy', coupon, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Coupon', new_coupon_path %>
