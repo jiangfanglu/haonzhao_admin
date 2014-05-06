@@ -14,7 +14,7 @@ class CertificatesController < ApplicationController
 
   # GET /certificates/new
   def new
-    @certificate = Certificate.new
+    @certificate = Certificate.new foo_type: params[:foo_type], promotion_id: params[:promotion]
   end
 
   # GET /certificates/1/edit
@@ -28,7 +28,7 @@ class CertificatesController < ApplicationController
 
     respond_to do |format|
       if @certificate.save
-        format.html { redirect_to @certificate, notice: 'Certificate was successfully created.' }
+        format.html { redirect_to @certificate.promotion, notice: 'Certificate was successfully created.' }
         format.json { render action: 'show', status: :created, location: @certificate }
       else
         format.html { render action: 'new' }
@@ -69,6 +69,6 @@ class CertificatesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def certificate_params
-      params.require(:certificate).permit(:code, :foo_type, :foo_id, :customer_id)
+      params.require(:certificate).permit(:code, :foo_type, :foo_id, :customer_id, :promotion_id)
     end
 end

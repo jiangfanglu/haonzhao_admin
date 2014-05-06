@@ -1,10 +1,10 @@
-<h1>Listing promotions</h1>
+<h1>活动列表</h1>
 
 <table>
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Failed at</th>
+      <th>活动名称</th>
+      <th>有效期至</th>
       <th></th>
       <th></th>
       <th></th>
@@ -15,10 +15,10 @@
     <% @promotions.each do |promotion| %>
       <tr>
         <td><%= promotion.name %></td>
-        <td><%= promotion.failed_at %></td>
-        <td><%= link_to 'Show', promotion %></td>
-        <td><%= link_to 'Edit', edit_promotion_path(promotion) %></td>
-        <td><%= link_to 'Destroy', promotion, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= promotion.failed_at.strftime('%Y-%m-%d') %></td>
+        <td><%= link_to '查看', promotion %></td>
+        <td><%= link_to '修改', edit_promotion_path(promotion) %></td>
+        <td><%= link_to '删除', promotion, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
@@ -26,4 +26,4 @@
 
 <br>
 
-<%= link_to 'New Promotion', new_promotion_path %>
+<%= link_to '创建活动', new_promotion_path %>

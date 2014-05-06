@@ -1,32 +1,32 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Name:</strong>
+  <strong>活动名称:</strong>
   <%= @promotion.name %>
 </p>
 
 <p>
-  <strong>Failed at:</strong>
-  <%= @promotion.failed_at %>
+  <strong>有效期至:</strong>
+  <%= @promotion.failed_at.strftime('%Y-%m-%d') %>
 </p>
 
 <p>
-  <strong>发布地址:</strong>
+  <strong>活动页面:</strong>
 	<a href='http://haonzhao.com/shop/promotion/<%= @promotion.id %>'>
 		http://haonzhao.com/shop/promotion/<%= @promotion.id %>
 	</a>
 </p>
 
-<%= link_to '创建代金券', controller: :coupons, action: :new, promotion_id: @promotion.id %> |
-<%= link_to 'Edit', edit_promotion_path(@promotion) %> |
-<%= link_to 'Back', promotions_path %>
+<%= link_to '创建券', controller: :certificates, action: :new, foo_type: 'Coupon', promotion: @promotion.id %> |
+<%= link_to '修改', edit_promotion_path(@promotion) %> |
+<%= link_to '返回', promotions_path %>
 
 <div class='coupons'>
-	<span>代金券列表</span>
-	<% @promotion.coupons.each do |coupon| %>
+	<span>券列表</span>
+	<% @promotion.coupon_certificates.each do |certificate| %>
 	<p>
-		<a href='/coupons/<%= coupon.id %>'>
-			<%= coupon.code[0..3].upcase %> - <%= coupon.code[4..7].upcase %> - <%= coupon.code[8..11].upcase %> - <%= coupon.code[12..15].upcase %>  <span style='color: red;'>￥<%= coupon.total %></span>
+		<a href='/certificates/<%= certificate.id %>'>
+			<%= certificate.code[0..3].upcase %> - <%= certificate.code[4..7].upcase %> - <%= certificate.code[8..11].upcase %> - <%= certificate.code[12..15].upcase %>  <span style='color: red;'>￥<%= certificate.coupon.total %></span>
 		</a>
 	</p>
 	<% end %>

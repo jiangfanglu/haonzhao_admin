@@ -14,7 +14,7 @@ class CouponsController < ApplicationController
 
   # GET /coupons/new
   def new
-    @coupon = Coupon.new(promotion_id: params[:promotion_id])
+    @coupon = Coupon.new
   end
 
   # GET /coupons/1/edit

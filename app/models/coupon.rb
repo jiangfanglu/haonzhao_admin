@@ -8,11 +8,17 @@ class Coupon < ActiveRecord::Base
   has_many :coupon_products
   has_many :products, through: :coupon_products
   has_many :certificates, -> { where foo_type: 'Coupon' }, foreign_key: :foo_id
-
-  before_create :set_all_time
     
-  def set_all_time
+  def initialize args = {}
+    super
+    self.logged = true
+    self.shipping = false
+    self.status = true
     self.date_added = Time.now
+  end
+    
+  def value
+    '￥' + total.to_s
   end
   
 end

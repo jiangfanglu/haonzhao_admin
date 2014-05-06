@@ -1,0 +1,59 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Order:</strong>
+  <%= @voucher.order_id %>
+</p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @voucher.code %>
+</p>
+
+<p>
+  <strong>From name:</strong>
+  <%= @voucher.from_name %>
+</p>
+
+<p>
+  <strong>From email:</strong>
+  <%= @voucher.from_email %>
+</p>
+
+<p>
+  <strong>To name:</strong>
+  <%= @voucher.to_name %>
+</p>
+
+<p>
+  <strong>To email:</strong>
+  <%= @voucher.to_email %>
+</p>
+
+<p>
+  <strong>Voucher theme:</strong>
+  <%= @voucher.voucher_theme_id %>
+</p>
+
+<p>
+  <strong>Message:</strong>
+  <%= @voucher.message %>
+</p>
+
+<p>
+  <strong>Amount:</strong>
+  <%= @voucher.amount %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @voucher.status %>
+</p>
+
+<p>
+  <strong>Date added:</strong>
+  <%= @voucher.date_added %>
+</p>
+
+<%= link_to 'Edit', edit_voucher_path(@voucher) %> |
+<%= link_to 'Back', vouchers_path %>

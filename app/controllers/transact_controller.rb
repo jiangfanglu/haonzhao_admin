@@ -37,6 +37,7 @@ class TransactController < ApplicationController
   
   def settlement
     @settlement = Settlement.find params[:id]
+    @shop = @settlement.shop
     render :settlement
   end
   

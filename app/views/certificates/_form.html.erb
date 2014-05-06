@@ -10,24 +10,15 @@
       </ul>
     </div>
   <% end %>
+    <%= f.hidden_field :promotion_id %>
+    <%= f.hidden_field :foo_type %>
+    <%= f.hidden_field :customer_id %>
 
   <div class="field">
-    <%= f.label :code %><br>
-    <%= f.text_field :code %>
-  </div>
-  <div class="field">
-    <%= f.label :foo_type %><br>
-    <%= f.text_field :foo_type %>
-  </div>
-  <div class="field">
-    <%= f.label :foo_id %><br>
-    <%= f.number_field :foo_id %>
-  </div>
-  <div class="field">
-    <%= f.label :customer_id %><br>
-    <%= f.number_field :customer_id %>
+    <%= f.label '选择券' %><br>
+		<%= f.select :foo_id, @certificate.foo_for_select.collect{|t|[t.name + " | " + t.value, t.id]} %>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit '添加' %>
   </div>
 <% end %>

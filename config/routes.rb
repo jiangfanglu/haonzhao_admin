@@ -6,6 +6,8 @@ HaonzhaoAdmin::Application.routes.draw do
 
   resources :coupons
 
+  resources :vouchers
+
   resources :featured_shops
 
   resources :featured_products
