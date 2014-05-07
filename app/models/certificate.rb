@@ -6,8 +6,6 @@ class Certificate < ActiveRecord::Base
   KEY = '98531858825ll727'
   
   belongs_to :foo, polymorphic: true
-  belongs_to :coupon, foreign_key: :foo_id
-  belongs_to :voucher, foreign_key: :foo_id
   belongs_to :customer
   belongs_to :promotion
   
