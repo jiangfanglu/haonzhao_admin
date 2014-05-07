@@ -15,7 +15,7 @@ class CategoryGroupsController < ApplicationController
   # GET /category_groups/new
   def new
     @category_group = CategoryGroup.new
-    @category = CategoryDescription.joins(:category).where("parent_id = 0")
+    @category = CategoryDescription.joins(:category).where("parent_id = 0 AND status = 1")
     @groups = Categorynavgroup.all
   end
 
