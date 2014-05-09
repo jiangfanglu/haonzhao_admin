@@ -1,0 +1,5 @@
+<h1>分类 列表</h1>
+
+<%= render partial: 'index' %>
+
+<%= link_to '新建 分类', (@category ? {action: :new, pid: @category.category_id} : {action: :new}) %>

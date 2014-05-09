@@ -1,5 +1,11 @@
 HaonzhaoAdmin::Application.routes.draw do
 
+  resources :categories do
+    collection do
+      get :edit_attributes, :new_attribute_group
+    end
+  end
+
   resources :certificates
 
   resources :promotions
@@ -12,7 +18,12 @@ HaonzhaoAdmin::Application.routes.draw do
 
   resources :featured_products
 
-  resources :category_groups
+  resources :category_groups do
+    
+    collection do
+      delete :destroy
+    end
+  end
 
   resources :transact do
     collection do

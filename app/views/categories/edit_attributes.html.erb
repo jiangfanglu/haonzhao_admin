@@ -1,0 +1,73 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Image:</strong>
+  <%= @category.image %>
+</p>
+
+<p>
+  <strong>Parent:</strong>
+  <%= @category.parent_id %>
+</p>
+
+<p>
+  <strong>Top:</strong>
+  <%= @category.top %>
+</p>
+
+<p>
+  <strong>Column:</strong>
+  <%= @category.column %>
+</p>
+
+<p>
+  <strong>Sort order:</strong>
+  <%= @category.sort_order %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @category.status %>
+</p>
+
+<p>
+  <strong>Date added:</strong>
+  <%= @category.date_added.strftime('%Y-%m-%d %H:%M:%S') %>
+</p>
+
+<p>
+  <strong>Date modified:</strong>
+  <%= @category.date_modified.strftime('%Y-%m-%d %H:%M:%S') %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @category.category_description.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @category.category_description.description %>
+</p>
+
+<p>
+  <strong>Meta description:</strong>
+  <%= @category.category_description.meta_description %>
+</p>
+
+<p>
+  <strong>Meta keyword:</strong>
+  <%= @category.category_description.meta_keyword %>
+</p>
+
+<%= link_to '修改', edit_category_path(@category) %> |
+
+<%= link_to '修改相关属性', action: :edit_attributes, id: @category.category_id %>
+
+<% @category.attribute_groups.each do |attribute_group| %>
+<p>
+	<%= attribute_group.attribute_group_description.name %>
+</p>
+<% end %>
+
+<%= link_to '添加 attribute_group', action: :new_attribute_group, id: @category.category_id %>

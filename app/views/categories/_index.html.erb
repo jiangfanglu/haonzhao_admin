@@ -1,0 +1,45 @@
+<table>
+  <thead>
+    <tr>
+     	<th>ID</th>
+      <!-- <th>Image</th>
+      <th>Parent</th>
+      <th>Top</th>
+      <th>Column</th>
+      <th>Sort order</th>
+      <th>Status</th> -->
+      <!-- <th>Date added</th>
+      <th>Date modfied</th> -->
+      <th>Name</th>
+      <th>Description</th>
+      <th>Meta description</th>
+      <th>Meta keyword</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @categories.each do |category| %>
+      <tr>
+        <td><%= link_to category.id, category %></td>
+        <!-- <td><%= category.image %></td>
+        <td><%= category.parent_id %></td>
+        <td><%= category.top %></td>
+        <td><%= category.column %></td>
+        <td><%= category.sort_order %></td>
+        <td><%= category.status %></td> -->
+        <!-- <td><%= category.date_added %></td>
+        <td><%= category.date_modified %></td> -->
+        <td><%= category.category_description.name %></td>
+        <td><%= category.category_description.description %></td>
+        <td><%= category.category_description.meta_description %></td>
+        <td><%= category.category_description.meta_keyword %></td>
+        <td><%= link_to '修改', edit_category_path(category) %></td>
+        <td><%= link_to '删除', category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>

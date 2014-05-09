@@ -17,8 +17,8 @@
         <td class="text-right">
           <%#= link_to '查看', category_group, {:class=>"btn btn-default"} %>
           <%= link_to '编辑', edit_category_group_path(category_group), {:class=>"btn btn-default"} %>
-          <%= link_to '删除', category_group, method: :delete, data: { confirm: 'Are you sure?' }, :class=>"btn btn-danger" %>
-        </td>
+					<%= link_to '删除', category_group, method: :delete, data: { confirm: 'Are you sure?' } %>
+			  </td>
       </tr>
     <% end %>
   </tbody>

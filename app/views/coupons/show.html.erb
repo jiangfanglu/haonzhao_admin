@@ -60,10 +60,6 @@
   <%= @coupon.date_added.strftime('%Y-%m-%d %H:%M:%S') %>
 </p>
 
-<p>
-  <strong>Promotion:</strong>
-  <%= @coupon.promotion_id %>
-</p>
 
 <% @coupon.certificates.each do |certificate| %>
 <p>
