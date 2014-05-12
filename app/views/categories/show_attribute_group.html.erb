@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>属性名称:</strong>
+  <%= @attribute_group.name %>
+</p>
+
+<%= render partial: 'attribute_form' %>
+
+<% @attribute_group.select_attributes.order('attribute_id DESC').each do |select_attribute| %>
+<p>
+	<%= link_to select_attribute.name, action: :edit_attribute, id: select_attribute.attribute_id %>
+	<%= link_to '删除', action: :destroy_attribute, id: select_attribute.attribute_id %>
+</p>
+<% end %>

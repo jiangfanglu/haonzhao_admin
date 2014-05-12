@@ -3,10 +3,9 @@ class AttributeGroupDescription < ActiveRecord::Base
   establish_connection :haonzhao
   self.table_name = "oc_attribute_group_description"
   self.primary_key = 'attribute_group_id'
-  default_scope :conditions => "language_id = ?"
-
-  has_many :attributes, :primary_key=>"attribute_group_id", :foreign_key=>"attribute_group_id", :class_name => "Attribute"
-  belongs_to :attribute_group, :primary_key=>"attribute_group_id", :foreign_key=>"attribute_group_id", :class_name => "AttributeGroup"
+   
+  has_many :select_attributes, :foreign_key=>"attribute_group_id", :class_name => "Attribute"
+  belongs_to :select_attribute_group, :foreign_key=>"attribute_group_id", :class_name => "AttributeGroup"
 
   has_many :category_to_attributes, :primary_key=>"attribute_group_id",:foreign_key=>"attribute_group_id"
   has_many :categories, through: :category_to_attributes

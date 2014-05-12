@@ -62,12 +62,12 @@
 
 <%= link_to '修改', edit_category_path(@category) %> |
 
-<%= link_to '修改相关属性', action: :edit_attributes, id: @category.category_id %>
+<%= link_to '修改Attribute', action: :edit_attributes, id: @category.category_id %>
 
 <% @category.attribute_groups.each do |attribute_group| %>
 <p>
-	<%= attribute_group.attribute_group_description.name %>
+	<%= link_to attribute_group.attribute_group_description.name, action: :show_attribute_group, id: attribute_group.attribute_group_id %>
 </p>
 <% end %>
 
-<%= link_to '添加 attribute_group', action: :new_attribute_group, id: @category.category_id %>
+<%= link_to '添加 属性', action: :new_attribute_group, id: @category.category_id %>

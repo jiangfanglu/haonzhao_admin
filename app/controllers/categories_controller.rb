@@ -67,11 +67,53 @@ class CategoriesController < ApplicationController
   end
   
   def new_attribute_group
-    @category_to_attribute = CategoryToAttribute.new category: @category, attribute_group: AttributeGroup.new
+    @category = Category.find params[:id]
+    @attribute_group = AttributeGroup.new
+    @attribute_group.category_id = @category.category_id
+  end
+  
+  def show_attribute_group
+    @attribute_group = AttributeGroup.find params[:id]
+    @attribute = Attribute.new attribute_group_id: @attribute_group.attribute_group_id
   end
 
   def create_attribute_group
+    @attribute_group = AttributeGroup.new(params[:attribute_group].merge({sort_order: 0}))
+    @category = Category.find @attribute_group.category_id
+    if @attribute_group.save
+      @category.attribute_groups << @attribute_group
+      redirect_to action: :show_attribute_group, id: @attribute_group.attribute_group_id
+    else
+      render :new_attribute_group
+    end
+  end
+
+  def update_attribute_group
     @category_to_attribute = CategoryToAttribute.new category: @category, attribute_group: AttributeGroup.new(name: params[:name])
+  end
+  
+  def edit_attribute
+    @attribute = Attribute.find params[:id]
+  end
+  
+  def create_attribute
+    @attribute = Attribute.new params[:attribute]
+    @attribute.save
+    redirect_to action: :show_attribute_group, id: @attribute.attribute_group_id
+  end
+  
+  def update_attribute
+    @attribute = Attribute.find params[:attribute][:attribute_id]
+    if @attribute.update_attributes(params[:attribute].except(:attribute_id))
+      redirect_to action: :show_attribute_group, id: @attribute.attribute_group_id
+    end
+  end
+
+  def destroy_attribute
+    @attribute = Attribute.find params[:id]
+    if @attribute.destroy
+      redirect_to action: :show_attribute_group, id: @attribute.attribute_group_id
+    end
   end
 
 

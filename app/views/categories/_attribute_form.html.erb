@@ -1,0 +1,14 @@
+
+<%= form_for(@attribute, url: {action: (params[:action] == 'show_attribute_group' ? :create_attribute : :update_attribute)}) do |f| %>
+	<%= f.hidden_field :attribute_group_id %>
+	<%= f.hidden_field :attribute_id %>
+
+<p>
+	<%= f.label '选项' %>
+	<%= f.text_field :name %>
+</p>
+
+<p>
+	<%= f.submit %>
+</p>
+<% end %>
