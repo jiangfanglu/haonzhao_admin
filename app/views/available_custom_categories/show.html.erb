@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Category:</strong>
+  <%= @available_custom_category.category_id %>
+</p>
+
+<p>
+  <strong>Sort order:</strong>
+  <%= @available_custom_category.sort_order %>
+</p>
+
+<%= link_to 'Edit', edit_available_custom_category_path(@available_custom_category) %> |
+<%= link_to 'Back', available_custom_categories_path %>

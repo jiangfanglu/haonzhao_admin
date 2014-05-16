@@ -28,6 +28,13 @@ class PromotionsController < ApplicationController
 
     respond_to do |format|
       if @promotion.save
+        require 'fileutils'
+
+        tmp = params[:promotion][:htmll].tempfile
+        file = "/var/www/haonzhao/public/promotions/#{params[:promotion][:htmll].original_filename}"
+        FileUtils.cp tmp.path, file
+
+
         format.html { redirect_to @promotion, notice: 'Promotion was successfully created.' }
         format.json { render action: 'show', status: :created, location: @promotion }
       else
@@ -42,6 +49,13 @@ class PromotionsController < ApplicationController
   def update
     respond_to do |format|
       if @promotion.update(promotion_params)
+
+        require 'fileutils'
+
+        tmp = params[:promotion][:htmll].tempfile
+        file = "/var/www/haonzhao/public/promotions/#{params[:promotion][:htmll].original_filename}"
+        FileUtils.cp tmp.path, file
+
         format.html { redirect_to @promotion, notice: 'Promotion was successfully updated.' }
         format.json { head :no_content }
       else
@@ -69,6 +83,6 @@ class PromotionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def promotion_params
-      params.require(:promotion).permit(:name, :failed_at)
+      params.require(:promotion).permit(:name,:htmll, :failed_at)
     end
 end

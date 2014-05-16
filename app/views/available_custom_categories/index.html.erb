@@ -1,0 +1,29 @@
+<h1>Listing available_custom_categories</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Sort order</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @available_custom_categories.each do |available_custom_category| %>
+      <tr>
+        <td><%= available_custom_category.category_id %></td>
+        <td><%= available_custom_category.sort_order %></td>
+        <td><%= link_to 'Show', available_custom_category %></td>
+        <td><%= link_to 'Edit', edit_available_custom_category_path(available_custom_category) %></td>
+        <td><%= link_to 'Destroy', available_custom_category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Available custom category', new_available_custom_category_path %>

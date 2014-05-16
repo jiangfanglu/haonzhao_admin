@@ -1,5 +1,6 @@
 HaonzhaoAdmin::Application.routes.draw do
 
+
   resources :categories do
     collection do
       get :edit_attributes, :new_attribute_group, :edit_attribute_group, :show_attribute_group, :edit_attribute, :destroy_attribute
@@ -7,6 +8,9 @@ HaonzhaoAdmin::Application.routes.draw do
       patch :create_attribute, :update_attribute
     end
   end
+
+  resources :available_custom_categories
+
 
   resources :certificates
 

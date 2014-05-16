@@ -60,7 +60,6 @@
   <%= @coupon.date_added.strftime('%Y-%m-%d %H:%M:%S') %>
 </p>
 
-
 <% @coupon.certificates.each do |certificate| %>
 <p>
 	<%= certificate.foo.name %>  <span style='color: red;'>￥<%= certificate.foo.total %></span>, 序号 : <%= certificate.code[0..3].upcase %> - <%= certificate.code[4..7].upcase %> - <%= certificate.code[8..11].upcase %> - <%= certificate.code[12..15].upcase %>

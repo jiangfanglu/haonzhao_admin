@@ -6,6 +6,11 @@
 </p>
 
 <p>
+  <strong>活动HTML:</strong>
+  <%= @promotion.html %>
+</p>
+
+<p>
   <strong>有效期至:</strong>
   <%= @promotion.failed_at.strftime('%Y-%m-%d') %>
 </p>
@@ -26,7 +31,7 @@
 	<% @promotion.coupon_certificates.each do |certificate| %>
 	<p>
 		<a href='/certificates/<%= certificate.id %>'>
-			<%= certificate.code[0..3].upcase %> - <%= certificate.code[4..7].upcase %> - <%= certificate.code[8..11].upcase %> - <%= certificate.code[12..15].upcase %>  <span style='color: red;'>￥<%= certificate.coupon.total %></span>
+			<%= certificate.code[0..3].upcase %> - <%= certificate.code[4..7].upcase %> - <%= certificate.code[8..11].upcase %> - <%= certificate.code[12..15].upcase %>  <span style='color: red;'>￥<%= certificate.foo.total %></span>
 		</a>
 	</p>
 	<% end %>

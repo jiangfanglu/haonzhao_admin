@@ -16,6 +16,10 @@
     <%= f.text_field :name %>
   </div>
   <div class="field">
+    <%= f.label :html %><br>
+    <%= f.file_field :htmll, :value=>@promotion.html %>
+  </div>
+  <div class="field">
     <%= f.label :failed_at %><br>
 		<input type="text" class="form-control date_available" value="<%= @promotion.failed_at %>" name="promotion[failed_at]" id='promotion_failed_at'>
   </div>

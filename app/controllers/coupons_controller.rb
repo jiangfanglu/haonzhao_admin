@@ -69,6 +69,6 @@ class CouponsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def coupon_params
-      params.require(:coupon).permit(:name, :type, :discount, :logged, :shipping, :total, :date_start, :date_end, :uses_total, :uses_customer, :integer, :status, :boolean, :date_added, :promotion_id)
+      params.require(:coupon).permit(:name, :code, :type, :discount, :logged, :shipping, :total, :date_start, :date_end, :uses_total, :uses_customer, :integer, :status, :boolean, :date_added, :promotion_id)
     end
 end
