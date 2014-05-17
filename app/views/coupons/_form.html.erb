@@ -18,7 +18,7 @@
   </div>
   <div class="field">
     <%= f.label :type %><br>
-    <%= f.text_field :type %>
+    <%=select("coupon", "type", [["Percentage","P"],["Fixed","F"]], {:selected => (params[:action] == 'new' ? "" : @coupon.type )},{:class => 'form-control',:id=>'coupon_type'})%>
   </div>
   <div class="field">
     <%= f.label :code %><br>
@@ -30,14 +30,17 @@
   </div>
   <div class="field">
     <%= f.label :total %><br>
+    <label class="info" style="color:#999;">The total amount that must reached before the coupon is valid.</label><br/>
     <%= f.text_field :total %>
   </div>
   <div class="field">
     <%= f.label :uses_total %><br>
+    <label class="info" style="color:#999;">The maximum number of times the coupon can be used by any customer. 0 for unlimited</label><br/>
     <%= f.text_field :uses_total %>
   </div>
   <div class="field">
     <%= f.label :uses_customer %><br>
+    <label  class="info" style="color:#999;">The maximum number of times the coupon can be used by a single customer. 0 for unlimited</label><br/>
     <%= f.text_field :uses_customer %>
   </div>
 
