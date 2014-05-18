@@ -1,0 +1,29 @@
+<h1>Listing coupon_products</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Coupon</th>
+      <th>Product</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @coupon_products.each do |coupon_product| %>
+      <tr>
+        <td><%= coupon_product.coupon_id %></td>
+        <td><%= coupon_product.product_id %></td>
+        <td><%= link_to 'Show', coupon_product %></td>
+        <td><%= link_to 'Edit', edit_coupon_product_path(coupon_product) %></td>
+        <td><%= link_to 'Destroy', coupon_product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Coupon product', new_coupon_product_path, :class=>"btn btn-info" %>

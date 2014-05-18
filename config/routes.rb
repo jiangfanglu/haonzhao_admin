@@ -1,6 +1,8 @@
 HaonzhaoAdmin::Application.routes.draw do
 
 
+  resources :coupon_products
+
   resources :categories do
     collection do
       get :edit_attributes, :new_attribute_group, :edit_attribute_group, :show_attribute_group, :edit_attribute, :destroy_attribute

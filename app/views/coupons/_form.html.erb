@@ -18,7 +18,7 @@
   </div>
   <div class="field">
     <%= f.label :type %><br>
-    <%=select("coupon", "type", [["Percentage","P"],["Fixed","F"]], {:selected => (params[:action] == 'new' ? "" : @coupon.type )},{:class => 'form-control',:id=>'coupon_type'})%>
+    <%=select("coupon", "type", [["Percentage","P"],["Fixed Discount","F"],["Fixed Price","A"]], {:selected => (params[:action] == 'new' ? "" : @coupon.type )},{:class => 'form-control',:id=>'coupon_type'})%>
   </div>
   <div class="field">
     <%= f.label :code %><br>
