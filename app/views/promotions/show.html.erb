@@ -31,7 +31,7 @@
 	<% @promotion.coupon_certificates.each do |certificate| %>
 	<p>
 		<a href='/certificates/<%= certificate.id %>'>
-			<%= certificate.code[0..3].upcase %> - <%= certificate.code[4..7].upcase %> - <%= certificate.code[8..11].upcase %> - <%= certificate.code[12..15].upcase %>  <span style='color: red;'>￥<%= certificate.foo.total %></span>
+			<%= certificate.code[0..3].upcase %> - <%= certificate.code[4..7].upcase %> - <%= certificate.code[8..11].upcase %> - <%= certificate.code[12..15].upcase %>  
 		</a>
 	</p>
 	<% end %>
