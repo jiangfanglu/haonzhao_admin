@@ -1,6 +1,12 @@
 HaonzhaoAdmin::Application.routes.draw do
 
 
+  resources :profiles
+
+  resources :profile_groups
+
+  resources :profile_values
+
   resources :coupon_products
 
   resources :categories do

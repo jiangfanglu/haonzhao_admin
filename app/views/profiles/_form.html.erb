@@ -1,0 +1,33 @@
+<%= form_for(@profile) do |f| %>
+  <% if @profile.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@profile.errors.count, "error") %> prohibited this profile from being saved:</h2>
+
+      <ul>
+      <% @profile.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :alias %><br>
+    <%= f.text_field :alias %>
+  </div>
+  <div class="field">
+    <%= f.label :profile_type %><br>
+    <%=select("profile", "profile_type", [["TEXT","T"],["SELECT","S"]], {:selected => (params[:action] == 'new' ? "" : @profile.profile_type )},{:class => 'form-control',:id=>'profile_profile_type'})%>
+  </div>
+  <div class="field">
+    <%= f.label :profile_group_id %><br>
+    <%=select("profile", "profile_group_id", @profile_groups.collect {|p| [ p.name, p.id ] }, {:selected => (params[:action] == 'new' ? "" : @profile.profile_group_id )},{:class => 'form-control',:id=>'profile_profile_group_id'})%>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

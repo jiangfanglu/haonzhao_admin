@@ -1,0 +1,33 @@
+<h1>用户属性</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Alias</th>
+      <th>Profile type</th>
+      <th>Profile group</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @profiles.each do |profile| %>
+      <tr>
+        <td><%= profile.name %></td>
+        <td><%= profile.alias %></td>
+        <td><%= profile.profile_type %></td>
+        <td><%= profile.profile_group_id %></td>
+        <td><%= link_to 'Show', profile,:class=>"btn btn-default" %></td>
+        <td><%= link_to 'Edit', edit_profile_path(profile),:class=>"btn btn-default" %></td>
+        <td><%= link_to 'Destroy', profile, method: :delete, data: { confirm: 'Are you sure?' },:class=>"btn btn-default" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Profile', new_profile_path,:class=>"btn btn-default" %>
