@@ -1,6 +1,10 @@
 HaonzhaoAdmin::Application.routes.draw do
 
 
+  resources :shippings
+
+  resources :shipping_options
+
   resources :profiles
 
   resources :profile_groups

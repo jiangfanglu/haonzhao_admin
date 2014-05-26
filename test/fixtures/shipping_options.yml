@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  option_value: MyString
+  shipping_id: 1
+  price: 1.5
+
+two:
+  option_value: MyString
+  shipping_id: 1
+  price: 1.5

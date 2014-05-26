@@ -1,0 +1,31 @@
+<h1>Listing shipping_options</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Option value</th>
+      <th>Shipping</th>
+      <th>Price</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @shipping_options.each do |shipping_option| %>
+      <tr>
+        <td><%= shipping_option.option_value %></td>
+        <td><%= shipping_option.shipping_id %></td>
+        <td><%= shipping_option.price %></td>
+        <td><%= link_to 'Show', shipping_option %></td>
+        <td><%= link_to 'Edit', edit_shipping_option_path(shipping_option) %></td>
+        <td><%= link_to 'Destroy', shipping_option, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Shipping option', new_shipping_option_path %>

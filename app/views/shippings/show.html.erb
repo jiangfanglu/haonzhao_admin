@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @shipping.name %>
+</p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @shipping.code %>
+</p>
+
+<%= link_to 'Edit', edit_shipping_path(@shipping) %> |
+<%= link_to 'Back', shippings_path %>

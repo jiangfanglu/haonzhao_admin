@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Option value:</strong>
+  <%= @shipping_option.option_value %>
+</p>
+
+<p>
+  <strong>Shipping:</strong>
+  <%= @shipping_option.shipping_id %>
+</p>
+
+<p>
+  <strong>Price:</strong>
+  <%= @shipping_option.price %>
+</p>
+
+<%= link_to 'Edit', edit_shipping_option_path(@shipping_option) %> |
+<%= link_to 'Back', shipping_options_path %>
