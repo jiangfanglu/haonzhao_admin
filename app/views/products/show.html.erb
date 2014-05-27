@@ -1,0 +1,176 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Model:</strong>
+  <%= @product.model %>
+</p>
+
+<p>
+  <strong>Sku:</strong>
+  <%= @product.sku %>
+</p>
+
+<p>
+  <strong>Upc:</strong>
+  <%= @product.upc %>
+</p>
+
+<p>
+  <strong>Ean:</strong>
+  <%= @product.ean %>
+</p>
+
+<p>
+  <strong>Jan:</strong>
+  <%= @product.jan %>
+</p>
+
+<p>
+  <strong>Isbn:</strong>
+  <%= @product.isbn %>
+</p>
+
+<p>
+  <strong>Mpn:</strong>
+  <%= @product.mpn %>
+</p>
+
+<p>
+  <strong>Location:</strong>
+  <%= @product.location %>
+</p>
+
+<p>
+  <strong>Quantity:</strong>
+  <%= @product.quantity %>
+</p>
+
+<p>
+  <strong>Stock status:</strong>
+  <%= @product.stock_status_id %>
+</p>
+
+<p>
+  <strong>Image:</strong>
+  <%= @product.image %>
+</p>
+
+<p>
+  <strong>Manufacturer:</strong>
+  <%= @product.manufacturer_id %>
+</p>
+
+<p>
+  <strong>Shipping:</strong>
+  <%= @product.shipping %>
+</p>
+
+<p>
+  <strong>Price:</strong>
+  <%= @product.price %>
+</p>
+
+<p>
+  <strong>Points:</strong>
+  <%= @product.points %>
+</p>
+
+<p>
+  <strong>Tax class:</strong>
+  <%= @product.tax_class_id %>
+</p>
+
+<p>
+  <strong>Date available:</strong>
+  <%= @product.date_available %>
+</p>
+
+<p>
+  <strong>Weight:</strong>
+  <%= @product.weight %>
+</p>
+
+<p>
+  <strong>Weight class:</strong>
+  <%= @product.weight_class_id %>
+</p>
+
+<p>
+  <strong>Length:</strong>
+  <%= @product.length %>
+</p>
+
+<p>
+  <strong>Width:</strong>
+  <%= @product.width %>
+</p>
+
+<p>
+  <strong>Height:</strong>
+  <%= @product.height %>
+</p>
+
+<p>
+  <strong>Length class:</strong>
+  <%= @product.length_class_id %>
+</p>
+
+<p>
+  <strong>Subtract:</strong>
+  <%= @product.subtract %>
+</p>
+
+<p>
+  <strong>Minimum:</strong>
+  <%= @product.minimum %>
+</p>
+
+<p>
+  <strong>Sort order:</strong>
+  <%= @product.sort_order %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @product.status %>
+</p>
+
+<p>
+  <strong>Date added:</strong>
+  <%= @product.date_added %>
+</p>
+
+<p>
+  <strong>Date modified:</strong>
+  <%= @product.date_modified %>
+</p>
+
+<p>
+  <strong>Viewed:</strong>
+  <%= @product.viewed %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @product.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%=raw @product.description %>
+</p>
+
+<p>
+  <strong>Meta description:</strong>
+  <%= @product.meta_description %>
+</p>
+
+<p>
+  <strong>Meta keyword:</strong>
+  <%= @product.meta_keyword %>
+</p>
+<% if @product.status %>
+<%= link_to 'Inactive', inactive_product_path(@product) %> |
+<% else %>
+<%= link_to 'Active', active_product_path(@product) %> |
+<% end %>

@@ -1,0 +1,262 @@
+<%= form_for(@order) do |f| %>
+  <% if @order.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@order.errors.count, "error") %> prohibited this order from being saved:</h2>
+
+      <ul>
+      <% @order.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :invoice_no %><br>
+    <%= f.number_field :invoice_no %>
+  </div>
+  <div class="field">
+    <%= f.label :invoice_prefix %><br>
+    <%= f.text_field :invoice_prefix %>
+  </div>
+  <div class="field">
+    <%= f.label :store_id %><br>
+    <%= f.number_field :store_id %>
+  </div>
+  <div class="field">
+    <%= f.label :store_name %><br>
+    <%= f.text_field :store_name %>
+  </div>
+  <div class="field">
+    <%= f.label :store_url %><br>
+    <%= f.text_field :store_url %>
+  </div>
+  <div class="field">
+    <%= f.label :customer_id %><br>
+    <%= f.number_field :customer_id %>
+  </div>
+  <div class="field">
+    <%= f.label :customer_group_id %><br>
+    <%= f.number_field :customer_group_id %>
+  </div>
+  <div class="field">
+    <%= f.label :firstname %><br>
+    <%= f.text_field :firstname %>
+  </div>
+  <div class="field">
+    <%= f.label :lastname %><br>
+    <%= f.text_field :lastname %>
+  </div>
+  <div class="field">
+    <%= f.label :email %><br>
+    <%= f.text_field :email %>
+  </div>
+  <div class="field">
+    <%= f.label :telephone %><br>
+    <%= f.text_field :telephone %>
+  </div>
+  <div class="field">
+    <%= f.label :fax %><br>
+    <%= f.text_field :fax %>
+  </div>
+  <div class="field">
+    <%= f.label :payment_firstname %><br>
+    <%= f.text_field :payment_firstname %>
+  </div>
+  <div class="field">
+    <%= f.label :payment_lastname %><br>
+    <%= f.text_field :payment_lastname %>
+  </div>
+  <div class="field">
+    <%= f.label :payment_company %><br>
+    <%= f.text_field :payment_company %>
+  </div>
+  <div class="field">
+    <%= f.label :payment_company_id %><br>
+    <%= f.text_field :payment_company_id %>
+  </div>
+  <div class="field">
+    <%= f.label :payment_tax_id %><br>
+    <%= f.text_field :payment_tax_id %>
+  </div>
+  <div class="field">
+    <%= f.label :payment_address_1 %><br>
+    <%= f.text_field :payment_address_1 %>
+  </div>
+  <div class="field">
+    <%= f.label :payment_address_2 %><br>
+    <%= f.text_field :payment_address_2 %>
+  </div>
+  <div class="field">
+    <%= f.label :payment_city %><br>
+    <%= f.text_field :payment_city %>
+  </div>
+  <div class="field">
+    <%= f.label :payment_postcode %><br>
+    <%= f.text_field :payment_postcode %>
+  </div>
+  <div class="field">
+    <%= f.label :payment_country %><br>
+    <%= f.text_field :payment_country %>
+  </div>
+  <div class="field">
+    <%= f.label :payment_country_id %><br>
+    <%= f.number_field :payment_country_id %>
+  </div>
+  <div class="field">
+    <%= f.label :payment_zone %><br>
+    <%= f.text_field :payment_zone %>
+  </div>
+  <div class="field">
+    <%= f.label :payment_zone_id %><br>
+    <%= f.number_field :payment_zone_id %>
+  </div>
+  <div class="field">
+    <%= f.label :payment_address_format %><br>
+    <%= f.text_area :payment_address_format %>
+  </div>
+  <div class="field">
+    <%= f.label :payment_method %><br>
+    <%= f.text_field :payment_method %>
+  </div>
+  <div class="field">
+    <%= f.label :payment_code %><br>
+    <%= f.text_field :payment_code %>
+  </div>
+  <div class="field">
+    <%= f.label :shipping_firstname %><br>
+    <%= f.text_field :shipping_firstname %>
+  </div>
+  <div class="field">
+    <%= f.label :shipping_lastname %><br>
+    <%= f.text_field :shipping_lastname %>
+  </div>
+  <div class="field">
+    <%= f.label :shipping_company %><br>
+    <%= f.text_field :shipping_company %>
+  </div>
+  <div class="field">
+    <%= f.label :shipping_address_1 %><br>
+    <%= f.text_field :shipping_address_1 %>
+  </div>
+  <div class="field">
+    <%= f.label :shipping_address_2 %><br>
+    <%= f.text_field :shipping_address_2 %>
+  </div>
+  <div class="field">
+    <%= f.label :shipping_city %><br>
+    <%= f.text_field :shipping_city %>
+  </div>
+  <div class="field">
+    <%= f.label :shipping_postcode %><br>
+    <%= f.text_field :shipping_postcode %>
+  </div>
+  <div class="field">
+    <%= f.label :shipping_country %><br>
+    <%= f.text_field :shipping_country %>
+  </div>
+  <div class="field">
+    <%= f.label :shipping_country_id %><br>
+    <%= f.number_field :shipping_country_id %>
+  </div>
+  <div class="field">
+    <%= f.label :shipping_zone %><br>
+    <%= f.text_field :shipping_zone %>
+  </div>
+  <div class="field">
+    <%= f.label :shipping_zone_id %><br>
+    <%= f.number_field :shipping_zone_id %>
+  </div>
+  <div class="field">
+    <%= f.label :shipping_address_format %><br>
+    <%= f.text_area :shipping_address_format %>
+  </div>
+  <div class="field">
+    <%= f.label :shipping_method %><br>
+    <%= f.text_field :shipping_method %>
+  </div>
+  <div class="field">
+    <%= f.label :shipping_code %><br>
+    <%= f.text_field :shipping_code %>
+  </div>
+  <div class="field">
+    <%= f.label :comment %><br>
+    <%= f.text_area :comment %>
+  </div>
+  <div class="field">
+    <%= f.label :total %><br>
+    <%= f.text_field :total %>
+  </div>
+  <div class="field">
+    <%= f.label :order_status %><br>
+		<%= f.select :order_status_id, OrderStatus.all.collect{|t|[t.name, t.id]}, selected: @order.order_status_id %>
+    <%#= f.number_field :order_status_id %>
+  </div>
+  <div class="field">
+    <%= f.label :affiliate_id %><br>
+    <%= f.number_field :affiliate_id %>
+  </div>
+  <div class="field">
+    <%= f.label :commission %><br>
+    <%= f.text_field :commission %>
+  </div>
+  <div class="field">
+    <%= f.label :language_id %><br>
+    <%= f.number_field :language_id %>
+  </div>
+  <div class="field">
+    <%= f.label :currency_id %><br>
+    <%= f.number_field :currency_id %>
+  </div>
+  <div class="field">
+    <%= f.label :currency_code %><br>
+    <%= f.text_field :currency_code %>
+  </div>
+  <div class="field">
+    <%= f.label :currency_value %><br>
+    <%= f.text_field :currency_value %>
+  </div>
+  <div class="field">
+    <%= f.label :ip %><br>
+    <%= f.text_field :ip %>
+  </div>
+  <div class="field">
+    <%= f.label :forwarded_ip %><br>
+    <%= f.text_field :forwarded_ip %>
+  </div>
+  <div class="field">
+    <%= f.label :user_agent %><br>
+    <%= f.text_field :user_agent %>
+  </div>
+  <div class="field">
+    <%= f.label :accept_language %><br>
+    <%= f.text_field :accept_language %>
+  </div>
+  <div class="field">
+    <%= f.label :date_added %><br>
+    <%= f.datetime_select :date_added %>
+  </div>
+  <div class="field">
+    <%= f.label :date_modified %><br>
+    <%= f.datetime_select :date_modified %>
+  </div>
+  <div class="field">
+    <%= f.label :shipping_option_id %><br>
+    <%= f.number_field :shipping_option_id %>
+  </div>
+  <div class="field">
+    <%= f.label :address_id %><br>
+    <%= f.number_field :address_id %>
+  </div>
+  <div class="field">
+    <%= f.label :order_sn %><br>
+    <%= f.text_field :order_sn %>
+  </div>
+  <div class="field">
+    <%= f.label :payment_sn %><br>
+    <%= f.text_field :payment_sn %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

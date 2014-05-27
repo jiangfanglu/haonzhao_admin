@@ -1,0 +1,95 @@
+<h1>Listing products</h1>
+
+<table>
+  <thead>
+    <tr>
+			<th>ID</th>
+      <!-- <th>Model</th>
+      <th>Sku</th>
+      <th>Upc</th>
+      <th>Ean</th>
+      <th>Jan</th>
+      <th>Isbn</th>
+      <th>Mpn</th>
+      <th>Location</th>
+      <th>Quantity</th>
+      <th>Stock status</th>
+      <th>Image</th>
+      <th>Manufacturer</th>
+      <th>Shipping</th>
+      <th>Price</th>
+      <th>Points</th>
+      <th>Tax class</th>
+      <th>Date available</th>
+      <th>Weight</th>
+      <th>Weight class</th>
+      <th>Length</th>
+      <th>Width</th>
+      <th>Height</th>
+      <th>Length class</th>
+      <th>Subtract</th>
+      <th>Minimum</th>
+      <th>Sort order</th>
+      <th>Status</th>
+      <th>Date added</th>
+      <th>Date modified</th>
+      <th>Viewed</th> -->
+      <th>Name</th>
+      <!-- <th>Description</th> -->
+      <th>Meta description</th>
+      <th>Meta keyword</th>
+      <th></th>
+      <!-- <th></th> -->
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @products.each do |product| %>
+      <tr>
+				<td><%= product.product_id %></td>
+        <!-- <td><%= product.model %></td>
+        <td><%= product.sku %></td>
+        <td><%= product.upc %></td>
+        <td><%= product.ean %></td>
+        <td><%= product.jan %></td>
+        <td><%= product.isbn %></td>
+        <td><%= product.mpn %></td>
+        <td><%= product.location %></td>
+        <td><%= product.quantity %></td>
+        <td><%= product.stock_status_id %></td>
+        <td><%= product.image %></td>
+        <td><%= product.manufacturer_id %></td>
+        <td><%= product.shipping %></td>
+        <td><%= product.price %></td>
+        <td><%= product.points %></td>
+        <td><%= product.tax_class_id %></td>
+        <td><%= product.date_available %></td>
+        <td><%= product.weight %></td>
+        <td><%= product.weight_class_id %></td>
+        <td><%= product.length %></td>
+        <td><%= product.width %></td>
+        <td><%= product.height %></td>
+        <td><%= product.length_class_id %></td>
+        <td><%= product.subtract %></td>
+        <td><%= product.minimum %></td>
+        <td><%= product.sort_order %></td>
+        <td><%= product.status %></td>
+        <td><%= product.date_added %></td>
+        <td><%= product.date_modified %></td>
+        <td><%= product.viewed %></td> -->
+        <td><%= product.name %></td>
+        <!-- <td><%=raw product.description %></td> -->
+        <td><%= product.meta_description %></td>
+        <td><%= product.meta_keyword %></td>
+        <td><%= link_to 'Show', product %></td>
+        <!-- <td><%= link_to 'Edit', edit_product_path(product) %></td> -->
+        <td><%= link_to 'Destroy', product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= will_paginate @products %>
+<br>
+
+<%#= link_to 'New Product', new_product_path %>

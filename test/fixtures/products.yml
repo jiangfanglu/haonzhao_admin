@@ -1,0 +1,73 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  model: MyString
+  sku: MyString
+  upc: MyString
+  ean: MyString
+  jan: MyString
+  isbn: MyString
+  mpn: MyString
+  location: MyString
+  quantity: 1
+  stock_status_id: 1
+  image: MyString
+  manufacturer_id: 1
+  shipping: false
+  price: 1.5
+  points: 1
+  tax_class_id: 1
+  date_available: 2014-05-27 11:23:29
+  weight: 1.5
+  weight_class_id: 1
+  length: 1.5
+  width: 1.5
+  height: 1.5
+  length_class_id: 1
+  subtract: false
+  minimum: 1
+  sort_order: 1
+  status: false
+  date_added: 2014-05-27 11:23:29
+  date_modified: 2014-05-27 11:23:29
+  viewed: 1
+  name: MyString
+  description: MyText
+  meta_description: MyText
+  meta_keyword: MyString
+
+two:
+  model: MyString
+  sku: MyString
+  upc: MyString
+  ean: MyString
+  jan: MyString
+  isbn: MyString
+  mpn: MyString
+  location: MyString
+  quantity: 1
+  stock_status_id: 1
+  image: MyString
+  manufacturer_id: 1
+  shipping: false
+  price: 1.5
+  points: 1
+  tax_class_id: 1
+  date_available: 2014-05-27 11:23:29
+  weight: 1.5
+  weight_class_id: 1
+  length: 1.5
+  width: 1.5
+  height: 1.5
+  length_class_id: 1
+  subtract: false
+  minimum: 1
+  sort_order: 1
+  status: false
+  date_added: 2014-05-27 11:23:29
+  date_modified: 2014-05-27 11:23:29
+  viewed: 1
+  name: MyString
+  description: MyText
+  meta_description: MyText
+  meta_keyword: MyString

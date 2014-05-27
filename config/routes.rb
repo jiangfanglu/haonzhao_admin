@@ -4,6 +4,18 @@ HaonzhaoAdmin::Application.routes.draw do
   resources :shippings
 
   resources :shipping_options
+  
+  resources :orders do
+    member do
+      get :cancel
+    end
+  end
+
+  resources :products do
+    member do
+      get :inactive, :active
+    end
+  end
 
   resources :profiles
 

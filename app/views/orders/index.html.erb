@@ -1,0 +1,149 @@
+<h1>Listing orders</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Invoice no</th>
+      <th>Invoice prefix</th>
+      <th>Store</th>
+      <th>Store name</th>
+      <th>Store url</th>
+      <th>Customer</th>
+      <th>Customer group</th>
+      <th>Firstname</th>
+      <th>Lastname</th>
+      <th>Email</th>
+      <th>Telephone</th>
+      <th>Fax</th>
+      <th>Payment firstname</th>
+      <th>Payment lastname</th>
+      <th>Payment company</th>
+      <th>Payment company</th>
+      <th>Payment tax</th>
+      <th>Payment address 1</th>
+      <th>Payment address 2</th>
+      <th>Payment city</th>
+      <th>Payment postcode</th>
+      <th>Payment country</th>
+      <th>Payment country</th>
+      <th>Payment zone</th>
+      <th>Payment zone</th>
+      <th>Payment address format</th>
+      <th>Payment method</th>
+      <th>Payment code</th>
+      <th>Shipping firstname</th>
+      <th>Shipping lastname</th>
+      <th>Shipping company</th>
+      <th>Shipping address 1</th>
+      <th>Shipping address 2</th>
+      <th>Shipping city</th>
+      <th>Shipping postcode</th>
+      <th>Shipping country</th>
+      <th>Shipping country</th>
+      <th>Shipping zone</th>
+      <th>Shipping zone</th>
+      <th>Shipping address format</th>
+      <th>Shipping method</th>
+      <th>Shipping code</th>
+      <th>Comment</th>
+      <th>Total</th>
+      <th>Order status</th>
+      <th>Affiliate</th>
+      <th>Commission</th>
+      <th>Language</th>
+      <th>Currency</th>
+      <th>Currency code</th>
+      <th>Currency value</th>
+      <th>Ip</th>
+      <th>Forwarded ip</th>
+      <th>User agent</th>
+      <th>Accept language</th>
+      <th>Date added</th>
+      <th>Date modified</th>
+      <th>Shipping option</th>
+      <th>Address</th>
+      <th>Order sn</th>
+      <th>Payment sn</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @orders.each do |order| %>
+      <tr>
+        <td><%= order.order_id %></td>
+        <td><%= order.invoice_no %></td>
+        <td><%= order.invoice_prefix %></td>
+        <td><%= order.store_id %></td>
+        <td><%= order.store_name %></td>
+        <td><%= order.store_url %></td>
+        <td><%= order.customer_id %></td>
+        <td><%= order.customer_group_id %></td>
+        <td><%= order.firstname %></td>
+        <td><%= order.lastname %></td>
+        <td><%= order.email %></td>
+        <td><%= order.telephone %></td>
+        <td><%= order.fax %></td>
+        <td><%= order.payment_firstname %></td>
+        <td><%= order.payment_lastname %></td>
+        <td><%= order.payment_company %></td>
+        <td><%= order.payment_company_id %></td>
+        <td><%= order.payment_tax_id %></td>
+        <td><%= order.payment_address_1 %></td>
+        <td><%= order.payment_address_2 %></td>
+        <td><%= order.payment_city %></td>
+        <td><%= order.payment_postcode %></td>
+        <td><%= order.payment_country %></td>
+        <td><%= order.payment_country_id %></td>
+        <td><%= order.payment_zone %></td>
+        <td><%= order.payment_zone_id %></td>
+        <td><%= order.payment_address_format %></td>
+        <td><%= order.payment_method %></td>
+        <td><%= order.payment_code %></td>
+        <td><%= order.shipping_firstname %></td>
+        <td><%= order.shipping_lastname %></td>
+        <td><%= order.shipping_company %></td>
+        <td><%= order.shipping_address_1 %></td>
+        <td><%= order.shipping_address_2 %></td>
+        <td><%= order.shipping_city %></td>
+        <td><%= order.shipping_postcode %></td>
+        <td><%= order.shipping_country %></td>
+        <td><%= order.shipping_country_id %></td>
+        <td><%= order.shipping_zone %></td>
+        <td><%= order.shipping_zone_id %></td>
+        <td><%= order.shipping_address_format %></td>
+        <td><%= order.shipping_method %></td>
+        <td><%= order.shipping_code %></td>
+        <td><%= order.comment %></td>
+        <td><%= order.total %></td>
+        <td><%= order.order_status_id %></td>
+        <td><%= order.affiliate_id %></td>
+        <td><%= order.commission %></td>
+        <td><%= order.language_id %></td>
+        <td><%= order.currency_id %></td>
+        <td><%= order.currency_code %></td>
+        <td><%= order.currency_value %></td>
+        <td><%= order.ip %></td>
+        <td><%= order.forwarded_ip %></td>
+        <td><%= order.user_agent %></td>
+        <td><%= order.accept_language %></td>
+        <td><%= order.date_added %></td>
+        <td><%= order.date_modified %></td>
+        <td><%= order.shipping_option_id %></td>
+        <td><%= order.address_id %></td>
+        <td><%= order.order_sn %></td>
+        <td><%= order.payment_sn %></td>
+        <td><%= link_to 'Show', order %></td>
+        <td><%= link_to 'Edit', edit_order_path(order) %></td>
+        <td><%= link_to 'Destroy', order, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= will_paginate @orders %>
+<br>
+
+<%= link_to 'New Order', new_order_path %>
