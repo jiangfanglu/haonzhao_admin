@@ -5,6 +5,9 @@ class Product < ActiveRecord::Base
   self.primary_key = :product_id
   
   has_one :product_description
+  has_many :product_attributes
+  has_many :product_categories
+  has_many :categories, through: :productcategories
   
   attr_accessor :name, :description, :meta_description, :meta_keyword, :tag
   

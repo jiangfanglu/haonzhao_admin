@@ -3,11 +3,12 @@ class Shop < ActiveRecord::Base
   establish_connection :haonzhao
   validates :manufacturer_id, :identity_no, :name, :register_type, presence: true
   validates :manufacturer_id, uniqueness: true
-  self.table_name = 'oc_manufacturer'
+  self.table_name = :oc_manufacturer
+  self.primary_key = :manufacturer_id
   alias :manufacturer_id :id
   
-  belongs_to :user, foreign_key: :id#'manufacturer_id'
-  has_many :transactions, foreign_key: "store_id"
+  belongs_to :user, foreign_key: :id
+  has_many :transactions, foreign_key: :store_id
   has_many :settlements
   
   scope :transact, -> { joins('INNER JOIN (transactions) ON (transactions.receiver_id = oc_manufacturer.manufacturer_id AND transactions.transaction_source_type = "Order")').where('transactions.status = "Paid" AND transactions.receiver_type = "User"').order('transactions.created_at DESC').group('oc_manufacturer.manufacturer_id') } 
