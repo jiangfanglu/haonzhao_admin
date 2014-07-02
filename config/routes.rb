@@ -2,6 +2,11 @@ HaonzhaoAdmin::Application.routes.draw do
 
 
   resources :custom_categories
+  resources :template_to_shops
+
+  resources :template_categories
+
+  resources :templates
 
   resources :shippings
 

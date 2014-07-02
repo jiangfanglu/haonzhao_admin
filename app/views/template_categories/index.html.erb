@@ -1,0 +1,29 @@
+<h1>Listing template_categories</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Sort order</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @template_categories.each do |template_category| %>
+      <tr>
+        <td><%= template_category.name %></td>
+        <td><%= template_category.sort_order %></td>
+        <td><%= link_to 'Show', template_category %></td>
+        <td><%= link_to 'Edit', edit_template_category_path(template_category) %></td>
+        <td><%= link_to 'Destroy', template_category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Template category', new_template_category_path %>

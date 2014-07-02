@@ -1,0 +1,43 @@
+<h1>Listing templates</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Rating</th>
+      <th>Title</th>
+      <th>Code</th>
+      <th>Price</th>
+      <th>Used</th>
+      <th>Params</th>
+      <th>Template category</th>
+      <th>Author</th>
+      <th>Tags</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @templates.each do |template| %>
+      <tr>
+        <td><%= template.rating %></td>
+        <td><%= template.title %></td>
+        <td><%= template.code %></td>
+        <td><%= template.price %></td>
+        <td><%= template.used %></td>
+        <td><%= template.params %></td>
+        <td><%= template.template_category_id %></td>
+        <td><%= template.author_id %></td>
+        <td><%= template.tags %></td>
+        <td><%= link_to 'Show', template %></td>
+        <td><%= link_to 'Edit', edit_template_path(template) %></td>
+        <td><%= link_to 'Destroy', template, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Template', new_template_path %>
