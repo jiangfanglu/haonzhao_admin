@@ -12,3 +12,6 @@
  *= require jquery-ui
  *= require_tree .
  */
+a.btn-success, a.btn-warning, a.btn-info, a.btn-inverse, a.btn-danger{
+	color: #fff!important;
+} 

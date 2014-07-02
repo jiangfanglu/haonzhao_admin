@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Rating:</strong>
+  <%= @template.rating %>
+</p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @template.title %>
+</p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @template.code %>
+</p>
+
+<p>
+  <strong>Price:</strong>
+  <%= @template.price %>
+</p>
+
+<p>
+  <strong>Used:</strong>
+  <%= @template.used %>
+</p>
+
+<p>
+  <strong>Params:</strong>
+  <%= @template.params %>
+</p>
+
+<p>
+  <strong>Template category:</strong>
+  <%= @template.template_category_id %>
+</p>
+
+<p>
+  <strong>Author:</strong>
+  <%= @template.author_id %>
+</p>
+
+<p>
+  <strong>Tags:</strong>
+  <%= @template.tags %>
+</p>
+
+<%= link_to 'Edit', edit_template_path(@template) %> |
+<%= link_to 'Back', templates_path %>

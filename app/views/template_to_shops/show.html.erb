@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Shop:</strong>
+  <%= @template_to_shop.shop_id %>
+</p>
+
+<p>
+  <strong>Template:</strong>
+  <%= @template_to_shop.template_id %>
+</p>
+
+<%= link_to 'Edit', edit_template_to_shop_path(@template_to_shop) %> |
+<%= link_to 'Back', template_to_shops_path %>

@@ -1,0 +1,29 @@
+<h1>Listing template_to_shops</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Shop</th>
+      <th>Template</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @template_to_shops.each do |template_to_shop| %>
+      <tr>
+        <td><%= template_to_shop.shop_id %></td>
+        <td><%= template_to_shop.template_id %></td>
+        <td><%= link_to 'Show', template_to_shop %></td>
+        <td><%= link_to 'Edit', edit_template_to_shop_path(template_to_shop) %></td>
+        <td><%= link_to 'Destroy', template_to_shop, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Template to shop', new_template_to_shop_path %>
