@@ -1,0 +1,27 @@
+<h1>定制分类列表</h1>
+
+<table class='table'>
+  <!-- <thead> -->
+    <tr>
+      <th>Category</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @custom_categories.each do |custom_category| %>
+      <tr>
+        <td><%= custom_category.category.name %></td>
+        <td><%= link_to 'Show', custom_category %></td>
+        <td><%= link_to 'Edit', edit_custom_category_path(custom_category) %></td>
+        <td><%= link_to 'Destroy', custom_category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  <!-- </tbody> -->
+</table>
+<%= will_paginate @custom_categories %>
+<br>
+
+<%= link_to '添加 Custom category', new_custom_category_path %>

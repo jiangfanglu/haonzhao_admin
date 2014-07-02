@@ -1,6 +1,8 @@
 HaonzhaoAdmin::Application.routes.draw do
 
 
+  resources :custom_categories
+
   resources :shippings
 
   resources :shipping_options

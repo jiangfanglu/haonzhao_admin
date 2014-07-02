@@ -1,0 +1,22 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Category:</strong>
+  <%= @custom_category.category.name %>
+</p>
+
+<p>
+  <strong>Parent Category:</strong>
+	<%#= @custom_category.category.parent.name if @custom_category.category.parent %>
+  <%#= link_to @custom_category.category.parent.name, action: :show, id: @custom_category.category.parent.custom_category.id if @custom_category.category.parent && @custom_category.category.parent.custom_category %>
+	<% if @custom_category.category.parent && @custom_category.category.parent.custom_category %>
+	<%= link_to @custom_category.category.parent.name, action: :show, id: @custom_category.category.parent.custom_category.id %>
+	<% elsif @custom_category.category.parent %>
+	<%= @custom_category.category.parent.name %>
+	<% else %>
+	<%= '无' %>
+	<% end %>
+</p>
+
+
+<%= link_to 'Edit', action: :edit, id: @custom_category.id %>

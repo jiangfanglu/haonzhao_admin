@@ -5,7 +5,9 @@ class Category < ActiveRecord::Base
   self.primary_key = "category_id"
 
   has_one :category_description, :foreign_key => "category_id", :class_name => "CategoryDescription"
+  belongs_to :parent, class_name: self
   has_many :children, foreign_key: "parent_id", class_name: self
+  has_one :custom_category
 
   has_many :category_groups
   has_many :categorynavgroups, through: :category_groups
