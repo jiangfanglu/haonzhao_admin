@@ -1,4 +1,5 @@
 class ProductsController < ApplicationController
+  include ApplicationHelper
   before_action :set_product, only: [:show, :edit, :update, :destroy, :active, :inactive]
 
   # GET /products
@@ -13,9 +14,12 @@ class ProductsController < ApplicationController
   end
 
   # # GET /products/new
-  # def new
-  #   @product = Product.new
-  # end
+  def new
+    @product = Product.new
+    @shops = Shop.where("register_type = 2")
+    @categories = Category.includes(:category_description).where("status = 1")
+    #@product_stock_status = StockStatus.where("name = 'In Stock'").first.stock_status_id
+  end
 
   # # GET /products/1/edit
   # def edit
@@ -43,6 +47,10 @@ class ProductsController < ApplicationController
         format.json { render json: @product.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def newp
+
   end
 
   # # POST /products

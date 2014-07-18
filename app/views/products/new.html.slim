@@ -1,0 +1,56 @@
+= form_for(@product) do |f| 
+	h1 添加新商品
+	= link_to '返回', products_path,{:class=>"btn btn-default pull-right"}
+	button type="submit" class="btn btn-info pull-right" style="margin-right:5px;"
+		| 保存
+
+
+	- if @product.errors.any?
+		div id="error_explanation"
+      		h2
+        			= pluralize(@product.errors.count, "error")  
+        			| prohibited this product from being saved:
+
+      		ul
+      			- @product.errors.full_messages.each do |msg|
+					li = msg
+
+	ul class="nav nav-tabs" role="tablist"
+		li class="active"
+			a href="#desc" role="tab" data-toggle="tab"
+				| 产品介绍
+		li class=""
+			a href="#basic" role="tab" data-toggle="tab"
+				| 产品基本信息
+		li class=""
+			a href="#link" role="tab" data-toggle="tab"
+				| 产品相关
+		li class=""
+			a href="#image" role="tab" data-toggle="tab"
+				| 产品图片
+		li class=""
+			a href="#discount" role="tab" data-toggle="tab"
+				| 产品折扣与促销
+		li class=""
+			a href="#attribute" role="tab" data-toggle="tab"
+				| 产品属性
+		li class=""
+			a href="#option" role="tab" data-toggle="tab"
+				| 产品SKU选项
+
+	br
+	div class="tab-content" style="margin-bottom:50px;"
+		div class="tab-pane active" id="desc"
+			== render partial: "pdesc", :locals=>{:f=>f}
+		div class="tab-pane " id="basic"
+			== render partial: "pbasic", :locals=>{:f=>f}
+		div class="tab-pane" id="link"
+			== render partial: "plink", :locals=>{}
+		div class="tab-pane" id="image"
+			== render partial: "pimage", :locals=>{:f=>f}
+		div class="tab-pane" id="discount"
+			== render partial: "pdiscount", :locals=>{}
+		div class="tab-pane" id="attribute"
+			== render partial: "pattr", :locals=>{}
+		div class="tab-pane" id="option"
+			== render partial: "poption", :locals=>{}

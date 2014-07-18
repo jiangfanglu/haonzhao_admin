@@ -23,6 +23,8 @@ gem 'rails-i18n', '~> 4.0.0'
 
 gem 'rails-observers'
 
+gem "slim-rails"
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
 

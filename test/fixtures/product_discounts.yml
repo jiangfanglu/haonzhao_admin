@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  product_discount_id: 1
+  product_id: 1
+  customer_group_id: 1
+  quantity: 1
+  priority: 1
+  price: 1.5
+  date_start: 2014-07-13 21:53:09
+  date_end: 2014-07-13 21:53:09
+
+two:
+  product_discount_id: 1
+  product_id: 1
+  customer_group_id: 1
+  quantity: 1
+  priority: 1
+  price: 1.5
+  date_start: 2014-07-13 21:53:09
+  date_end: 2014-07-13 21:53:09

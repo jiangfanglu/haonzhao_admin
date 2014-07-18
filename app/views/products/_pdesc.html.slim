@@ -1,0 +1,21 @@
+script src="/ckeditor/ckeditor.js"
+script src="/ckeditor/adapters/jquery.js"
+
+div class="field"
+  = f.label :name
+  = f.text_field :name, :class=>"form-control"
+
+div class="field"
+  = f.label :description
+  = f.text_area :description, :class=>"form-control"
+
+div class="field"
+  = f.label :meta_description
+  = f.text_area :meta_description, :class=>"form-control"
+
+div class="field"
+  = f.label :meta_keyword
+  = f.text_field :meta_keyword, :class=>"form-control"
+
+javascript:
+  $( '#product_description' ).ckeditor();

@@ -1,0 +1,69 @@
+br
+div class="row"
+  div class="col-lg-3"
+    label 商品型号
+    = f.text_field :model, :class=>"form-control"
+  div class="col-lg-3"
+    label 库存
+    = f.number_field :quantity, :class=>"form-control"
+  div class="col-lg-3"
+    label 价格
+    = f.text_field :price, :class=>"form-control"
+  div class="col-lg-3"
+    label 积分
+    = f.number_field :points, :class=>"form-control"
+br
+div class="field"
+  label 上架时间
+  br
+  = f.datetime_select :date_available, :class=>"form-control"
+div class="page-header"
+  h6 以下为非必填项
+div class="row"
+  div class="col-lg-2"
+    = f.label :sku
+    = f.text_field :sku, :class=>"form-control"
+  div class="col-lg-2"
+    = f.label :upc
+    = f.text_field :upc, :class=>"form-control"
+  div class="col-lg-2"
+    = f.label :ean
+    = f.text_field :ean, :class=>"form-control"
+  div class="col-lg-2"
+    = f.label :jan
+    = f.text_field :jan, :class=>"form-control"
+  div class="col-lg-2"
+    = f.label :isbn
+    = f.text_field :isbn, :class=>"form-control"
+  div class="col-lg-2"
+    = f.label :mpn
+    = f.text_field :mpn, :class=>"form-control"
+hr
+div class="row"
+  div class="col-lg-3"
+    = f.label :weight
+    = f.text_field :weight, :class=>"form-control",value: 0
+  div class="col-lg-3"
+    = f.label :length
+    = f.text_field :length, :class=>"form-control",value: 0
+  div class="col-lg-3"
+    = f.label :width
+    = f.text_field :width, :class=>"form-control",value: 0
+  div class="col-lg-3"
+    = f.label :height
+    = f.text_field :height, :class=>"form-control",value: 0
+br
+br
+= f.hidden_field :location, :value=>"上海"
+= f.hidden_field :stock_status_id, :value=>7
+= f.hidden_field :shipping, :value=>true
+= f.hidden_field :tax_class_id, :value=>9
+= f.hidden_field :weight_class_id, :value=>0
+= f.hidden_field :subtract, :value=>true
+= f.hidden_field :length_class_id, :value=>0
+= f.hidden_field :minimum, :value=>1
+= f.hidden_field :sort_order, :value=>0
+= f.hidden_field :status, :value=>true
+= f.hidden_field :viewed, :value=>0
+= f.hidden_field :date_added, :value=>Time.now
+= f.hidden_field :date_modified, :value=>Time.now

@@ -1,0 +1,37 @@
+ul class="nav nav-tabs" role="tablist"
+	li class="active"
+		a href="#basic" role="tab" data-toggle="tab"
+			| 产品基本信息
+	li class=""
+		a href="#link" role="tab" data-toggle="tab"
+			| 产品相关
+	li class=""
+		a href="#image" role="tab" data-toggle="tab"
+			| 产品图片
+	li class=""
+		a href="#discount" role="tab" data-toggle="tab"
+			| 产品折扣与促销
+	li class=""
+		a href="#attribute" role="tab" data-toggle="tab"
+			| 产品属性
+	li class=""
+		a href="#option" role="tab" data-toggle="tab"
+			| 产品SKU选项
+
+
+div class="tab-content"
+	div class="tab-pane active" id="basic"
+		== render partial: "pbasic", :locals=>{}
+	div class="tab-pane" id="link"
+		== render partial: "plink", :locals=>{}
+	div class="tab-pane" id="image"
+		== render partial: "pimage", :locals=>{}
+	div class="tab-pane" id="discount"
+		== render partial: "pdiscount", :locals=>{}
+	div class="tab-pane" id="attribute"
+		== render partial: "pattr", :locals=>{}
+	div class="tab-pane" id="option"
+		== render partial: "poption", :locals=>{}
+
+button type="submit" class="btn btn-info"
+	| 保存

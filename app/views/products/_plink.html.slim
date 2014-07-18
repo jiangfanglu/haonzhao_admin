@@ -1,0 +1,13 @@
+div class="field"
+	label 品牌
+	== select("product", "manufacturer_id", @shops.collect {|t| [ t.name, t.manufacturer_id ] }, {},{:class => 'form-control',:id=>'product_manufacturer_id'})
+
+div class="field"
+	label 产品主视图
+	= file_field "product", 'image',:accept=>"image/jpeg"
+
+div class="field"
+	label 产品类别
+	== select("products", "categories", @categories.collect {|t| [ iterate_categories(t), t.category_id ] }, {},{:class => 'form-control',:id=>'products_categories',:multiple=>true, :size=>10})
+
+	

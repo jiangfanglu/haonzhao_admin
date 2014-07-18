@@ -1,0 +1,28 @@
+div class="container" id="image_container"
+
+div class="form-group"
+	a class="add_image btn btn-info"
+		| 添加图片 
+
+javascript:
+	$(".add_image").click(function(){
+		var container = document.getElementById("image_container");
+		var div = document.createElement("div"),
+			input = document.createElement("input"),
+			label = document.createElement("label"),
+			button = document.createElement("a");
+		div.className = "form-group";
+		input.setAttribute("type","file");
+		input.setAttribute("accept","image/jpeg");
+		input.setAttribute("name","product_images[]");
+		label.innerHTML="产品图片";
+		button.innerHTML="删除"
+		button.className="btn btn-danger btn-sm remove_image"
+		div.appendChild(label);
+		div.appendChild(input);
+		div.appendChild(button);
+		container.appendChild(div);
+	});
+	$(".container").delegate(".remove_image","click",function(){
+		$(this).parent(".form-group").remove();
+	});

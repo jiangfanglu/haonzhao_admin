@@ -1,0 +1,31 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  product_option_value_id: 1
+  product_option_id: 1
+  product_id: 1
+  option_id: 1
+  option_value_id: 1
+  quantity: 1
+  subtract: 1
+  price: 1.5
+  price_prefix: MyString
+  points: 1
+  points_prefix: MyString
+  weight: 1.5
+  weight_prefix: MyString
+
+two:
+  product_option_value_id: 1
+  product_option_id: 1
+  product_id: 1
+  option_id: 1
+  option_value_id: 1
+  quantity: 1
+  subtract: 1
+  price: 1.5
+  price_prefix: MyString
+  points: 1
+  points_prefix: MyString
+  weight: 1.5
+  weight_prefix: MyString
