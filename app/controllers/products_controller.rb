@@ -18,7 +18,7 @@ class ProductsController < ApplicationController
     @product = Product.new
     @shops = Shop.where("register_type = 2")
     @categories = Category.where("status = 1")
-    @attribute_groups = AttributeGroupDescription.select("distinct name, attribute_group_id").order("name asc").all
+    @attribute_groups = AttributeGroupDescription.order("name asc").all.uniq_by(&:name)
     #@product_stock_status = StockStatus.where("name = 'In Stock'").first.stock_status_id
   end
 

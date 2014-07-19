@@ -1,18 +1,22 @@
 div class="row"
 	div class="col-lg-6"
 		div class="form-group"
-			label 规格名
+			label 属性名
 			== select("products", "attribute_groups", @attribute_groups.collect {|t| [ t.name, t. attribute_group_id ] }, {include_blank: "选择产品规格"},{:class => 'form-control',:id=>'products_attribute_groups'})
 	div class="col-lg-6"
 		div class="form-group attribute_container"
-			label 规格选项
-			select id="attribute_select" class="form-control"
+			label 属性选项
+			select id="attribute_select" class="form-control" data-attributegroupid="" data-attributegroupname=""
 				option
 					| 产品规格项
 	
 div class="container"
 	table class="table table-striped"
-
+		thead
+			tr
+				th 属性名
+				th 属性选项
+		tbody id="attr_list"
 
 javascript:
 	$("#products_attribute_groups").change(function(){
@@ -22,8 +26,13 @@ javascript:
           })
 	     .done(function( html ) {
 	          $( "#attribute_select" ).html( html );
+	          $( "#attribute_select" ).data("attributegroupid",$("#products_attribute_groups").val());
+	          $( "#attribute_select" ).data("attributegroupname",$("#products_attribute_groups option:selected").text());
 	     });
 	});
 	$("#attribute_select").change(function(){
-
+		$("#attr_list").append("<tr><td>"+$(this).data("attributegroupname")+"<input type='hidden' name='attribute_group[]' value='"+$(this).data("attributegroupid")+"'/></td><td>"+$("#attribute_select option:selected").text()+"<input type='hidden' name='attribute[]' value='"+$(this).val()+"'/></td><td><a class='btn btn-danger attr_remove btn-xs'>删除</a></td></tr>");
+	});
+	$("#attr_list").delegate(".attr_remove","click", function(){
+		$(this).parent("td").parent("tr").remove();
 	});
