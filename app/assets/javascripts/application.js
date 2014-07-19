@@ -14,3 +14,21 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+
+function displayAsImage3(file, containerid,index) {
+	if (typeof FileReader !== "undefined") {
+		var container = document.getElementById(containerid),
+		    img = document.createElement("img"),
+		    reader;
+		img.className = 'img-responsive';
+		container.appendChild(img);
+
+		reader = new FileReader();
+		reader.onload = (function (theImg) {
+			return function (evt) {
+				theImg.src = evt.target.result;
+			};
+		}(img));
+		reader.readAsDataURL(file);
+	}
+}

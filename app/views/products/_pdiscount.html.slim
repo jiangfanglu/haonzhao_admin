@@ -1,0 +1,79 @@
+div class="container"
+	table class="table table-stiped"
+		thead
+			tr
+				th 数量
+				th 价格
+				th 优先级
+				th 开始时间
+				th 截至时间
+				th &nbsp;
+		tbody id="discount_container"
+
+
+
+div class="form-group"
+	a class="add_discount btn btn-info"
+		| 添加折扣信息
+
+javascript:
+	var discount_count = 0;
+	$(".add_discount").click(function(){
+		var container = document.getElementById("discount_container");
+		var tr = document.createElement("tr"),
+			quantity_td = document.createElement("td"),
+			quantity_input = document.createElement("input"),
+			price_td = document.createElement("td"),
+			price_input = document.createElement("input"),
+			priority_td = document.createElement("td"),
+			priority_input = document.createElement("input"),
+			start_td = document.createElement("td"),
+			start_input = document.createElement("input"),
+			end_td = document.createElement("td"),
+			end_input = document.createElement("input")
+			remove_btn_td = document.createElement("td"),
+			remove_btn = document.createElement("a");
+
+		quantity_input.setAttribute("name", "discount_quantity[]");
+		quantity_input.setAttribute("type", "text");
+		quantity_input.className = "form-control";
+		price_input.setAttribute("name", "discount_quantity[]");
+		price_input.setAttribute("type", "text");
+		price_input.className = "form-control";
+		priority_input.setAttribute("name", "discount_quantity[]");
+		priority_input.setAttribute("type", "text");
+		priority_input.className = "form-control";
+		priority_input.setAttribute("value", "0");
+		start_input.setAttribute("name", "discount_quantity[]");
+		start_input.setAttribute("type", "text");
+		start_input.className = "form-control picktime";
+		start_input.setAttribute("value","#{Time.now.strftime('%Y-%m-%d %H:%M:%S')}")
+		end_input.setAttribute("name", "discount_quantity[]");
+		end_input.setAttribute("type", "text");
+		end_input.className = "form-control picktime";
+		end_input.setAttribute("value","#{Time.now.strftime('%Y-%m-%d %H:%M:%S')}")
+		remove_btn.className = "remove_btn btn btn-danger";
+		remove_btn.innerHTML = "删除";
+
+		quantity_td.appendChild(quantity_input);
+		price_td.appendChild(price_input);
+		priority_td.appendChild(priority_input);
+		start_td.appendChild(start_input);
+		end_td.appendChild(end_input);
+		remove_btn_td.appendChild(remove_btn);
+
+		tr.appendChild(quantity_td);
+		tr.appendChild(price_td);
+		tr.appendChild(priority_td);
+		tr.appendChild(start_td);
+		tr.appendChild(end_td);
+		tr.appendChild(remove_btn_td);
+
+		container.appendChild(tr);
+
+		discount_count += 1
+	});
+	$("#discount_container").delegate(".remove_btn","click", function(){
+		$(this).parent("td").parent("tr").remove();
+	});
+

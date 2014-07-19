@@ -1,0 +1,29 @@
+div class="row"
+	div class="col-lg-6"
+		div class="form-group"
+			label 规格名
+			== select("products", "attribute_groups", @attribute_groups.collect {|t| [ t.name, t. attribute_group_id ] }, {include_blank: "选择产品规格"},{:class => 'form-control',:id=>'products_attribute_groups'})
+	div class="col-lg-6"
+		div class="form-group attribute_container"
+			label 规格选项
+			select id="attribute_select" class="form-control"
+				option
+					| 产品规格项
+	
+div class="container"
+	table class="table table-striped"
+
+
+javascript:
+	$("#products_attribute_groups").change(function(){
+		$.ajax({
+            url: '/products/attributes?id='+$("#products_attribute_groups").val(),
+            cache: false
+          })
+	     .done(function( html ) {
+	          $( "#attribute_select" ).html( html );
+	     });
+	});
+	$("#attribute_select").change(function(){
+
+	});

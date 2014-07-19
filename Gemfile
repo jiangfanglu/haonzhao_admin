@@ -19,6 +19,8 @@ gem 'protected_attributes'
 
 gem 'therubyracer'
 
+gem 'quiet_assets', group: :development
+
 gem 'rails-i18n', '~> 4.0.0' 
 
 gem 'rails-observers'

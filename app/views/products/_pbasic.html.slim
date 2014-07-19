@@ -16,7 +16,13 @@ br
 div class="field"
   label 上架时间
   br
-  = f.datetime_select :date_available, :class=>"form-control"
+  = f.text_field :date_available, :class=>"form-control"
+
+javascript:
+  $(function() {
+    $( "#product_date_available" ).datepicker();
+  });
+
 div class="page-header"
   h6 以下为非必填项
 div class="row"

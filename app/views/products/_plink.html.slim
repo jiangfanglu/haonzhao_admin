@@ -4,10 +4,19 @@ div class="field"
 
 div class="field"
 	label 产品主视图
-	= file_field "product", 'image',:accept=>"image/jpeg"
+	div class="preview" id="main_image_preview"
+	= file_field "product", 'image',:accept=>"image/jpeg",:class=>"imgfile_main"
 
 div class="field"
 	label 产品类别
 	== select("products", "categories", @categories.collect {|t| [ iterate_categories(t), t.category_id ] }, {},{:class => 'form-control',:id=>'products_categories',:multiple=>true, :size=>10})
 
-	
+javascript:
+	$(".container").delegate(".imgfile_main","change",function(){
+		var file = $(this)[0].files;
+		var obj = $(this).siblings(".preview");
+		obj.empty();
+		for(i=0;i<file.length;i++){
+			displayAsImage3(file[i], obj.attr("id"), i);
+		}
+	});

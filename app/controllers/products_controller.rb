@@ -17,7 +17,8 @@ class ProductsController < ApplicationController
   def new
     @product = Product.new
     @shops = Shop.where("register_type = 2")
-    @categories = Category.includes(:category_description).where("status = 1")
+    @categories = Category.where("status = 1")
+    @attribute_groups = AttributeGroupDescription.select("distinct name, attribute_group_id").order("name asc").all
     #@product_stock_status = StockStatus.where("name = 'In Stock'").first.stock_status_id
   end
 
@@ -51,6 +52,13 @@ class ProductsController < ApplicationController
 
   def newp
 
+  end
+
+  def attributes
+    @attributes = AttributeDescription.joins(:select_attribute).where("oc_attribute.attribute_group_id = ?", params[:id])
+    respond_to do |format|
+      format.html { render layout: false }
+    end
   end
 
   # # POST /products

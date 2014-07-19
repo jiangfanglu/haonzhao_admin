@@ -5,24 +5,39 @@ div class="form-group"
 		| 添加图片 
 
 javascript:
+	var image_count = 0
 	$(".add_image").click(function(){
 		var container = document.getElementById("image_container");
 		var div = document.createElement("div"),
 			input = document.createElement("input"),
 			label = document.createElement("label"),
+			prev = document.createElement("div"),
 			button = document.createElement("a");
-		div.className = "form-group";
+		div.className = "thumbnail col-lg-3";
+		prev.className = "preview";
+		prev.id = "imgprev"+image_count;
+		input.className = "imgfile";
 		input.setAttribute("type","file");
 		input.setAttribute("accept","image/jpeg");
 		input.setAttribute("name","product_images[]");
 		label.innerHTML="产品图片";
-		button.innerHTML="删除"
-		button.className="btn btn-danger btn-sm remove_image"
+		button.innerHTML="删除";
+		button.className="btn btn-danger btn-sm remove_image";
+		div.appendChild(prev);
 		div.appendChild(label);
 		div.appendChild(input);
 		div.appendChild(button);
 		container.appendChild(div);
+		image_count += 1;
 	});
 	$(".container").delegate(".remove_image","click",function(){
-		$(this).parent(".form-group").remove();
+		$(this).parent(".thumbnail").remove();
+	});
+	$(".container").delegate(".imgfile","change",function(){
+		var file = $(this)[0].files;
+		var obj = $(this).siblings(".preview");
+		obj.empty();
+		for(i=0;i<file.length;i++){
+			displayAsImage3(file[i], obj.attr("id"), i);
+		}
 	});

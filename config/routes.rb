@@ -1,7 +1,14 @@
 HaonzhaoAdmin::Application.routes.draw do
 
 
-  resources :products
+  resources :products do
+    member do
+      get :inactive, :active
+    end
+    collection do
+      get :newp, :attributes
+    end
+  end
 
   resources :custom_categories
   resources :template_to_shops
@@ -20,11 +27,12 @@ HaonzhaoAdmin::Application.routes.draw do
     end
   end
 
-  resources :products do
-    member do
-      get :inactive, :active,:newp
-    end
-  end
+  # resources :products do
+  #   member do
+  #     get :inactive, :active
+  #   end
+    
+  # end
 
   resources :profiles
 
