@@ -1,7 +1,7 @@
-= form_for(@product) do |f| 
+= form_for(@product, :html => {:multipart => true}) do |f| 
 	h1 添加新商品
 	= link_to '返回', products_path,{:class=>"btn btn-default pull-right"}
-	button type="submit" class="btn btn-info pull-right" style="margin-right:5px;"
+	button type="submit" class="btn btn-info pull-right submit_product" style="margin-right:5px;"
 		| 保存
 
 
@@ -34,9 +34,9 @@
 		li class=""
 			a href="#attribute" role="tab" data-toggle="tab"
 				| 产品属性
-		li class=""
-			a href="#option" role="tab" data-toggle="tab"
-				| 产品SKU选项
+		//li class=""
+		//	a href="#option" role="tab" data-toggle="tab"
+		//		| 产品规格
 
 	br
 	div class="tab-content" style="margin-bottom:50px;"
@@ -52,5 +52,12 @@
 			== render partial: "pdiscount", :locals=>{}
 		div class="tab-pane" id="attribute"
 			== render partial: "pattr", :locals=>{}
-		div class="tab-pane" id="option"
-			== render partial: "poption", :locals=>{}
+		//div class="tab-pane" id="option"
+		//	== render partial: "poption", :locals=>{}
+
+
+javascript:
+	$("form#new_product").submit(function(){
+		$(".submit_product").addClass("disabled");
+		$(".submit_product").html("存储中......");
+	});

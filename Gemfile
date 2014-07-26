@@ -24,7 +24,7 @@ gem 'quiet_assets', group: :development
 gem 'rails-i18n', '~> 4.0.0' 
 
 gem 'rails-observers'
-
+gem 'mini_magick'
 gem "slim-rails"
 
 # Use SCSS for stylesheets

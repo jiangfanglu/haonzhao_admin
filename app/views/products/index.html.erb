@@ -78,10 +78,9 @@
         <td><%= product.date_added %></td>
         <td><%= product.date_modified %></td>
         <td><%= product.viewed %></td> -->
-        <td><%= product.name %></td>
-        <!-- <td><%=raw product.description %></td> -->
-        <td><%= product.meta_description %></td>
-        <td><%= product.meta_keyword %></td>
+        <td><%= product.product_description.name %></td>
+        <td><%= product.product_description.meta_description %></td>
+        <td><%= product.product_description.meta_keyword %></td>
         <td><%= link_to '查看', product,:class=>"btn btn-default btn-xs" %></td>
         <!-- <td><%= link_to 'Edit', edit_product_path(product) %></td> -->
         <td><%#= link_to '删除', product, method: :delete, data: { confirm: 'Are you sure?' },:class=>"btn btn-danger btn-xs" %></td>

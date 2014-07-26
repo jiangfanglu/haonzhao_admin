@@ -31,7 +31,7 @@ javascript:
 	     });
 	});
 	$("#attribute_select").change(function(){
-		$("#attr_list").append("<tr><td>"+$(this).data("attributegroupname")+"<input type='hidden' name='attribute_group[]' value='"+$(this).data("attributegroupid")+"'/></td><td>"+$("#attribute_select option:selected").text()+"<input type='hidden' name='attribute[]' value='"+$(this).val()+"'/></td><td><a class='btn btn-danger attr_remove btn-xs'>删除</a></td></tr>");
+		$("#attr_list").append("<tr><td>"+$(this).data("attributegroupname")+"<input type='hidden' name='attribute_group[]' value='"+$(this).data("attributegroupid")+"'/></td><td>"+$("#attribute_select option:selected").text()+"<input type='hidden' name='attribute[]' value='"+$(this).val()+"_"+$("#attribute_select option:selected").text()+"'/></td><td><a class='btn btn-danger attr_remove btn-xs'>删除</a></td></tr>");
 	});
 	$("#attr_list").delegate(".attr_remove","click", function(){
 		$(this).parent("td").parent("tr").remove();

@@ -1,3 +1,6 @@
+div class="alert alert-warning"
+	div class="container"
+		| 开始与截至日期请务必按照该默认格式填写
 div class="container"
 	table class="table table-stiped"
 		thead
@@ -34,23 +37,23 @@ javascript:
 			remove_btn_td = document.createElement("td"),
 			remove_btn = document.createElement("a");
 
-		quantity_input.setAttribute("name", "discount_quantity[]");
+		quantity_input.setAttribute("name", "discount[][quantity]");
 		quantity_input.setAttribute("type", "text");
 		quantity_input.className = "form-control";
 		quantity_input.setAttribute("value", "1");
-		price_input.setAttribute("name", "discount_quantity[]");
+		price_input.setAttribute("name", "discount[][price]");
 		price_input.setAttribute("type", "text");
 		price_input.className = "form-control";
 		price_input.setAttribute("value", "0.0");
-		priority_input.setAttribute("name", "discount_quantity[]");
+		priority_input.setAttribute("name", "discount[][priority]");
 		priority_input.setAttribute("type", "text");
 		priority_input.className = "form-control";
 		priority_input.setAttribute("value", "0");
-		start_input.setAttribute("name", "discount_quantity[]");
+		start_input.setAttribute("name", "discount[][start]");
 		start_input.setAttribute("type", "text");
 		start_input.className = "form-control picktime";
 		start_input.setAttribute("value","#{Time.now.strftime('%Y-%m-%d %H:%M:%S')}")
-		end_input.setAttribute("name", "discount_quantity[]");
+		end_input.setAttribute("name", "discount[][end]");
 		end_input.setAttribute("type", "text");
 		end_input.className = "form-control picktime";
 		end_input.setAttribute("value","#{Time.now.strftime('%Y-%m-%d %H:%M:%S')}")

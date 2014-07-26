@@ -152,22 +152,22 @@
 
 <p>
   <strong>Name:</strong>
-  <%= @product.name %>
+  <%= @product.product_description.name %>
 </p>
 
 <p>
   <strong>Description:</strong>
-  <%=raw @product.description %>
+  <%=raw @product.product_description.description %>
 </p>
 
 <p>
   <strong>Meta description:</strong>
-  <%= @product.meta_description %>
+  <%= @product.product_description.meta_description %>
 </p>
 
 <p>
   <strong>Meta keyword:</strong>
-  <%= @product.meta_keyword %>
+  <%= @product.product_description.meta_keyword %>
 </p>
 <% if @product.status %>
 <%= link_to 'Inactive', inactive_product_path(@product) %> |

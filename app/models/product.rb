@@ -7,29 +7,31 @@ class Product < ActiveRecord::Base
   has_one :product_description
   has_many :product_attributes
   has_many :product_categories
+  has_many :product_images
+  has_many :product_discounts
   has_many :categories, through: :productcategories
   
-  attr_accessor :name, :description, :meta_description, :meta_keyword, :tag
+  # attr_accessor :name, :description, :meta_description, :meta_keyword, :tag
   
-  before_update :save_description
+  # before_update :save_description
   
-  after_find :set_description
+  # after_find :set_description
   
-  def initialize args={}
-    super
-    self.product_description = ProductDescription.new args
-  end
+  # def initialize args={}
+  #   super
+  #   self.product_description = ProductDescription.new args
+  # end
   
-  def save_description
-    product_description.update_attributes attributes.select{|key,v| [:name, :description, :meta_description, :meta_keyword, :tag].include? key }
-  end
+  # def save_description
+  #   product_description.update_attributes attributes.select{|key,v| [:name, :description, :meta_description, :meta_keyword, :tag].include? key }
+  # end
   
-  def set_description
-    self.name             = product_description.name
-    self.description      = product_description.description
-    self.meta_description = product_description.meta_description
-    self.meta_keyword     = product_description.meta_keyword
-    self.tag              = product_description.tag
-  end
+  # def set_description
+  #   self.name             = product_description.name
+  #   self.description      = product_description.description
+  #   self.meta_description = product_description.meta_description
+  #   self.meta_keyword     = product_description.meta_keyword
+  #   self.tag              = product_description.tag
+  # end
   
 end
