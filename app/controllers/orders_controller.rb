@@ -4,7 +4,8 @@ class OrdersController < ApplicationController
   # GET /orders
   # GET /orders.json
   def index
-    @orders = Order.order('order_id DESC').paginate page: params[:page], per_page: 20
+    @order_status = ['Processing','Customer Order Processing','Reviewed','Payment Received','Shipping','Processed','Shipped']
+    @orders = Order.joins(:order_status).where("oc_order_status.name in (?) AND oc_order_status.language_id = ?",@order_status, 3).order('order_id DESC').paginate page: params[:page], per_page: 20
   end
 
   # GET /orders/1
@@ -30,6 +31,25 @@ class OrdersController < ApplicationController
         format.html { render action: 'show' }
         format.json { render json: @order.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def confirm_payment
+    require 'net/http'
+    order = Order.find params[:id]
+    token = Digest::SHA2.hexdigest("Gra55r00t!" + order.payment_sn)
+
+    remote_url = "#{MAIN_SITE}/utility/admin_confirm_payment/0"
+    url = URI.parse(remote_url)
+    req = Net::HTTP::Post.new(url.path)
+    req.set_form_data({'pmtsn'=>order.payment_sn, 'token'=>token})
+    res = Net::HTTP.start(url.host, url.port) {|http|
+      http.request(req)
+    }
+    if res.body == "OK"
+      render :text=>"OK",:layout=>false
+    else
+      render :text=>"NOT",:layout=>false
     end
   end
   

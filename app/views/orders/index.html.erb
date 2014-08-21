@@ -1,21 +1,21 @@
 <h1>Listing orders</h1>
 
-<table>
+<table class="table table-striped">
   <thead>
     <tr>
       <th>ID</th>
-      <th>Invoice no</th>
+      <!-- <th>Invoice no</th>
       <th>Invoice prefix</th>
       <th>Store</th>
       <th>Store name</th>
-      <th>Store url</th>
+      <th>Store url</th> -->
       <th>Customer</th>
-      <th>Customer group</th>
+<!--       <th>Customer group</th> -->
       <th>Firstname</th>
       <th>Lastname</th>
       <th>Email</th>
       <th>Telephone</th>
-      <th>Fax</th>
+<!--       <th>Fax</th> -->
       <th>Payment firstname</th>
       <th>Payment lastname</th>
       <th>Payment company</th>
@@ -75,18 +75,18 @@
     <% @orders.each do |order| %>
       <tr>
         <td><%= order.order_id %></td>
-        <td><%= order.invoice_no %></td>
+<!--         <td><%= order.invoice_no %></td>
         <td><%= order.invoice_prefix %></td>
         <td><%= order.store_id %></td>
         <td><%= order.store_name %></td>
-        <td><%= order.store_url %></td>
+        <td><%= order.store_url %></td> -->
         <td><%= order.customer_id %></td>
-        <td><%= order.customer_group_id %></td>
+<!--         <td><%= order.customer_group_id %></td> -->
         <td><%= order.firstname %></td>
         <td><%= order.lastname %></td>
         <td><%= order.email %></td>
         <td><%= order.telephone %></td>
-        <td><%= order.fax %></td>
+<!--         <td><%= order.fax %></td> -->
         <td><%= order.payment_firstname %></td>
         <td><%= order.payment_lastname %></td>
         <td><%= order.payment_company %></td>
@@ -136,8 +136,12 @@
         <td><%= order.address_id %></td>
         <td><%= order.order_sn %></td>
         <td><%= order.payment_sn %></td>
-        <td><%= link_to 'Show', order %></td>
-        <td><%= link_to 'Edit', edit_order_path(order) %></td>
+        <td><%= link_to '查看', order,{:class=>"btn btn-info btn-xs"} %></td>
+        <td><%#= link_to 'Edit', edit_order_path(order) %>
+          <% if order.order_status.name == 'Processing' and !order.payment_sn.blank? %>
+          <a class="btn btn-xs btn-info confirm_pymt" data-orderid="<%=order.order_id%>">确认付款</a>
+          <% end %>
+        </td>
         <td><%= link_to 'Destroy', order, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
@@ -147,3 +151,22 @@
 <br>
 
 <%= link_to 'New Order', new_order_path %>
+<script type="text/javascript">
+  $(".confirm_pymt").click(function(){
+    var obj = $(this);
+    obj.html("处理中...");
+    obj.addClass("disabled");
+    $.ajax({
+          url: '/orders/confirm_payment/?id='+obj.data('orderid'),
+          cache: false
+      })
+     .done(function( html ) {
+         if(html=="OK"){
+            alert("成功确认！");
+            obj.hide();
+         }else{
+          alert("出问题啦");
+         }
+     });
+  });
+</script>

@@ -25,6 +25,9 @@ HaonzhaoAdmin::Application.routes.draw do
     member do
       get :cancel
     end
+    collection do
+      get :confirm_payment
+    end
   end
 
   # resources :products do
