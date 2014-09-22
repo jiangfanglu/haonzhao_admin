@@ -55,6 +55,11 @@ HaonzhaoAdmin::Application.routes.draw do
 
   resources :available_custom_categories
 
+  resources :hangzhou do
+    collection do
+      get :importorder, :personal_goods_declare, :taxisneed,:productapplication
+    end
+  end
 
   resources :certificates
 
@@ -85,7 +90,7 @@ HaonzhaoAdmin::Application.routes.draw do
   
   resources :shops do
     collection do
-      get :close, :allow, :login
+      get :close, :allow, :login,:test
       post :login_check
     end
   end
