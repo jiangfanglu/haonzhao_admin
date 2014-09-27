@@ -10,6 +10,8 @@ class Product < ActiveRecord::Base
   has_many :product_images
   has_many :product_discounts
   has_many :categories, through: :productcategories
+
+  has_one :hz_product, :class_name=>"HzProduct"
   
   # attr_accessor :name, :description, :meta_description, :meta_keyword, :tag
   

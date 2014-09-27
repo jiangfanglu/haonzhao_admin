@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  hz_country_code: 1
+  address: MyText
+  tel: MyString
+  fax: MyString
+  manufacturer_id: 1
+
+two:
+  hz_country_code: 1
+  address: MyText
+  tel: MyString
+  fax: MyString
+  manufacturer_id: 1

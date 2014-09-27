@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
   has_many :custom_order_requests, :primary_key => "id", :foreign_key => "manufacturer_id", :class_name => "CustomOrderRequest"
   has_one :seller_payment
   has_many :transactions, foreign_key: 'store_id'
-  
+  has_many :customer_identifications
   has_many :receivables_list, foreign_key: 'receiver_id', class_name: 'Transaction', as: :receiver
   
   has_many :pay_list, foreign_key: 'sender_id', class_name: 'Transaction', as: :sender

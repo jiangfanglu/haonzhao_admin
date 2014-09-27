@@ -9,4 +9,6 @@ class HangzhouController < ApplicationController
   end
   def productapplication
   end
+
+  
 end
