@@ -1,0 +1,24 @@
+div class="row"
+  div class="col-lg-3"
+    label 商品条形码
+    = text_field 'hz','barcode', :class=>"form-control"
+  div class="col-lg-3"
+    label 行邮税种类
+    == select("hz", "post_tax_no", @post_taxes.collect {|t| [ t.item_range, t.post_tax_no ] }, {include_blank: "选择行邮税种类"},{:class => 'form-control',:id=>'hz_post_tax_no'})
+  div class="col-lg-3"
+    label 申报材料地址
+    = text_field 'hz','material_address', :class=>"form-control"
+  div class="col-lg-3"
+    label 计量单位
+    == select("hz", "unit", @units.collect {|t| [ t.name, t.code ] }, {include_blank: "选择计量单位"},{:class => 'form-control',:id=>'hz_unit'})
+br
+div class="row"
+  div class="col-lg-3"
+    label 产品用途
+    == select("hz", "purpose", @purposes.collect {|t| [ t.name, t.code ] }, {include_blank: "选择产品用途"},{:class => 'form-control',:id=>'hz_purpose'})
+  div class="col-lg-3"
+    label 产品适用标准
+    = text_field 'hz','standard', :class=>"form-control"
+  div class="col-lg-6"
+    label 主要成分
+    = text_area 'hz','main_elements', :class=>"form-control"

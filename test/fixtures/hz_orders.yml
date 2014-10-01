@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  pay_company_code: MyString
+  pay_number: MyString
+  post_mode: MyString
+  sender_country: MyString
+  sender_name: MyString
+  logistic_company_name: MyString
+  logistic_company_code: MyString
+  way_bills: MyText
+  currency_code: MyString
+
+two:
+  pay_company_code: MyString
+  pay_number: MyString
+  post_mode: MyString
+  sender_country: MyString
+  sender_name: MyString
+  logistic_company_name: MyString
+  logistic_company_code: MyString
+  way_bills: MyText
+  currency_code: MyString

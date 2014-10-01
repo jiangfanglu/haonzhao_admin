@@ -1,0 +1,51 @@
+p#notice = notice
+
+p
+  strong Company code:
+  = @hz_company.company_code
+p
+  strong Org code:
+  = @hz_company.org_code
+p
+  strong Company name:
+  = @hz_company.company_name
+p
+  strong Company type:
+  = @hz_company.company_type
+p
+  strong Company address:
+  = @hz_company.company_address
+p
+  strong Registered capital:
+  = @hz_company.registered_capital
+p
+  strong Total investment:
+  = @hz_company.total_investment
+p
+  strong Business cope:
+  = @hz_company.business_cope
+p
+  strong Contact person:
+  = @hz_company.contact_person
+p
+  strong Contact info:
+  = @hz_company.contact_info
+p
+  strong Fax no:
+  = @hz_company.fax_no
+p
+  strong Zipcode:
+  = @hz_company.zipcode
+p
+  strong Website url:
+  = @hz_company.website_url
+p
+  strong Email:
+  = @hz_company.email
+p
+  strong Custom code:
+  = @hz_company.custom_code
+
+= link_to 'Edit', edit_hz_company_path(@hz_company)
+'|
+= link_to 'Back', hz_companies_path

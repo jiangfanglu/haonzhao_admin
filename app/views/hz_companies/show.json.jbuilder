@@ -1,0 +1,1 @@
+json.extract! @hz_company, :id, :company_code, :org_code, :company_name, :company_type, :company_address, :registered_capital, :total_investment, :business_cope, :contact_person, :contact_info, :fax_no, :zipcode, :website_url, :email, :custom_code, :created_at, :updated_at

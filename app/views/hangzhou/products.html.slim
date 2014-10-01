@@ -1,0 +1,68 @@
+h1 商品申报管理
+
+table class="table"
+  thead
+    tr
+      th 
+        input type="checkbox" name="tickall" class="tickboxall"
+        | 全选
+      th 
+        button type="button" class="btn btn-info applyall"
+          | 申报
+      th
+        button type="button" class="btn btn-info checkresultall"
+          | 查看申报结果(刷新)
+    tr
+      th 
+      th ID
+      th Name
+      th manufacturer
+      th model
+      th barcode
+      th recorded
+      th applied
+      th
+  tbody
+    form id="productapplyform"
+      - @products.each do |product|
+        tr
+          td 
+            input type="checkbox" name="tick[]" value="#{product.product_id}" class="tickbox"
+          td = product.product_id
+          td = product.product_description.name
+          td = product.shop.name
+          td = product.model
+          td = product.hz_product.barcode if !product.hz_product.blank?
+          td = product.hz_product.record_time if !product.hz_product.blank?
+          td = product.hz_product.applied_time if !product.hz_product.blank?
+          td = link_to '查看', product,:class=>"btn btn-default btn-xs"
+      end
+
+= will_paginate @products
+
+javascript:
+  $(".tickboxall").click(function(){
+    if ($(this).prop("checked") == true){
+      $(".tickbox").each(function(){
+        $(this).prop("checked",true);
+      });
+    }else{
+      $(".tickbox").each(function(){
+        $(this).prop("checked",false);
+      });
+    }   
+  });
+
+  $(".applyall").click(function(){
+    $.ajax({
+      url: '/hangzhou/apply_for_product_record',
+      type: 'post',
+      data: {ids: $("#productapplyform").serializeArray()}
+    }).done(function(response){
+      alert(response);
+      //window.location.reload();
+    });
+  });
+  $(".checkresultall").click(function(){
+
+  });

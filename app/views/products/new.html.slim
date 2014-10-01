@@ -34,9 +34,12 @@
 		li class=""
 			a href="#attribute" role="tab" data-toggle="tab"
 				| 产品属性
-		//li class=""
-		//	a href="#option" role="tab" data-toggle="tab"
-		//		| 产品规格
+		li class=""
+			a href="#hangzhou" role="tab" data-toggle="tab"
+				| 产品申报附加信息
+		li class=""
+			a href="#option" role="tab" data-toggle="tab"
+				| 产品规格
 
 	br
 	div class="tab-content" style="margin-bottom:50px;"
@@ -52,8 +55,10 @@
 			== render partial: "pdiscount", :locals=>{}
 		div class="tab-pane" id="attribute"
 			== render partial: "pattr", :locals=>{}
-		//div class="tab-pane" id="option"
-		//	== render partial: "poption", :locals=>{}
+		div class="tab-pane" id="hangzhou"
+			== render partial: "hangzhou", :locals=>{}
+		div class="tab-pane" id="option"
+			== render partial: "poption", :locals=>{}
 
 
 javascript:

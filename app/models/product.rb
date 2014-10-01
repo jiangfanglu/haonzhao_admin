@@ -1,6 +1,11 @@
 class Product < ActiveRecord::Base
   establish_connection :haonzhao
-  attr_accessible :model, :sku, :upc, :ean, :jan, :isbn, :mpn, :location, :quantity, :stock_status_id, :image, :manufacturer_id, :shipping, :price, :points, :tax_class_id, :date_available, :weight, :weight_class_id, :length, :width, :height, :length_class_id, :subtract, :minimum, :sort_order, :status, :date_added, :date_modified, :viewed
+  #approved 
+  # 0 normal products
+  # 1 applied products
+  # 2 hangzhou approved products
+  
+  attr_accessible :model,:approved, :sku, :upc, :ean, :jan, :isbn, :mpn, :location, :quantity, :stock_status_id, :image, :manufacturer_id, :shipping, :price, :points, :tax_class_id, :date_available, :weight, :weight_class_id, :length, :width, :height, :length_class_id, :subtract, :minimum, :sort_order, :status, :date_added, :date_modified, :viewed
   self.table_name = :oc_product
   self.primary_key = :product_id
   
@@ -10,6 +15,7 @@ class Product < ActiveRecord::Base
   has_many :product_images
   has_many :product_discounts
   has_many :categories, through: :productcategories
+  belongs_to :shop,:foreign_key=>"manufacturer_id"
 
   has_one :hz_product, :class_name=>"HzProduct"
   

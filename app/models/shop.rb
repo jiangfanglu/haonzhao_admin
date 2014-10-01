@@ -10,8 +10,9 @@ class Shop < ActiveRecord::Base
   belongs_to :user, foreign_key: :id
   has_many :transactions, foreign_key: :store_id
   has_many :settlements
+  has_many :products, :foreign_key=>"manufacturer_id"
 
-  has_one :hz_manufacturer, :class_name=>"HzManufacturer"
+  has_one :hz_manufacturer,:primary_key=>"manufacturer_id", :foreign_key=>"manufacturer_id", :class_name=>"HzManufacturer"
   
   scope :transact, -> { joins('INNER JOIN (transactions) ON (transactions.receiver_id = oc_manufacturer.manufacturer_id AND transactions.transaction_source_type = "Order")').where('transactions.status = "Paid" AND transactions.receiver_type = "User"').order('transactions.created_at DESC').group('oc_manufacturer.manufacturer_id') } 
 

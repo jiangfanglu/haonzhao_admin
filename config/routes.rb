@@ -1,6 +1,8 @@
 HaonzhaoAdmin::Application.routes.draw do
 
 
+  resources :hz_companies
+
   resources :products do
     member do
       get :inactive, :active
@@ -57,7 +59,8 @@ HaonzhaoAdmin::Application.routes.draw do
 
   resources :hangzhou do
     collection do
-      get :importorder, :personal_goods_declare, :taxisneed,:productapplication
+      get :importorder, :personal_goods_declare, :taxisneed,:productapplication,:company_applied,:products,:orders,:personals,:individual_product_apply
+      post :apply_for_product_record,:ws_test
     end
   end
 
@@ -66,6 +69,7 @@ HaonzhaoAdmin::Application.routes.draw do
   resources :promotions
 
   resources :coupons
+  resources :hz_companies
 
   resources :vouchers
 

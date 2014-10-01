@@ -1,0 +1,2 @@
+module HzCompaniesHelper
+end

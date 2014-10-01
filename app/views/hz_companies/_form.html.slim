@@ -1,0 +1,68 @@
+= form_for @hz_company do |f|
+  - if @hz_company.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@hz_company.errors.count, "error")} prohibited this hz_company from being saved:"
+      ul
+        - @hz_company.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :company_code
+    = f.text_field :company_code, :class=>"form-control"
+  .field
+    = f.label :org_code
+    = f.text_field :org_code, :class=>"form-control"
+  .field
+    = f.label :company_name
+    = f.text_field :company_name, :class=>"form-control"
+  .field
+    = f.label :company_type
+    select name="hz_company[company_type]" id="hz_company_company_type" class="form-control"
+      option value=""
+        | 选择公司类别
+      option value="1"
+        | 商家
+      option value="2"
+        | 平台企业
+      option value="3"
+        | 物流企业
+      option value="4"
+        | 仓储企业
+      option value="5"
+        | 第三方支付企业
+      option value="6"
+        | 报关行企业
+  .field
+    = f.label :company_address
+    = f.text_field :company_address, :class=>"form-control"
+  .field
+    = f.label :registered_capital
+    = f.text_field :registered_capital, :class=>"form-control"
+  .field
+    = f.label :total_investment
+    = f.text_field :total_investment, :class=>"form-control"
+  .field
+    = f.label :business_cope
+    = f.text_area :business_cope, :class=>"form-control"
+  .field
+    = f.label :contact_person
+    = f.text_field :contact_person, :class=>"form-control"
+  .field
+    = f.label :contact_info
+    = f.text_field :contact_info, :class=>"form-control"
+  .field
+    = f.label :fax_no
+    = f.text_field :fax_no, :class=>"form-control"
+  .field
+    = f.label :zipcode
+    = f.text_field :zipcode, :class=>"form-control"
+  .field
+    = f.label :website_url
+    = f.text_field :website_url, :class=>"form-control"
+  .field
+    = f.label :email
+    = f.text_field :email, :class=>"form-control"
+  .field
+    = f.label :custom_code
+    == select("hz_company", "custom_code", @custom.collect {|t| [ t.name, t.code ] }, {include_blank: "选择报关行"},{:class => 'form-control',:id=>'hz_company_custom_code'})
+  .actions = f.submit 'Save'

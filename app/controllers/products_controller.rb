@@ -20,6 +20,10 @@ class ProductsController < ApplicationController
     @categories = Category.includes(:category_description).where("status = 1")
     @attribute_groups = AttributeGroupDescription.order("name asc").all.uniq_by(&:name)
     #@product_stock_status = StockStatus.where("name = 'In Stock'").first.stock_status_id
+
+    @post_taxes = HzPostTax.all
+    @units = HzUnit.all
+    @purposes = HzPurpose.all
   end
 
   # # GET /products/1/edit

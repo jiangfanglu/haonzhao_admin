@@ -1,0 +1,30 @@
+h1 申报企业
+
+table class="table"
+  thead
+    tr
+      th Company code
+      th Org code
+      th Company name
+      th Company type
+      th
+      //th
+      th
+
+  tbody
+    - @hz_companies.each do |hz_company|
+      tr
+        td = hz_company.company_code
+        td = hz_company.org_code
+        td = hz_company.company_name
+        td = hz_company.company_type
+        td = link_to '查看', hz_company,{:class=>"btn btn-xs btn-default"}
+        td
+          a class="btn btn-xs btn-default" 
+            | 提交申请
+        //td = link_to 'Edit', edit_hz_company_path(hz_company)
+        //td = link_to 'Destroy', hz_company, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Hz company', new_hz_company_path, {:class=>"btn btn-default"}
