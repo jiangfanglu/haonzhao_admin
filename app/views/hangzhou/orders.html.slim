@@ -87,10 +87,10 @@ javascript:
     $.ajax({
       url: '/hangzhou/apply_for_order_record',
       type: 'post',
-      data: {ids: $("#orderapplyform").serializeArray()}
+      data: $("#orderapplyform").serializeArray()
     }).done(function(response){
-      //alert(response);
-      window.location.reload();
+      alert(response);
+      //window.location.reload();
     });
   });
   $(".checkresultall").click(function(){

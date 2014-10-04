@@ -1,7 +1,7 @@
 class HangzhouController < ApplicationController
   skip_before_filter  :verify_authenticity_token
   def importorder
-    @orders = Order.includes(:order_products).includes(:hz_order).where("order_id in (?)",params[:oids])
+    #@orders = Order.includes(:order_products).includes(:hz_order).where("order_id in (?)",params[:oids].split(","))
   end
   def company_applied
     @companies = HzCompany.where("id in (?)",params[:cids].split(","))
@@ -23,6 +23,13 @@ class HangzhouController < ApplicationController
   end
   def personals
   end
+  def apply_for_order_record
+    @orders = Order.includes(:order_products).includes(:hz_order).where("order_id in (?)",params[:tick])
+    s = render_to_string :file => 'hangzhou/importorder.xml'
+    filename = "JKF_1SHOO_IMPORTORDER_1_#{@orders.first.order_sn}_#{Time.new.strftime('%Y%m%d%H%M%S')}"
+    File.open("#{Rails.root}/public/beian/orders/#{filename}.xml",'w'){|f| f.write s}
+    render :text=>"data",:layout=>false
+  end
   def individual_product_apply
     @orderids = params[:order_info][:order_ids].split(",")
     @hz_orders = HzOrder.where("order_id in (?)", @orderids)
@@ -36,8 +43,9 @@ class HangzhouController < ApplicationController
       hz_order.sender_city = params[:order_info][:sender_city]
       hz_order.save
     end
-    render :text=>"tada",:layout=>false
+    render :text=>"OK",:layout=>false
   end
+
   def add_order_info
     @packages = HzPackage.all
     render :layout=>false
@@ -66,7 +74,12 @@ class HangzhouController < ApplicationController
   end
 
   def ws_test
-      render :text=>"OKLA", :layout=>false
+    @orders = Order.includes(:order_products).includes(:hz_order).where("order_id in (119)")
+    s = render_to_string :file => 'hangzhou/importorder.xml'
+    filename = "JKF_1SHOO_IMPORTORDER_1_#{@orders.first.order_sn}_#{Time.new.strftime('%Y%m%d%H%M%S')}"
+    File.open("#{Rails.root}/public/beian/orders/#{filename}.xml",'w'){|f| f.write s}
+    render :text => s
+    #render :text=>"DONE", :layout=>false
   end
 
   def company

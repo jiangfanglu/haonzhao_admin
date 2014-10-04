@@ -6,6 +6,8 @@ class Order < ActiveRecord::Base
   self.primary_key = :order_id
   belongs_to :shop, foreign_key: :store_id, :primary_key=>"manufacturer_id"
   belongs_to :order_status
+  has_many :order_totals
+
   has_many :order_products
   belongs_to :customer,:primary_key=>"customer_id", :foreign_key=>"customer_id"
 

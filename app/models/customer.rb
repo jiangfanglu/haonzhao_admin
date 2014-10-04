@@ -17,7 +17,7 @@ class Customer < ActiveRecord::Base
   
   has_many :pay_list, foreign_key: 'sender_id', class_name: 'Transaction', as: :sender
   
-  has_many :orders
+  has_many :orders, :primary_key => "customer_id", :foreign_key=>"customer_id"
 
   def initialize args={}
     super
