@@ -6,10 +6,10 @@ xml.mo(version: "1.0.0") do
     xml.jkfSign do
         xml.businessNo("1SHOO001")
         xml.businessType("IMPORT_COMPANY")
-        xml.platformCode("电商平台编码")
-        xml.platformName("电商平台名称")
+        xml.platformCode(HZ_ECOMMERCE_COMPANY_NO)
+        xml.platformName(HZ_ECOMMERCE_COMPANY_NAME)
         xml.declareType(1)
-        xml.note("备注")
+        xml.note("")
     end 
     xml.ImportCompanyList do
       @companies.each do |company|

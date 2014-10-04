@@ -17,6 +17,8 @@ class Product < ActiveRecord::Base
   has_many :categories, through: :productcategories
   belongs_to :shop,:foreign_key=>"manufacturer_id"
 
+  has_many :order_products, :primary_key => "product_id", :foreign_key => "product_id"
+
   has_one :hz_product, :class_name=>"HzProduct"
   
   # attr_accessor :name, :description, :meta_description, :meta_keyword, :tag

@@ -59,8 +59,8 @@ HaonzhaoAdmin::Application.routes.draw do
 
   resources :hangzhou do
     collection do
-      get :importorder, :personal_goods_declare, :taxisneed,:productapplication,:company_applied,:products,:orders,:personals,:individual_product_apply
-      post :apply_for_product_record,:ws_test
+      get :add_order_info, :apply_personal_goods_form, :importorder, :personal_goods_declare, :taxindividual_product_applyisneed,:productapplication,:company_applied,:products,:orders,:personals
+      post :apply_for_product_record,:ws_test,:save_order_extra_info,:individual_product_apply
     end
   end
 

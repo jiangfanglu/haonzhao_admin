@@ -1,0 +1,59 @@
+div class="modal-content"
+	div class="modal-header"
+		button type="button" class="close" data-dismiss="modal"
+        		span aria-hidden="true"
+        			| &times;
+    			span class="sr-only"
+    				| Close
+		h4 class="modal-title"
+			| 添加申报相关信息
+	div class="modal-body"
+		form id="personal_good_form"
+			= hidden_field :order_info, :entering_person, :value=>current_user.name
+			= hidden_field :order_info, :order_ids, :value=>params[:orderids]
+			div class="row"
+				div class="col-lg-3"
+					label 发件城市
+					= text_field :order_info, :sender_city, :class=>"form-control"
+				div class="col-lg-3"
+					label 申报口岸
+					== select("order_info", "decl_port", @domestic_ports.collect {|t| [ t.name, t.code ] }, {include_blank: "选择申报口岸"},{:class => 'form-control',:id=>'order_info_package_type'})
+				div class="col-lg-3"
+					label 码头/货场
+					== select("order_info", "custom_field", @domestic_ports.collect {|t| [ t.name, t.code ] }, {include_blank: "选择码头/货场"},{:class => 'form-control',:id=>'order_info_package_type'})
+				div class="col-lg-3"
+					label 进出口岸
+					== select("order_info", "ie_port", @ports.collect {|t| [ t.name, t.code ] }, {include_blank: "选择进出口岸"},{:class => 'form-control',:id=>'order_info_package_type'})
+				div class="col-lg-3"
+					label 指运港(抵运港)
+					== select("order_info", "destination_port", @domestic_ports.collect {|t| [ t.name, t.code ] }, {include_blank: "选择指运港(抵运港)"},{:class => 'form-control',:id=>'order_info_package_type'})
+				div class="col-lg-3"
+					label 运输方式
+					== select("order_info", "tranf_mode", @transports.collect {|t| [ t.name, t.code ] }, {include_blank: "选择运输方式"},{:class => 'form-control',:id=>'order_info_package_type'})
+			
+			br
+			button type="button" class="btn btn-default saveorderinfo"
+				| 提交申报
+
+javascript:
+	var processing = false;
+	$(".saveorderinfo").click(function(){
+		processing = true;
+		$("#mask").show();
+		$(this).addClass("disabled");
+		$(this).html("提交中...请耐心等待");
+		$.ajax({
+	      url: '/hangzhou/individual_product_apply',
+	      type: 'post',
+	      data: $("#personal_good_form").serializeArray()
+	    }).done(function(response){
+	      //alert(response);
+	      processing = false;
+	      window.location.reload();
+	    });
+	});
+	$(window).bind('beforeunload', function(){
+		if(processing){
+			return '正在处理中，您确定要离开本页？';
+		}
+	});
