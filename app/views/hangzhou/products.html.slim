@@ -8,7 +8,7 @@ table class="table table-bordered"
         | 全选
         | &nbsp; 
         button type="button" class="btn btn-info applyall"
-          | 申报
+          | 申请备案
         | &nbsp;
         button type="button" class="btn btn-info checkresultall"
           | 查看申报结果(刷新)
@@ -54,13 +54,20 @@ javascript:
   });
 
   $(".applyall").click(function(){
+    if($(".tickbox:checked").length < 1){
+      alert("请选择需要备案的产品");
+      return false;
+    }
+    $(this).html("提交中...请耐心等待");
+    $(this).addClass("disabled");
+    $("#mask").show();
     $.ajax({
       url: '/hangzhou/apply_for_product_record',
       type: 'post',
-      data: {ids: $("#productapplyform").serializeArray()}
+      data: $("#productapplyform").serializeArray()
     }).done(function(response){
-      alert(response);
-      //window.location.reload();
+      //alert(response);
+      window.location.reload();
     });
   });
   $(".checkresultall").click(function(){

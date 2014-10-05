@@ -23,12 +23,26 @@ class HangzhouController < ApplicationController
   end
   def personals
   end
+
+  def apply_for_product_record
+    @products = Product.includes(:product_description).includes(:hz_product).where("oc_product.product_id in (?)",params[:tick])
+    s = render_to_string :file => 'hangzhou/productapplication.xml'
+    filename = "JKF_1SHOO_PRODUCT_RECORD_1_#{@products.first.product_id}_#{Time.new.strftime('%Y%m%d%H%M%S')}"
+    File.open("#{Rails.root}/public/beian/products/#{filename}.xml",'w'){|f| f.write s}
+
+    render :json => { :success => true, :html => "OK" },:layout=>false
+    # product_ids = params[:ids].collect{|key,value| value["value"]}.map{|t|t.to_i}
+    # http = Net::HTTP.new("localhost",3001)
+    # response = http.post("/utility/ws_test", "haha")
+    # render :text=>response.body, :layout=>false
+  end
   def apply_for_order_record
     @orders = Order.includes(:order_products).includes(:hz_order).where("order_id in (?)",params[:tick])
     s = render_to_string :file => 'hangzhou/importorder.xml'
     filename = "JKF_1SHOO_IMPORTORDER_1_#{@orders.first.order_sn}_#{Time.new.strftime('%Y%m%d%H%M%S')}"
     File.open("#{Rails.root}/public/beian/orders/#{filename}.xml",'w'){|f| f.write s}
-    render :text=>"data",:layout=>false
+
+    render :json => { :success => true, :html => "OK" },:layout=>false
   end
   def individual_product_apply
     @orderids = params[:order_info][:order_ids].split(",")
@@ -41,9 +55,14 @@ class HangzhouController < ApplicationController
       hz_order.decl_port = params[:order_info][:decl_port]
       hz_order.entering_person = params[:order_info][:entering_person]
       hz_order.sender_city = params[:order_info][:sender_city]
+      hz_order.sender_country = params[:order_info][:sender_country]
       hz_order.save
     end
-    render :text=>"OK",:layout=>false
+    @orders = Order.includes(:order_products).includes(:hz_order).where("order_id in (?)",@orderids)
+    s = render_to_string :file => 'hangzhou/personal_goods_declare.xml'
+    filename = "JKF_1SHOO_PERSONAL_GOODS_DECLAR_1_#{@orders.first.order_sn}_#{Time.new.strftime('%Y%m%d%H%M%S')}"
+    File.open("#{Rails.root}/public/beian/personals/#{filename}.xml",'w'){|f| f.write s}
+    render :json => { :success => true, :html => "OK" },:layout=>false
   end
 
   def add_order_info
@@ -54,6 +73,7 @@ class HangzhouController < ApplicationController
     @transports = HzTransport.all
     @domestic_ports = HzDomesticPorts.all.order("name asc")
     @ports = HzPort.all.order("name asc")
+    @countries = HzCountry.all.order("name asc")
     render :layout=>false
   end
   def save_order_extra_info
@@ -66,12 +86,7 @@ class HangzhouController < ApplicationController
     render :text => "OK", :layout=>false
   end
 
-  def apply_for_product_record
-    product_ids = params[:ids].collect{|key,value| value["value"]}.map{|t|t.to_i}
-    http = Net::HTTP.new("localhost",3001)
-    response = http.post("/utility/ws_test", "haha")
-    render :text=>response.body, :layout=>false
-  end
+ 
 
   def ws_test
     @orders = Order.includes(:order_products).includes(:hz_order).where("order_id in (119)")

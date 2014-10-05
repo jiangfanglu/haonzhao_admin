@@ -4,13 +4,13 @@ p
   | 全选
   | &nbsp;
   button type="button" class="btn btn-info applyall"
-    | 申报订单
+    | 备案订单
   | &nbsp;
   button type="button" class="btn btn-info apply_personal_all"
     | 申报个人物品(商品入库)
   | &nbsp;
   button type="button" class="btn btn-info checkresultall"
-    | 查看申报结果(刷新)
+    | 查看结果(刷新)
 table class="table table-bordered"
   thead
     tr
@@ -60,6 +60,10 @@ javascript:
     });
   });
   $(".apply_personal_all").click(function(){
+    if($(".tickbox:checked").length < 1){
+      alert("请选择需要申报的订单");
+      return false;
+    }
     var obj=$(this);
     var tickedboxes = [];
     $(".tickbox:checked").each(function(){
@@ -84,13 +88,20 @@ javascript:
   });
 
   $(".applyall").click(function(){
+    if($(".tickbox:checked").length < 1){
+      alert("请选择要申报的订单");
+      return false;
+    }
+    $(this).html("提交中...请耐心等待");
+    $(this).addClass("disabled");
+    $("#mask").show();
     $.ajax({
       url: '/hangzhou/apply_for_order_record',
       type: 'post',
       data: $("#orderapplyform").serializeArray()
     }).done(function(response){
-      alert(response);
-      //window.location.reload();
+      //alert(response);
+      window.location.reload();
     });
   });
   $(".checkresultall").click(function(){

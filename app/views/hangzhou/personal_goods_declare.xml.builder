@@ -4,7 +4,7 @@ xml.mo(:version=>"1.0.0") do
   end
   xml.body do
     xml.goodsDeclareModuleList do
-      - @orders.each do |order|
+      @orders.each do |order|
         xml.goodsDeclareModule do
           xml.jkfSign do
             xml.companyCode(HZ_COMPANY_NO)
@@ -44,10 +44,12 @@ xml.mo(:version=>"1.0.0") do
             xml.customsField(order.hz_order.customs_field) #对应参数表
             xml.senderName(order.hz_order.sender_name)
             xml.consignee(order.firstname)
-            xml.senderCountry(order.hz_order.sender_conutry) #参数表
+            xml.senderCountry(order.hz_order.sender_country) #参数表
             xml.senderCity(order.hz_order.sender_city)
-            xml.paperType(order.cutomer.user.customer_identifications.identity_type) #身份证（试点时期）
-            xml.paperNumber(order.cutomer.user.customer_identifications.identity_no)
+            # xml.paperType(order.customer.user.customer_identifications.identity_type) #身份证（试点时期）
+            # xml.paperNumber(order.customer.user.customer_identifications.identity_no)
+            xml.paperType("") #身份证（试点时期）
+            xml.paperNumber("")
             xml.worth(order.total) #只有数字，表体所有商品成交总价的和
             xml.currCode(order.hz_order.currency_code)  #对应参数表
             xml.mainGName(order.order_products.collect{|t| t.name}.join(","))  #可以数字和字母或者中文
@@ -57,7 +59,7 @@ xml.mo(:version=>"1.0.0") do
             xml.isAuthorize("1")
           end
           xml.goodsDeclareDetails do
-            @order.order_products.each do |product|
+            order.order_products.each do |product|
               xml.goodsDeclareDetail do
                 xml.goodsOrder(product.product_id)
                 xml.codeTs(product.product.hz_product.post_tax_no)

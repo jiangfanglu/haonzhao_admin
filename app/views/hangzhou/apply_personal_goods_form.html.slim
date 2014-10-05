@@ -30,7 +30,9 @@ div class="modal-content"
 				div class="col-lg-3"
 					label 运输方式
 					== select("order_info", "tranf_mode", @transports.collect {|t| [ t.name, t.code ] }, {include_blank: "选择运输方式"},{:class => 'form-control',:id=>'order_info_package_type'})
-			
+				div class="col-lg-3"
+					label 发件人国别
+					== select("order_info", "sender_country", @countries.collect {|t| [ t.name, t.code ] }, {include_blank: "选择发件人国别"},{:class => 'form-control',:id=>'order_info_sender_country'})
 			br
 			button type="button" class="btn btn-default saveorderinfo"
 				| 提交申报
