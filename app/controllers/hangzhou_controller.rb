@@ -4,15 +4,15 @@ class HangzhouController < ApplicationController
     #@orders = Order.includes(:order_products).includes(:hz_order).where("order_id in (?)",params[:oids].split(","))
   end
   def company_applied
-    @companies = HzCompany.where("id in (?)",params[:cids].split(","))
+    #@companies = HzCompany.where("id in (?)",params[:cids].split(","))
   end
   def personal_goods_declare
-  	 @orders = Order.includes(:order_products).includes(:hz_order).where("order_id in (?)",params[:oids])
+  	 #@orders = Order.includes(:order_products).includes(:hz_order).where("order_id in (?)",params[:oids])
   end
   def taxisneed
   end
   def productapplication
-    @products = Product.includes(:shop).includes(:product_description).includes(:hz_product).where("product_id in (?)", params[:pids].split(","))
+    #@products = Product.includes(:shop).includes(:product_description).includes(:hz_product).where("product_id in (?)", params[:pids].split(","))
   end
 
   def products
@@ -65,6 +65,14 @@ class HangzhouController < ApplicationController
     render :json => { :success => true, :html => "OK" },:layout=>false
   end
 
+  def apply_for_company_record
+    @company = HzCompany.find params[:id]
+    s = render_to_string :file => 'hangzhou/company_applied.xml'
+    filename = "JKF_1SHOO_IMPORT_COMPANY_1_#{@company.id}_#{Time.new.strftime('%Y%m%d%H%M%S')}"
+    File.open("#{Rails.root}/public/beian/companies/#{filename}.xml",'w'){|f| f.write s}
+    render :json => { :success => true, :html => "OK" },:layout=>false
+  end
+
   def add_order_info
     @packages = HzPackage.all
     render :layout=>false
@@ -95,9 +103,6 @@ class HangzhouController < ApplicationController
     File.open("#{Rails.root}/public/beian/orders/#{filename}.xml",'w'){|f| f.write s}
     render :text => s
     #render :text=>"DONE", :layout=>false
-  end
-
-  def company
   end
   
 end

@@ -7,6 +7,8 @@ table class="table"
       th Org code
       th Company name
       th Company type
+      th record no
+      th approve result
       th
       //th
       th
@@ -18,13 +20,33 @@ table class="table"
         td = hz_company.org_code
         td = hz_company.company_name
         td = hz_company.company_type
+        td = hz_company.record_no
+        td = hz_company.approve_result
         td = link_to '查看', hz_company,{:class=>"btn btn-xs btn-default"}
         td
-          a class="btn btn-xs btn-default" 
-            | 提交申请
+          - if hz_company.approve_result.blank?
+            button class="btn btn-xs btn-default apply_this_company" data-comid="#{hz_company.id}" 
+              | 提交申请
+          end
         //td = link_to 'Edit', edit_hz_company_path(hz_company)
         //td = link_to 'Destroy', hz_company, data: {:confirm => 'Are you sure?'}, :method => :delete
 
 br
 
 = link_to 'New Hz company', new_hz_company_path, {:class=>"btn btn-default"}
+
+javascript:
+  $(".apply_this_company").click(function(){
+    $(this).html("提交中...请耐心等待");
+    $(this).addClass("disabled");
+    $("#mask").show();
+    var obj = $(this);
+    $.ajax({
+      url: '/hangzhou/apply_for_company_record',
+      type: 'post',
+      data: {id: obj.data("comid")}
+    }).done(function(response){
+      //alert(response);
+      window.location.reload();
+    });
+  });

@@ -1,0 +1,35 @@
+<mo version="1.0.0">
+  <head>
+    <businessType>IMPORT_COMPANY</businessType>
+  </head>
+  <body>
+    <jkfSign>
+      <businessNo>1SHOO001</businessNo>
+      <businessType>IMPORT_COMPANY</businessType>
+      <platformCode>1234567890</platformCode>
+      <platformName>asauhdisahduiashdiahduiash</platformName>
+      <declareType>1</declareType>
+      <note></note>
+    </jkfSign>
+    <ImportCompanyList>
+      <ImportCompany>
+        <busiId>1SHOO3</busiId>
+        <companyCode></companyCode>
+        <orgCode>20993023</orgCode>
+        <companyName>1Shoo Web Technology</companyName>
+        <companyType>2</companyType>
+        <companyAddress>2-2106,555,Dong Chuan Road</companyAddress>
+        <registeredCapital>100.0</registeredCapital>
+        <totalInvestment>200.0</totalInvestment>
+        <businessScope>asdasd asd as das as</businessScope>
+        <contactPerson>asd as </contactPerson>
+        <contactInfo>13728289182</contactInfo>
+        <faxNo></faxNo>
+        <zipCode>200241</zipCode>
+        <websiteUrl>http://www.haonzhao.com</websiteUrl>
+        <EMail>jiangfanglu@hotmail.com</EMail>
+        <customsCode>7915</customsCode>
+      </ImportCompany>
+    </ImportCompanyList>
+  </body>
+</mo>
