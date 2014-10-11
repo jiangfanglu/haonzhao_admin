@@ -54,6 +54,7 @@ class HangzhouController < ApplicationController
       hz_order.destination_port = params[:order_info][:destination_port]
       hz_order.decl_port = params[:order_info][:decl_port]
       hz_order.entering_person = params[:order_info][:entering_person]
+      hz_order.way_bills = params[:order_info][:way_bills]
       hz_order.sender_city = params[:order_info][:sender_city]
       hz_order.sender_country = params[:order_info][:sender_country]
       hz_order.save

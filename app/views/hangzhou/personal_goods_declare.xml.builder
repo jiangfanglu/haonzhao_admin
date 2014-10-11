@@ -46,10 +46,10 @@ xml.mo(:version=>"1.0.0") do
             xml.consignee(order.firstname)
             xml.senderCountry(order.hz_order.sender_country) #参数表
             xml.senderCity(order.hz_order.sender_city)
-            # xml.paperType(order.customer.user.customer_identifications.identity_type) #身份证（试点时期）
-            # xml.paperNumber(order.customer.user.customer_identifications.identity_no)
-            xml.paperType("") #身份证（试点时期）
-            xml.paperNumber("")
+            xml.paperType(order.customer.user.customer_identifications.identity_type) #身份证（试点时期）
+            xml.paperNumber(order.customer.user.customer_identifications.identity_no)
+            #xml.paperType("") #身份证（试点时期）
+            #xml.paperNumber("")
             xml.worth(order.total) #只有数字，表体所有商品成交总价的和
             xml.currCode(order.hz_order.currency_code)  #对应参数表
             xml.mainGName(order.order_products.collect{|t| t.name}.join(","))  #可以数字和字母或者中文
