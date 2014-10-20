@@ -132,7 +132,7 @@ class HangzhouController < ApplicationController
     #taxi_need
     #personal_good_declr_result
     #product_record_result
-    
+    render :text => "OK", :layout=>false
   end
 
   # def record_importorder_result
