@@ -81,25 +81,12 @@ class HangzhouController < ApplicationController
   end
 
   def post_to_interface content, business_type
-    # uri = URI(HZ_RECORD_URL)
-    # p HZ_RECORD_URL
-    # request = Net::HTTP::Post.new uri.request_uri
-    # request["Content-type"] = "application/x-www-form-urlencoded;charset:GBK,UTF-8"
-    # request.set_form_data(
-    #     'arg0' => content,
-    #     'arg1' => business_type,
-    #     'arg2' => "1"
-    #   )
-    # response = Net::HTTP.start(uri.hostname, uri.port) do |http|
-    #   http.request(request)
-    # end
-    # response
 
     client = Savon.client(wsdl: HZ_RECORD_URL)
     begin
       response = client.call(:check_received, :message=> {:arg0 => content, :arg1 => business_type, :arg2 => '1'})
     rescue Savon::Error => soap_fault
-      print "Error: #{soap_fault}\n"
+      print soap_fault.http.body
     end
     response
   end
