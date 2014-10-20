@@ -1,5 +1,5 @@
 class HangzhouController < ApplicationController
-  skip_before_filter  :verify_authenticity_token
+  skip_before_filter  :verify_authenticity_token, :except=>[:hz_record_result]
   def importorder
     #@orders = Order.includes(:order_products).includes(:hz_order).where("order_id in (?)",params[:oids].split(","))
   end
@@ -12,7 +12,7 @@ class HangzhouController < ApplicationController
   def taxisneed
   end
   def productapplication
-    #@products = Product.includes(:shop).includes(:product_description).includes(:hz_product).where("product_id in (?)", params[:pids].split(","))
+    #@products = Product.includes(:shop).includes(:product_description).includes(:hz_product).where("product_id in (109,107)")
   end
 
   def products
@@ -29,13 +29,11 @@ class HangzhouController < ApplicationController
     s = render_to_string :file => 'hangzhou/productapplication.xml'
     filename = "JKF_1SHOO_PRODUCT_RECORD_1_#{@products.first.product_id}_#{Time.new.strftime('%Y%m%d%H%M%S')}"
     File.open("#{Rails.root}/public/beian/products/#{filename}.xml",'w'){|f| f.write s}
-
+    response = post_to_interface(s, "PRODUCT_RECORD")
+    p response
     render :json => { :success => true, :html => "OK" },:layout=>false
-    # product_ids = params[:ids].collect{|key,value| value["value"]}.map{|t|t.to_i}
-    # http = Net::HTTP.new("localhost",3001)
-    # response = http.post("/utility/ws_test", "haha")
-    # render :text=>response.body, :layout=>false
   end
+
   def apply_for_order_record
     @orders = Order.includes(:order_products).includes(:hz_order).where("order_id in (?)",params[:tick])
     s = render_to_string :file => 'hangzhou/importorder.xml'
@@ -44,6 +42,7 @@ class HangzhouController < ApplicationController
 
     render :json => { :success => true, :html => "OK" },:layout=>false
   end
+
   def individual_product_apply
     @orderids = params[:order_info][:order_ids].split(",")
     @hz_orders = HzOrder.where("order_id in (?)", @orderids)
@@ -51,6 +50,7 @@ class HangzhouController < ApplicationController
       hz_order.ie_port = params[:order_info][:ie_port]
       hz_order.customs_field = params[:order_info][:custom_field]
       hz_order.tranf_mode = params[:order_info][:tranf_mode]
+      hz_order.post_mode = params[:order_info][:post_mode]
       hz_order.destination_port = params[:order_info][:destination_port]
       hz_order.decl_port = params[:order_info][:decl_port]
       hz_order.entering_person = params[:order_info][:entering_person]
@@ -63,6 +63,9 @@ class HangzhouController < ApplicationController
     s = render_to_string :file => 'hangzhou/personal_goods_declare.xml'
     filename = "JKF_1SHOO_PERSONAL_GOODS_DECLAR_1_#{@orders.first.order_sn}_#{Time.new.strftime('%Y%m%d%H%M%S')}"
     File.open("#{Rails.root}/public/beian/personals/#{filename}.xml",'w'){|f| f.write s}
+
+    response = post_to_interface(s, "PERSONAL_GOODS_DECLAR")
+
     render :json => { :success => true, :html => "OK" },:layout=>false
   end
 
@@ -74,14 +77,44 @@ class HangzhouController < ApplicationController
     render :json => { :success => true, :html => "OK" },:layout=>false
   end
 
+  def add_importorder_return
+  end
+
+  def post_to_interface content, business_type
+    # uri = URI(HZ_RECORD_URL)
+    # p HZ_RECORD_URL
+    # request = Net::HTTP::Post.new uri.request_uri
+    # request["Content-type"] = "application/x-www-form-urlencoded;charset:GBK,UTF-8"
+    # request.set_form_data(
+    #     'arg0' => content,
+    #     'arg1' => business_type,
+    #     'arg2' => "1"
+    #   )
+    # response = Net::HTTP.start(uri.hostname, uri.port) do |http|
+    #   http.request(request)
+    # end
+    # response
+
+    client = Savon.client(wsdl: HZ_RECORD_URL)
+    begin
+      response = client.call(:check_received, :message=> {:arg0 => content, :arg1 => business_type, :arg2 => '1'})
+    rescue Savon::Error => soap_fault
+      print "Error: #{soap_fault}\n"
+    end
+    response
+  end
+
+
   def add_order_info
     @packages = HzPackage.all
     render :layout=>false
   end
+
   def apply_personal_goods_form
     @transports = HzTransport.all
-    @domestic_ports = HzDomesticPorts.all.order("name asc")
-    @ports = HzPort.all.order("name asc")
+    #@domestic_ports = HzDomesticPorts.all.order("name asc")
+    #@ports = HzPort.all.order("name asc")
+    @post_modes = HzLogisticMode.all.order("name asc")
     @countries = HzCountry.all.order("name asc")
     render :layout=>false
   end
@@ -95,7 +128,25 @@ class HangzhouController < ApplicationController
     render :text => "OK", :layout=>false
   end
 
- 
+  def hz_record_result
+    #taxi_need
+    #personal_good_declr_result
+    #product_record_result
+    
+  end
+
+  # def record_importorder_result
+  # end
+  # def record_productrecord_result
+  # end
+  # def record_personal_goods_result
+  # end
+  # def record_importcompany_result
+  # end
+  # def record_is_taxineed_result
+  # end
+  # def record_return_order_result
+  # end
 
   def ws_test
     @orders = Order.includes(:order_products).includes(:hz_order).where("order_id in (119)")

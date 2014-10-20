@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
   end
   
   def login?
-    return redirect_to controller: :shops, action: :login unless current_user
+    return redirect_to controller: :shops, action: :login unless current_user || params[:action] = "hz_record_result"
   end
   
   def current_user

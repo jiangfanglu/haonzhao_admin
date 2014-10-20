@@ -15,27 +15,34 @@ div class="modal-content"
 				div class="col-lg-3"
 					label 发件城市
 					= text_field :order_info, :sender_city, :class=>"form-control"
+					= hidden_field :order_info, :decl_port, :value=>"2928"
+					= hidden_field :order_info, :custom_field, :value=>"292801"
+					= hidden_field :order_info, :ie_port, :value=>"2928"
+					= hidden_field :order_info, :destination_port, :value=>"142"
+				//div class="col-lg-3"
+				//	label 申报口岸
+				//	== select("order_info", "decl_port", @domestic_ports.collect {|t| [ t.name, t.code ] }, {include_blank: "选择申报口岸"},{:class => 'form-control',:id=>'order_info_package_type'})
+				//div class="col-lg-3"
+				//	label 码头/货场
+				//	== select("order_info", "custom_field", @domestic_ports.collect {|t| [ t.name, t.code ] }, {include_blank: "选择码头/货场"},{:class => 'form-control',:id=>'order_info_package_type'})
+				//div class="col-lg-3"
+				//	label 进出口岸
+				//	== select("order_info", "ie_port", @ports.collect {|t| [ t.name, t.code ] }, {include_blank: "选择进出口岸"},{:class => 'form-control',:id=>'order_info_package_type'})
+				//div class="col-lg-3"
+				//	label 指运港(抵运港)
+				//	== select("order_info", "destination_port", @domestic_ports.collect {|t| [ t.name, t.code ] }, {include_blank: "选择指运港(抵运港)"},{:class => 'form-control',:id=>'order_info_package_type'})
 				div class="col-lg-3"
-					label 申报口岸
-					== select("order_info", "decl_port", @domestic_ports.collect {|t| [ t.name, t.code ] }, {include_blank: "选择申报口岸"},{:class => 'form-control',:id=>'order_info_package_type'})
-				div class="col-lg-3"
-					label 码头/货场
-					== select("order_info", "custom_field", @domestic_ports.collect {|t| [ t.name, t.code ] }, {include_blank: "选择码头/货场"},{:class => 'form-control',:id=>'order_info_package_type'})
-				div class="col-lg-3"
-					label 进出口岸
-					== select("order_info", "ie_port", @ports.collect {|t| [ t.name, t.code ] }, {include_blank: "选择进出口岸"},{:class => 'form-control',:id=>'order_info_package_type'})
-				div class="col-lg-3"
-					label 指运港(抵运港)
-					== select("order_info", "destination_port", @domestic_ports.collect {|t| [ t.name, t.code ] }, {include_blank: "选择指运港(抵运港)"},{:class => 'form-control',:id=>'order_info_package_type'})
-				div class="col-lg-3"
-					label 运单列表
-					= text_area :order_info, :way_bills, :class=>"form-control"
+					label 发货方式
+					== select("order_info", "post_mode", @post_modes.collect {|t| [ t.name, t.code ] }, {include_blank: "选择发货方式"},{:class => 'form-control',:id=>'order_info_post_mode'})
 				div class="col-lg-3"
 					label 运输方式
-					== select("order_info", "tranf_mode", @transports.collect {|t| [ t.name, t.code ] }, {include_blank: "选择运输方式"},{:class => 'form-control',:id=>'order_info_package_type'})
+					== select("order_info", "tranf_mode", @transports.collect {|t| [ t.name, t.code ] }, {include_blank: "选择运输方式"},{:class => 'form-control',:id=>'order_info_tranf_mode'})
 				div class="col-lg-3"
 					label 发件人国别
 					== select("order_info", "sender_country", @countries.collect {|t| [ t.name, t.code ] }, {include_blank: "选择发件人国别"},{:class => 'form-control',:id=>'order_info_sender_country'})
+				div class="col-lg-3"
+					label 运单列表
+					= text_area :order_info, :way_bills, :class=>"form-control"
 			br
 			button type="button" class="btn btn-default saveorderinfo"
 				| 保存
