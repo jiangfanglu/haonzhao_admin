@@ -27,6 +27,9 @@ gem 'rails-observers'
 gem 'mini_magick'
 gem "slim-rails"
 
+gem 'aescrypt'
+gem 'rsa'
+
 gem "savon"
 
 # Use SCSS for stylesheets
