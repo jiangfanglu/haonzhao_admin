@@ -26,11 +26,11 @@ xml.mo(:version=>"1.0.0") do
             xml.purpose(product.hz_product.hz_purpose_code) #optional
             xml.standards(product.hz_product.standard) #optional
             xml.productionEnterprise(product.shop.name) #optional
-            xml.productionCountry(product.shop.hz_manufacturer.hz_country.name) #optional
+            xml.productionCountry(product.shop.hz_manufacturer.hz_country.code) #optional
             xml.licenceKey("") #optional
-            xml.categoryCode("") #optional
+            xml.categoryCode("1234567890") #optional
             xml.materialAddress(product.hz_product.material_address) #指国检要求提交的产品备案材料，此处指材料的片地址, optional
-            xml.declareTimeStr(Time.new.strftime("%Y%m%d%H%M%S")) ##optional
+            xml.declareTimeStr(Time.new.strftime("%Y-%m-%d %H:%M:%S")) ##optional yyyy-MM-dd HH:mm:ss
           end
         end
       end

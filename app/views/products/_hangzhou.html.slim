@@ -19,6 +19,9 @@ div class="row"
   div class="col-lg-3"
     label 产品适用标准
     = text_field 'hz','standard', :class=>"form-control"
+  div class="col-lg-3"
+    label 发件人国别
+    == select("order_info", "sender_country", @countries.collect {|t| [ t.name, t.code ] }, {include_blank: "选择发件人国别"},{:class => 'form-control',:id=>'order_info_sender_country'})
   div class="col-lg-6"
     label 主要成分
     = text_area 'hz','main_elements', :class=>"form-control"

@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # Load the Rails application.
 require File.expand_path('../application', __FILE__)
 
@@ -31,12 +32,13 @@ BUCKET_NAME = "1shootest"
 ALIYUNOSS_ACCESS_KEY_ID = "tZu94MC4MJVTEuvj"
 ALIYUNOSS_SECRET_ACCESS_KEY = "e8iglZEc1rKeIv3KbepxnvftGoY7Q7"
 
-HZ_COMPANY_NAME = "shanghaiyishuwangluokejiyouxiangongsi"
+HZ_COMPANY_NAME = "上海一树网络科技有限公司"
 HZ_COMPANY_NO = "1234567890"
 HZ_ECOMMERCE_COMPANY_NO = "1234567890"
 HZ_ECOMMERCE_COMPANY_NAME = "asauhdisahduiashdiahduiash"
 HZ_COMPANY_CODE = "1234567890"
 HZ_RECORD_URL = "http://122.224.230.4:8081/newyorkWS/ws/ReceivedDeclare?wsdl"
+AES_PRIVATE_KEY = "qZe60QZFxuirub2ey4+7+Q=="
 
 # Production server 生产机
 # BUCKET_NAME = "haonzhao"

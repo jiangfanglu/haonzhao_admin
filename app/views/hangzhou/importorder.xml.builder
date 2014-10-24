@@ -47,9 +47,10 @@ xml.mo(:version=>"1.0.0") do
 						xml.wayBills(order.hz_order.way_bills) #optional
 					end
 					xml.jkfOrderDetailList do
+						n = 1
 						order.order_products.each do |order_product|
 							xml.jkfOrderDetail do 
-								xml.goodsOrder(order_product.product_id)
+								xml.goodsOrder(n)
 								xml.goodsName(order_product.name)
 								xml.goodsModel(order_product.model) #optional
 								xml.codeTs(order_product.product.hz_product.blank? ? "" : order_product.product.hz_product.post_tax_no) #必须已备案，且与 参数说明文档中的行邮税号 中的税号一致
@@ -59,6 +60,7 @@ xml.mo(:version=>"1.0.0") do
                     				xml.goodsCount(order_product.quantity)
 								xml.originCountry(order_product.product.shop.hz_manufacturer.hz_country_code) #见参数表
 							end
+							n += 1
 						end
 					end
 					xml.jkfGoodsPurchaser do
@@ -67,8 +69,8 @@ xml.mo(:version=>"1.0.0") do
 						xml.email(order.email) #optional
 						xml.telNumber(order.telephone)
 						xml.address("#{order.shipping_country}#{order.shipping_zone}#{order.shipping_city}#{order.shipping_address_1}")
-						xml.paperType(order.customer.user.blank? ? "" : order.customer.user.customer_identifications.identity_type) 
-                			xml.paperNumber(order.customer.user.blank? ? "" : order.customer.user.customer_identifications.identity_no)
+						xml.paperType(order.customer.user.blank? ? "" : "0"+order.customer.user.customer_identifications.where("identification_type = '1'").first.identification_type.to_s) 
+                			xml.paperNumber(order.customer.user.blank? ? "" : order.customer.user.customer_identifications.where("identification_type = '1'").first.identification_no)
 					end
 				end
 			end

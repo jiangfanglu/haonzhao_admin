@@ -15,7 +15,7 @@ xml.mo(:version=>"1.0.0") do
           end
           xml.goodsDeclare do
             xml.accountBookNo("") #optional
-            xml.ieFlag("1")
+            xml.ieFlag("I")
             xml.preEntryNumber("预录入号码")
             xml.importType("0") #0：一般进口, 1：保税进口
             xml.inOutDateStr("") #格式：2014-02-18 20:33:33
@@ -46,8 +46,8 @@ xml.mo(:version=>"1.0.0") do
             xml.consignee(order.firstname)
             xml.senderCountry(order.hz_order.sender_country) #参数表
             xml.senderCity(order.hz_order.sender_city)
-            xml.paperType(order.customer.user.customer_identifications.identity_type) #身份证（试点时期）
-            xml.paperNumber(order.customer.user.customer_identifications.identity_no)
+            xml.paperType("0" + order.customer.user.customer_identifications.where("identification_type = '1'").first.identification_type.to_s) #身份证（试点时期）
+            xml.paperNumber(order.customer.user.customer_identifications.where("identification_type = '1'").first.identification_no)
             #xml.paperType("") #身份证（试点时期）
             #xml.paperNumber("")
             xml.worth(order.total) #只有数字，表体所有商品成交总价的和
