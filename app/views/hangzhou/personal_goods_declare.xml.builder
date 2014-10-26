@@ -30,7 +30,7 @@ xml.mo(:version=>"1.0.0") do
             xml.eCommerceCode(HZ_ECOMMERCE_COMPANY_NO) 
             xml.eCommerceName(HZ_ECOMMERCE_COMPANY_NAME)
             xml.orderNo(order.order_sn)
-            xml.wayBill(order.hz_order.way_bills)
+            xml.wayBill(order.hz_way_bills.collect{|wb| wb.way_bill_no}.join(","))
             xml.tradeCountry(order.shop.hz_manufacturer.hz_country_code) #参照国别代码表(COUNTRY)
             xml.packNo(order.order_products.sum("oc_order_product.quantity")) #只能有数字
             xml.grossWeight(order.hz_order.gross_weight) 

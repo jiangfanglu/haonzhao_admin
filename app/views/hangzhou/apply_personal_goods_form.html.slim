@@ -37,9 +37,13 @@ div class="modal-content"
 				div class="col-lg-3"
 					label 运输方式
 					== select("order_info", "tranf_mode", @transports.collect {|t| [ t.name, t.code ] }, {include_blank: "选择运输方式"},{:class => 'form-control',:id=>'order_info_tranf_mode'})
-				div class="col-lg-3"
+				//div class="col-lg-3"
 					label 运单列表
 					= text_area :order_info, :way_bills, :class=>"form-control"
+				div class="col-lg-12"
+					label 添加运单
+					button :class=>"btn btn-sm btn-default"
+						| 添加运单
 			br
 			button type="button" class="btn btn-default saveorderinfo"
 				| 保存

@@ -12,6 +12,7 @@ class Order < ActiveRecord::Base
   belongs_to :customer,:primary_key=>"customer_id", :foreign_key=>"customer_id"
 
   has_one :hz_order, :primary_key=>"order_id", :foreign_key=>"order_id"
+  has_many :hz_way_bills, :primary_key=>"order_id", :foreign_key=>"order_id"
   
   def restore
     

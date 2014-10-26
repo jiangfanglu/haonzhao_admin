@@ -1,0 +1,106 @@
+h1 订单与个人物品申报申报管理
+p
+  input type="checkbox" name="tickall" class="tickboxall"
+  | 全选
+  | &nbsp;
+  button type="button" class="btn btn-info apply_personal_all"
+    | 申报个人物品(商品入库)
+  | &nbsp;
+  button type="button" class="btn btn-info checkresultall"
+    | 查看结果(刷新)
+table class="table table-bordered"
+  thead
+    tr
+      th 
+      th Order SN
+      th Status
+      th Customer Name
+      th Total
+      th Date
+      th Gross Weight
+      th Package Type
+      th Currency
+      th Origin
+      th
+      th
+  tbody
+    form id="orderapplyform"
+      - @orders.each do |order|
+        tr
+          td 
+            input type="checkbox" name="tick[]" value="#{order.order_id}" class="tickbox"
+          td = order.order_sn
+          td = order.order_status.name
+          td = "#{order.firstname}#{order.lastname}"
+          td = order.total
+          td = order.date_added
+          td = order.hz_order.gross_weight unless order.hz_order.blank?
+          td = order.hz_order.package_type unless order.hz_order.blank?
+          td = order.hz_order.currency_code unless order.hz_order.blank?
+          td = order.shop.hz_manufacturer.hz_country_code unless order.shop.hz_manufacturer.blank? unless order.shop.blank?
+          td = link_to '查看', order,:class=>"btn btn-default btn-xs"
+          th
+            button type="button" class="btn btn-info addinfo btn-xs" data-oid="#{order.order_id}"
+              | 添加信息
+      end
+
+= will_paginate @orders, {:next_label=>"后一页", :previous_label=>"前一页"}
+
+== render :partial=>"partials/modal" 
+javascript:
+  $(".addinfo").click(function(){
+    var obj=$(this);
+    $('#modal').removeData('bs.modal');
+    $('#modal').modal({
+          show: true,
+          remote: '/hangzhou/add_order_info/?orderid='+obj.data("oid")
+    });
+  });
+  $(".apply_personal_all").click(function(){
+    if($(".tickbox:checked").length < 1){
+      alert("请选择需要申报的订单");
+      return false;
+    }
+    var obj=$(this);
+    var tickedboxes = [];
+    $(".tickbox:checked").each(function(){
+      tickedboxes.push(this.value);
+    });
+    $('#modal').removeData('bs.modal');
+    $('#modal').modal({
+          show: true,
+          remote: '/hangzhou/apply_personal_goods_form/?orderids='+tickedboxes.join(",")
+    });
+  });
+  $(".tickboxall").click(function(){
+    if ($(this).prop("checked") == true){
+      $(".tickbox").each(function(){
+        $(this).prop("checked",true);
+      });
+    }else{
+      $(".tickbox").each(function(){
+        $(this).prop("checked",false);
+      });
+    }   
+  });
+
+  $(".applyall").click(function(){
+    if($(".tickbox:checked").length < 1){
+      alert("请选择要申报的订单");
+      return false;
+    }
+    $(this).html("提交中...请耐心等待");
+    $(this).addClass("disabled");
+    $("#mask").show();
+    $.ajax({
+      url: '/hangzhou/apply_for_order_record',
+      type: 'post',
+      data: $("#orderapplyform").serializeArray()
+    }).done(function(response){
+      //alert(response);
+      window.location.reload();
+    });
+  });
+  $(".checkresultall").click(function(){
+
+  });

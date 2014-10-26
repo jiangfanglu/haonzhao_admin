@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  way_bill_no: MyString
+  order_id: 1
+  out_state: MyString
+  out_time: 2014-10-26 09:41:49
+
+two:
+  way_bill_no: MyString
+  order_id: 1
+  out_state: MyString
+  out_time: 2014-10-26 09:41:49
