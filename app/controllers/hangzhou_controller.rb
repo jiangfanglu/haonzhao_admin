@@ -20,13 +20,13 @@ class HangzhouController < ApplicationController
 
   # 列表清单开始 ==============================
   def products
-    @products = Product.includes(:product_description).includes(:hz_product).order('product_id DESC').paginate page: params[:page], per_page: 20
+    @products = Product.includes(:product_description).includes(:hz_product).where("hz_products.approve_result <> '1' or hz_products.approve_result is null").order('oc_product.product_id DESC').paginate page: params[:page], per_page: 20
   end
   def orders
     @orders = Order.includes(:hz_order).includes(:order_status).where("hz_orders.approve_result <> '1' or hz_orders.approve_result is null").order('oc_order.order_id DESC').paginate page: params[:page], per_page: 20
   end
   def personals
-    @orders = Order.includes(:hz_order).includes(:order_status).where("hz_orders.pg_result <> '1' or hz_orders.pg_result is null").order('oc_order.order_id DESC').references(:hz_order).paginate page: params[:page], per_page: 20
+    @orders = Order.includes(:hz_order).includes(:order_status).order('oc_order.order_id DESC').references(:hz_order).paginate page: params[:page], per_page: 20
   end
   # 列表清单结束 ==============================
 
@@ -67,20 +67,30 @@ class HangzhouController < ApplicationController
 
   def individual_product_apply
     @orderids = params[:order_info][:order_ids].split(",")
-    @orders = Order.includes(:order_products).includes(:hz_order).where("order_id in (?)",@orderids)
-    @orders.each do |order|
-      order.hz_order.update_attributes(
+    @way_bills = HzWayBill.includes(:order).where("hz_way_bills.order_id in (?)",@orderids)
+
+    @way_bills.each do |way_bill|
+     way_bill.update_attributes(
           ie_port: params[:order_info][:ie_port],
           customs_field: params[:order_info][:custom_field],
           tranf_mode: params[:order_info][:tranf_mode],
           destination_port: params[:order_info][:destination_port],
           decl_port: params[:order_info][:decl_port],
           entering_person: params[:order_info][:entering_person],
-          sender_city: params[:order_info][:sender_city]
+          sender_city: params[:order_info][:sender_city],
+          logistic_company_code: "3301980093", 
+          logistic_company_name: "浙江顺丰速运有限公司", 
+          post_mode: "1", 
+          sender_country: "601", 
+          sender_name: "上海一树网络科技有限公司(澳洲)", 
+          personal_goods_form_no: "", 
+          tax_amount: 0,
+          is_tax_needed: ""
         )
       
-      response = post_to_interface(personal_goods_xml(order), "PERSONAL_GOODS_DECLAR")
-      order.hz_order.update_attributes(
+      response = post_to_interface(personal_goods_xml(way_bill), "PERSONAL_GOODS_DECLAR")
+      
+      way_bill.update_attributes(
           pg_result: response[0], 
           pg_comment: response[1], 
           pg_time: response[2] 
@@ -117,7 +127,9 @@ class HangzhouController < ApplicationController
   # 添加订单重量与包装方式表单
   def add_order_info
     @packages = HzPackage.all
-    @hz_order = HzOrder.includes(:hz_way_bills).find_by_order_id params[:orderid]
+    @way_bill = HzWayBill.find_by_way_bill_no params[:wbn]
+    @order_products = @way_bill.order.order_products
+    @order_products = @order_products.where("order_product_id not in (#{@way_bill.order_product_ids})") unless @way_bill.order_product_ids.blank?
     render :layout=>false
   end
 
@@ -129,20 +141,14 @@ class HangzhouController < ApplicationController
 
 
   def save_order_extra_info
-    @hz_order = HzOrder.find_by_order_id params[:orderid]
-    @hz_order = HzOrder.new if @hz_order.blank?
-    @hz_order.order_id = params[:orderid] if @hz_order.order_id.blank?
-    @hz_order.package_type = params[:package_type]
-    @hz_order.gross_weight = params[:gross_weight].to_f
-    HzWayBill.delete_all("order_id = #{params[:orderid]}")
-    way_bill_nos = params[:way_bills].split(",")
-    way_bill_nos.each do |way_bill_no|
-      @hz_order.hz_way_bills << HzWayBill.new(
-        way_bill_no: way_bill_no,
-        order_id: @hz_order.order_id
-        ) 
-    end
-    @hz_order.save
+    # @way_bill = HzWayBill.find_by_way_bill_no params[:way_bill_no]
+    # @way_bill = HzWayBill.new if @way_bill.blank?
+    # @way_bill.order_id = params[:orderid] if @way_bill.order_id.blank?
+    # @way_bill.package_type = params[:package_type]
+    # @way_bill.gross_weight = params[:gross_weight]
+    # @way_bill.way_bill_no = params[:way_bill_no]
+    # @way_bill.order_product_ids = params[:order_product_ids]
+    # @way_bill.save
     render :text => "OK", :layout=>false
   end
 
@@ -212,7 +218,7 @@ class HangzhouController < ApplicationController
               xml.productRecord do
                 xml.jkfSign do
                   xml.companyCode(HZ_COMPANY_CODE)
-                  xml.businessNo(@product.product_id)
+                  xml.businessNo(product.product_id)
                   xml.businessType("PRODUCT_RECORD")
                   xml.declareType("1")
                   xml.note("")
@@ -220,20 +226,20 @@ class HangzhouController < ApplicationController
                 xml.productRecordDto do
                   xml.companyCode(HZ_COMPANY_NO) #电商平台备案取得的唯一标示
                   xml.companyName(HZ_COMPANY_NAME)
-                  xml.postTaxNo(@product.hz_product.post_tax_no) #海关10位行邮税号, 见参数表
-                  xml.goodsType(@product.hz_product.hz_post_tax.item_category)
-                  xml.goodsName(@product.product_description.name)
-                  xml.barCode(@product.hz_product.barcode) #optional
-                  xml.brand(@product.shop.name) #optional
-                  xml.goodsModel(@product.model) #optional
-                  xml.mainElement(@product.hz_product.main_elements) #optional
-                  xml.purpose(@product.hz_product.hz_purpose_code) #optional
-                  xml.standards(@product.hz_product.standard) #optional
-                  xml.productionEnterprise(@product.shop.name) #optional
-                  xml.productionCountry(@product.shop.hz_manufacturer.hz_country.code) #optional
+                  xml.postTaxNo(product.hz_product.post_tax_no) #海关10位行邮税号, 见参数表
+                  xml.goodsType(product.hz_product.hz_post_tax.item_category)
+                  xml.goodsName(product.product_description.name)
+                  xml.barCode(product.hz_product.barcode) #optional
+                  xml.brand(product.shop.name) #optional
+                  xml.goodsModel(product.model) #optional
+                  xml.mainElement(product.hz_product.main_elements) #optional
+                  xml.purpose(product.hz_product.hz_purpose_code) #optional
+                  xml.standards(product.hz_product.standard) #optional
+                  xml.productionEnterprise(product.shop.name) #optional
+                  xml.productionCountry(product.shop.hz_manufacturer.hz_country.code) #optional
                   xml.licenceKey("") #optional
                   xml.categoryCode("1234567890") #optional
-                  xml.materialAddress(@product.hz_product.material_address) #指国检要求提交的产品备案材料，此处指材料的片地址, optional
+                  xml.materialAddress(product.hz_product.material_address) #指国检要求提交的产品备案材料，此处指材料的片地址, optional
                   xml.declareTimeStr(Time.new.strftime("%Y-%m-%d %H:%M:%S")) ##optional yyyy-MM-dd HH:mm:ss
                 end
               end
@@ -293,7 +299,7 @@ class HangzhouController < ApplicationController
                   xml.logisCompanyCode(order.hz_order.logistic_company_code)
                   xml.zipCode(order.shipping_postcode) #optional
                   xml.note("") #optional
-                  xml.wayBills(order.hz_order.way_bills) #optional
+                  xml.wayBills(order.hz_way_bills.collect{|wb| wb.way_bill_no}.join(",")) #optional
                 end
                 xml.jkfOrderDetailList do
                   n = 1
@@ -328,7 +334,10 @@ class HangzhouController < ApplicationController
       end
       @output
     end
-    def personal_goods_xml order
+    def personal_goods_xml way_bill
+      order = way_bill.order
+      hz_order = way_bill.hz_order
+      order_products = OrderProduct.includes(:product).where("order_product_id in (?)",way_bill.order_product_ids.split(","))
       @output = ""
       xml = Builder::XmlMarkup.new(:target => @output, :ident => 1)
       xml.instruct! :xml, :encoding => "UTF-8",  :version => "1.0"
@@ -342,7 +351,7 @@ class HangzhouController < ApplicationController
               xml.goodsDeclareModule do
                 xml.jkfSign do
                   xml.companyCode(HZ_COMPANY_NO)
-                  xml.businessNo(order.order_sn)
+                  xml.businessNo(way_bill.way_bill_no)
                   xml.businessType("PERSONAL_GOODS_DECLAR")
                   xml.declareType("1")
                   xml.note("") #can be null
@@ -353,47 +362,47 @@ class HangzhouController < ApplicationController
                   xml.preEntryNumber("预录入号码")
                   xml.importType("0") #0：一般进口, 1：保税进口
                   xml.inOutDateStr("") #格式：2014-02-18 20:33:33
-                  xml.iePort(order.hz_order.ie_port) #见参数表
-                  xml.destinationPort(order.hz_order.destination_port) #见参数表
+                  xml.iePort(way_bill.ie_port) #见参数表
+                  xml.destinationPort(way_bill.destination_port) #见参数表
                   xml.trafName("运输工具名称") #包括字母和数字.可以填写中文.转关时填写@+16位转关单号. optional
                   xml.voyageNo("运输工具航次(班)号") #新增，包括字母和数字，可以有中文. optional
-                  xml.trafMode(order.hz_order.tranf_mode) #参照运输方式代码表(TRANSF)
+                  xml.trafMode(way_bill.tranf_mode) #参照运输方式代码表(TRANSF)
                   xml.declareCompanyType("个人委托电商企业申报") #个人委托电商企业申报;个人委托物流企业申报;个人委托第三方申报
                   xml.declareCompanyCode(HZ_COMPANY_NO) #指委托申报单位代码
                   xml.declareCompanyName(HZ_COMPANY_NAME) #指委托申报单位名称
                   xml.eCommerceCode(HZ_ECOMMERCE_COMPANY_NO) 
                   xml.eCommerceName(HZ_ECOMMERCE_COMPANY_NAME)
                   xml.orderNo(order.order_sn)
-                  xml.wayBill(order.hz_way_bills.collect{|wb| wb.way_bill_no}.join(","))
+                  xml.wayBill(way_bill.way_bill_no)
                   xml.tradeCountry(order.shop.hz_manufacturer.hz_country_code) #参照国别代码表(COUNTRY)
-                  xml.packNo(order.order_products.sum("oc_order_product.quantity")) #只能有数字
-                  xml.grossWeight(order.hz_order.gross_weight) 
+                  xml.packNo(order_products.sum("oc_order_product.quantity")) #只能有数字
+                  xml.grossWeight(way_bill.gross_weight) 
                   xml.netWeight("") #optional
-                  xml.warpType(order.hz_order.package_type) #参照包装种类代码表
+                  xml.warpType(way_bill.package_type) #参照包装种类代码表
                   xml.remark("") #optional
-                  xml.declPort(order.hz_order.decl_port) #对应参数表
-                  xml.enteringPerson(order.hz_order.entering_person) #默认9999
+                  xml.declPort(way_bill.decl_port) #对应参数表
+                  xml.enteringPerson(way_bill.entering_person) #默认9999
                   xml.enteringCompanyName(HZ_COMPANY_NAME) #默认9999
                   xml.declarantNo("") #optional
-                  xml.customsField(order.hz_order.customs_field) #对应参数表
-                  xml.senderName(order.hz_order.sender_name)
+                  xml.customsField(way_bill.custom_field) #对应参数表
+                  xml.senderName(way_bill.sender_name)
                   xml.consignee(order.firstname)
-                  xml.senderCountry(order.hz_order.sender_country) #参数表
-                  xml.senderCity(order.hz_order.sender_city)
+                  xml.senderCountry(way_bill.sender_country) #参数表
+                  xml.senderCity(way_bill.sender_city)
                   xml.paperType(order.customer.user.customer_identifications.where("identification_type = '1'").first.identification_type.to_s) #身份证（试点时期）
                   xml.paperNumber(order.customer.user.customer_identifications.where("identification_type = '1'").first.identification_no)
                   #xml.paperType("") #身份证（试点时期）
                   #xml.paperNumber("")
                   xml.worth(order.total) #只有数字，表体所有商品成交总价的和
-                  xml.currCode(order.hz_order.currency_code)  #对应参数表
-                  xml.mainGName(order.order_products.collect{|t| t.name}.join(","))  #可以数字和字母或者中文
+                  xml.currCode(hz_order.currency_code)  #对应参数表
+                  xml.mainGName(order_products.collect{|t| t.name}.join(","))  #可以数字和字母或者中文
                   xml.internalAreaCompanyNo("") #optional
                   xml.internalAreaCompanyName("") #optional
                   xml.applicationFormNo("") #optional
                   xml.isAuthorize("1")
                 end
                 xml.goodsDeclareDetails do
-                  order.order_products.each do |product|
+                  order_products.each do |product|
                     xml.goodsDeclareDetail do
                       xml.goodsOrder(product.product_id)
                       xml.codeTs(product.product.hz_product.post_tax_no)
@@ -401,7 +410,7 @@ class HangzhouController < ApplicationController
                       xml.goodsName(product.name)
                       xml.goodsModel(product.model)
                       xml.originCountry(product.product.shop.hz_manufacturer.hz_country_code) #参照国别代码表(COUNTRY)
-                      xml.tradeCurr(order.hz_order.currency_code) #参照币制代码表(CURR)
+                      xml.tradeCurr(hz_order.currency_code) #参照币制代码表(CURR)
                       xml.tradeTotal(order.total) 
                       xml.declPrice(product.price)
                       xml.declTotalPrice(product.price*product.quantity)
@@ -507,8 +516,8 @@ class HangzhouController < ApplicationController
           process_time: record_time
           )
       when "PERSONAL_GOODS_DECLAR"
-        hz_order = HzOrder.joins(:order).where("oc_order.order_sn = ?", doc.at_css("body list jkfResult businessNo").content.strip)
-        hz_order.update_attributes(
+        way_bill = HzWayBill.where("way_bill_no = ?", doc.at_css("body list jkfResult businessNo").content.strip)
+        way_bill.update_attributes(
           pg_result: record_status, 
           pg_comment: record_comment, 
           pg_time: record_time 
@@ -517,8 +526,7 @@ class HangzhouController < ApplicationController
       end
     end
     def save_personal_good_result doc
-      # 查找条件待修改
-      order = Order.includes(:hz_order).find_by_order_sn(doc.at_css("body jkfSign businessNo").content.strip)
+      way_bill = HzWayBill.find_by_way_bill_no(doc.at_css("body jkfSign businessNo").content.strip)
       order.hz_order.update_attributes(
         personal_goods_form_no: doc.at_css("body jkfGoodsDeclar personalGoodsFormNo").content.strip,
         pg_approve_result: doc.at_css("body jkfGoodsDeclar approveResult").content.strip,
@@ -527,8 +535,8 @@ class HangzhouController < ApplicationController
         )
     end
     def save_taxineed_result doc
-      hz_order = HzOrder.find_by_personal_goods_form_no(doc.at_css("body jkfTaxIsNeedDto personalGoodsFormNo").content.strip)
-      hz_order.update_attributes(
+      way_bill = HzWayBill.find_by_way_bill_no(doc.at_css("body jkfSign businessNo").content.strip)
+      way_bill.update_attributes(
         tax_amount: doc.at_css("body jkfTaxIsNeedDto taxAmount").content.strip,
         is_tax_needed: doc.at_css("body jkfTaxIsNeedDto isNeed").content.strip
       )

@@ -1,4 +1,5 @@
-h1 个人物品申报申报管理
+div class="page-header" 
+  | 个人物品申报申报管理
 p
   input type="checkbox" name="tickall" class="tickboxall"
   | 全选
@@ -13,12 +14,9 @@ table class="table table-bordered"
     tr
       th 
       th Order SN
-      th Status
       th Customer Name
       th Total
       th Date
-      th Gross Weight
-      th Package Type
       th Currency
       th Origin
       th
@@ -26,22 +24,39 @@ table class="table table-bordered"
   tbody
     form id="orderapplyform"
       - @orders.each do |order|
-        tr
+        tr style="background:#eee;"
           td 
             input type="checkbox" name="tick[]" value="#{order.order_id}" class="tickbox"
           td = order.order_sn
-          td = order.order_status.name
           td = "#{order.firstname}#{order.lastname}"
           td = order.total
           td = order.date_added
-          td = order.hz_order.gross_weight unless order.hz_order.blank?
-          td = order.hz_order.package_type unless order.hz_order.blank?
           td = order.hz_order.currency_code unless order.hz_order.blank?
           td = order.shop.hz_manufacturer.hz_country_code unless order.shop.hz_manufacturer.blank? unless order.shop.blank?
           td = link_to '查看', order,:class=>"btn btn-default btn-xs"
-          th
-            button type="button" class="btn btn-info addinfo btn-xs" data-oid="#{order.order_id}"
-              | 添加信息
+          td 
+            button class="btn btn-xs btn-default" data-oid="#{order.order_id}"
+              | 添加运单
+        - if order.hz_way_bills.size > 0
+          tr
+            th 
+            th 运单号
+            th 个人物品备案号
+            th 毛重
+            th 包装
+            th 备案结果
+            th
+        - order.hz_way_bills.each do |way_bill|
+          tr
+            td
+            td = way_bill.way_bill_no
+            td = way_bill.personal_goods_form_no
+            td = way_bill.gross_weight unless way_bill.blank?
+            td = way_bill.package_type unless way_bill.blank?
+            td = way_bill.pg_approve_result
+            td 
+              button type="button" class="btn btn-info addinfo btn-xs" data-wbid="#{way_bill.way_bill_no}"
+                | 添加信息
       end
 
 = will_paginate @orders, {:next_label=>"后一页", :previous_label=>"前一页"}
@@ -53,7 +68,7 @@ javascript:
     $('#modal').removeData('bs.modal');
     $('#modal').modal({
           show: true,
-          remote: '/hangzhou/add_order_info/?orderid='+obj.data("oid")
+          remote: '/hangzhou/add_order_info/?wbn='+obj.data("wbid")
     });
   });
   $(".apply_personal_all").click(function(){

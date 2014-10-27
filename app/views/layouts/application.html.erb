@@ -18,16 +18,17 @@
 	<%= csrf_meta_tags %>
 </head>
 <body>
-	<div class="container">
+	<div style="padding:0px 20px;border-bottom:1px solid #ddd;">
+		<h1>好难找网后台管理系统</h1>
+	</div>
 		<div class="row">
-			<div class="col-lg-12 text-center" style="padding:20px;">
+			<div class="col-lg-2">
 				<%= render partial: 'partials/nav' %>
 			</div>
-			<div class="col-lg-12">
+			<div class="col-lg-10" style="border-left:1px solid #ddd;">
 				<%= yield %>
 			</div>
 		</div>
-	</div>
 	<div id="mask">&nbsp;</div>
 </body>
 </html>

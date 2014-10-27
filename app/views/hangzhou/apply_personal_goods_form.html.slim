@@ -39,8 +39,8 @@ div class="modal-content"
 					== select("order_info", "tranf_mode", @transports.collect {|t| [ t.name, t.code ] }, {include_blank: "选择运输方式"},{:class => 'form-control',:id=>'order_info_tranf_mode'})
 
 			br
-			button type="button" class="btn btn-default saveorderinfo"
-				| 保存
+			//button type="button" class="btn btn-default saveorderinfo"
+			//	| 保存
 			button type="button" class="btn btn-default saveorderinfoandapply"
 				| 保存并提交申报
 
