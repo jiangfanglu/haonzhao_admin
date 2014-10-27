@@ -26,7 +26,7 @@ class HangzhouController < ApplicationController
     @orders = Order.includes(:hz_order).includes(:order_status).where("hz_orders.approve_result <> '1' or hz_orders.approve_result is null").order('oc_order.order_id DESC').paginate page: params[:page], per_page: 20
   end
   def personals
-    @orders = Order.includes(:hz_order).includes(:order_status).where("hz_orders.pg_result <> '1' or hz_orders.pg_result is null").order('oc_order.order_id DESC').paginate page: params[:page], per_page: 20
+    @orders = Order.includes(:hz_order).includes(:order_status).where("hz_orders.pg_result <> '1' or hz_orders.pg_result is null").order('oc_order.order_id DESC').references(:hz_order).paginate page: params[:page], per_page: 20
   end
   # 列表清单结束 ==============================
 
@@ -78,19 +78,8 @@ class HangzhouController < ApplicationController
           entering_person: params[:order_info][:entering_person],
           sender_city: params[:order_info][:sender_city]
         )
-      if order.hz_way_bills.count < 1
-        way_bill_nos = params[:order_info][:way_bills].split(",")
-        way_bill_nos.each do |way_bill_no|
-          order.hz_way_bills << HzWayBill.new(
-            :way_bill_no: way_bill_no,
-            :order_id: order.order_id
-            )
-        end
-      end
-      order.save
-
-      response = post_to_interface(personal_goods_xml(order), "PERSONAL_GOODS_DECLAR")
       
+      response = post_to_interface(personal_goods_xml(order), "PERSONAL_GOODS_DECLAR")
       order.hz_order.update_attributes(
           pg_result: response[0], 
           pg_comment: response[1], 
@@ -119,15 +108,16 @@ class HangzhouController < ApplicationController
       print soap_fault.http.body
     end
     doc = Nokogiri::XML(response.body[:check_received_response][:return])
-    record_status = doc.at_css("body chkMark").content
-    record_comment = doc.at_css("body note").content
-    record_time = "#{doc.at_css("body noticeDate").content} #{doc.at_css("body noticeTime").content}".to_datetime
-    return [record_status,record_comment,record_time]
+    record_status = doc.at_css("body list jkfResult chkMark").content
+    #record_comment = doc.at_css("body list jkfResult note").content
+    record_time = "#{doc.at_css("body list jkfResult noticeDate").content} #{doc.at_css("body list jkfResult noticeTime").content}".to_datetime
+    return [record_status,"",record_time]
   end
 
   # 添加订单重量与包装方式表单
   def add_order_info
     @packages = HzPackage.all
+    @hz_order = HzOrder.includes(:hz_way_bills).find_by_order_id params[:orderid]
     render :layout=>false
   end
 
@@ -144,6 +134,14 @@ class HangzhouController < ApplicationController
     @hz_order.order_id = params[:orderid] if @hz_order.order_id.blank?
     @hz_order.package_type = params[:package_type]
     @hz_order.gross_weight = params[:gross_weight].to_f
+    HzWayBill.delete_all("order_id = #{params[:orderid]}")
+    way_bill_nos = params[:way_bills].split(",")
+    way_bill_nos.each do |way_bill_no|
+      @hz_order.hz_way_bills << HzWayBill.new(
+        way_bill_no: way_bill_no,
+        order_id: @hz_order.order_id
+        ) 
+    end
     @hz_order.save
     render :text => "OK", :layout=>false
   end
@@ -188,9 +186,9 @@ class HangzhouController < ApplicationController
     
     #text = Base64.encode64(Digest::MD5.hexdigest(decrypted_data+"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCffOeIVYut9jW5w1L5uKX4aDvd837a8JhaWm5S8YqNQfgEmfD9T+rDknXLqMT+DXeQAqGo4hBmcbej1aoMzn6hIJHk3/TfTAToNN8fgwDotHewsTCBbVkQWtDTby3GouWToVsRi1i/A0Vfb0+xM8MnF46DdhhrnZrycERBSbyrcwIDAQAB")).strip
     
-    @product = Product.includes(:product_description).includes(:hz_product).find 107
-
-    render :xml => @output, :layout=>false
+    #@product = Product.includes(:product_description).includes(:hz_product).find 107
+    xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><mo version=\"1.0.0\"><head><businessType>RESULT</businessType></head><body><list><jkfResult><companyCode>1234567890</companyCode><businessNo>6751406356998</businessNo><businessType>PERSONAL_GOODS_DECLAR</businessType><declareType>1</declareType><chkMark>1</chkMark><noticeDate>2014-10-27</noticeDate><noticeTime>09:47</noticeTime><resultList><jkfResultDetail><resultInfo>处理成功</resultInfo></jkfResultDetail></resultList></jkfResult></list></body></mo>"
+    render :xml => xml, :layout=>false
   end
 
   private
@@ -382,7 +380,7 @@ class HangzhouController < ApplicationController
                   xml.consignee(order.firstname)
                   xml.senderCountry(order.hz_order.sender_country) #参数表
                   xml.senderCity(order.hz_order.sender_city)
-                  xml.paperType("0" + order.customer.user.customer_identifications.where("identification_type = '1'").first.identification_type.to_s) #身份证（试点时期）
+                  xml.paperType(order.customer.user.customer_identifications.where("identification_type = '1'").first.identification_type.to_s) #身份证（试点时期）
                   xml.paperNumber(order.customer.user.customer_identifications.where("identification_type = '1'").first.identification_no)
                   #xml.paperType("") #身份证（试点时期）
                   #xml.paperNumber("")
@@ -494,9 +492,9 @@ class HangzhouController < ApplicationController
 
     # 报文XML模板结束 ===========================================
     def save_result doc
-      record_status = doc.at_css("body chkMark").content
-      record_comment = doc.at_css("body note").content
-      record_time = "#{doc.at_css("body noticeDate").content} #{doc.at_css("body noticeTime").content}".to_datetime
+      record_status = doc.at_css("body list jkfResult chkMark").content
+      record_comment = doc.at_css("body list jkfResult note").content
+      record_time = "#{doc.at_css("body list jkfResult noticeDate").content} #{doc.at_css("body list jkfResult noticeTime").content}".to_datetime
     
       case doc.at_css("body list jkfResult businessType").content.strip
       when "PRODUCT_RECORD"
