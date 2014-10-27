@@ -23,33 +23,38 @@ class HangzhouController < ApplicationController
     @products = Product.includes(:product_description).includes(:hz_product).order('product_id DESC').paginate page: params[:page], per_page: 20
   end
   def orders
-    @orders = Order.includes(:hz_order).includes(:order_status).where("hz_orders.approve_result <> '1'").order('oc_order.order_id DESC').paginate page: params[:page], per_page: 20
+    @orders = Order.includes(:hz_order).includes(:order_status).where("hz_orders.approve_result <> '1' or hz_orders.approve_result is null").order('oc_order.order_id DESC').paginate page: params[:page], per_page: 20
   end
   def personals
-    @orders = Order.includes(:hz_order).includes(:order_status).where("hz_orders.pg_result <> '1'").order('oc_order.order_id DESC').paginate page: params[:page], per_page: 20
+    @orders = Order.includes(:hz_order).includes(:order_status).where("hz_orders.pg_result <> '1' or hz_orders.pg_result is null").order('oc_order.order_id DESC').paginate page: params[:page], per_page: 20
   end
   # 列表清单结束 ==============================
 
   # 申报接口方法开始 ===================================
   def apply_for_product_record
     @products = Product.includes(:product_description).includes(:hz_product).where("oc_product.product_id in (?)",params[:tick])
-    s = render_to_string :file => 'hangzhou/productapplication.xml'
-    #filename = "JKF_1SHOO_PRODUCT_RECORD_1_#{@products.first.product_id}_#{Time.new.strftime('%Y%m%d%H%M%S')}"
-    #File.open("#{Rails.root}/public/beian/products/#{filename}.xml",'w'){|f| f.write s}
-    response = post_to_interface(s, "PRODUCT_RECORD")
-    HzProduct.where("product_id in (?)", @products.collect{|p| p.product_id}).update_all(approve_result: response[0], approve_comment: response[1], process_time: response[2] ) if response[0].to_i == 1
-    
-    render :json => { :success => true, :html => "OK" },:layout=>false
+    @products.each do |product|
+      response = post_to_interface(product_xml(product), "PRODUCT_RECORD")
+      product.hz_product.update_attributes(
+        approve_result: response[0], 
+        approve_comment: response[1], 
+        process_time: response[2] 
+      ) if response[0].to_i == 1
+    end
+    render :text=>"OK",:layout=>false
   end
 
   def apply_for_order_record
     @orders = Order.includes(:order_products).includes(:hz_order).where("order_id in (?)",params[:tick])
-    s = render_to_string :file => 'hangzhou/importorder.xml'
-    #filename = "JKF_1SHOO_IMPORTORDER_1_#{@orders.first.order_sn}_#{Time.new.strftime('%Y%m%d%H%M%S')}"
-    #File.open("#{Rails.root}/public/beian/orders/#{filename}.xml",'w'){|f| f.write s}
-    response = post_to_interface(s, "IMPORTORDER")
-    HzOrder.where("order_id in (?)", @orders.collect{|p| p.order_id}).update_all(approve_result: response[0], approve_comment: response[1], process_time: response[2] ) if response[0].to_i == 1
-    render :json => { :success => true, :html => "OK" },:layout=>false
+    @orders.each do |order|
+      response = post_to_interface(order_xml(order), "IMPORTORDER")
+      order.hz_order.update_attributes(
+        approve_result: response[0], 
+        approve_comment: response[1], 
+        process_time: response[2] 
+      ) if response[0].to_i == 1
+    end
+    render :text=>"OK",:layout=>false
   end
 
   def add_importorder_return
@@ -57,30 +62,42 @@ class HangzhouController < ApplicationController
     s = render_to_string :file => 'hangzhou/order_return.xml'
     response = post_to_interface(s, "IMPORT_ORDER_RETURN")
     p response.body
-    render :json => { :success => true, :html => "OK" },:layout=>false
+    render :text=>"OK",:layout=>false
   end
 
   def individual_product_apply
     @orderids = params[:order_info][:order_ids].split(",")
-    @hz_orders = HzOrder.where("order_id in (?)", @orderids)
-    @hz_orders.each do |hz_order|
-      hz_order.ie_port = params[:order_info][:ie_port]
-      hz_order.customs_field = params[:order_info][:custom_field]
-      hz_order.tranf_mode = params[:order_info][:tranf_mode]
-      #hz_order.post_mode = params[:order_info][:post_mode]
-      hz_order.destination_port = params[:order_info][:destination_port]
-      hz_order.decl_port = params[:order_info][:decl_port]
-      hz_order.entering_person = params[:order_info][:entering_person]
-      #hz_order.way_bills = params[:order_info][:way_bills]
-      hz_order.sender_city = params[:order_info][:sender_city]
-      #hz_order.sender_country = params[:order_info][:sender_country]
-      hz_order.save
-    end
     @orders = Order.includes(:order_products).includes(:hz_order).where("order_id in (?)",@orderids)
-    s = render_to_string :file => 'hangzhou/personal_goods_declare.xml'
-    response = post_to_interface(s, "PERSONAL_GOODS_DECLAR")
-    HzOrder.where("order_id in (?)", @orders.collect{|p| p.order_id}).update_all(pg_result: response[0], pg_comment: response[1], pg_time: response[2] ) if response[0].to_i == 1
-    render :json => { :success => true, :html => "OK" },:layout=>false
+    @orders.each do |order|
+      order.hz_order.update_attributes(
+          ie_port: params[:order_info][:ie_port],
+          customs_field: params[:order_info][:custom_field],
+          tranf_mode: params[:order_info][:tranf_mode],
+          destination_port: params[:order_info][:destination_port],
+          decl_port: params[:order_info][:decl_port],
+          entering_person: params[:order_info][:entering_person],
+          sender_city: params[:order_info][:sender_city]
+        )
+      if order.hz_way_bills.count < 1
+        way_bill_nos = params[:order_info][:way_bills].split(",")
+        way_bill_nos.each do |way_bill_no|
+          order.hz_way_bills << HzWayBill.new(
+            :way_bill_no: way_bill_no,
+            :order_id: order.order_id
+            )
+        end
+      end
+      order.save
+
+      response = post_to_interface(personal_goods_xml(order), "PERSONAL_GOODS_DECLAR")
+      
+      order.hz_order.update_attributes(
+          pg_result: response[0], 
+          pg_comment: response[1], 
+          pg_time: response[2] 
+        ) if response[0].to_i == 1
+    end
+    render :text=>"OK",:layout=>false
   end
 
   def apply_for_company_record
@@ -171,14 +188,311 @@ class HangzhouController < ApplicationController
     
     #text = Base64.encode64(Digest::MD5.hexdigest(decrypted_data+"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCffOeIVYut9jW5w1L5uKX4aDvd837a8JhaWm5S8YqNQfgEmfD9T+rDknXLqMT+DXeQAqGo4hBmcbej1aoMzn6hIJHk3/TfTAToNN8fgwDotHewsTCBbVkQWtDTby3GouWToVsRi1i/A0Vfb0+xM8MnF46DdhhrnZrycERBSbyrcwIDAQAB")).strip
     
-    #xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><mo version=\"1.0.0\"><head><businessType>RESULT</businessType></head><body><list><jkfResult><companyCode>1234567890</companyCode><businessNo>107</businessNo><businessType>PRODUCT_RECORD</businessType><declareType>1</declareType><chkMark>1</chkMark><noticeDate>2014-10-24</noticeDate><noticeTime>09:02</noticeTime><note>备注</note><resultList><jkfResultDetail><resultInfo>处理成功</resultInfo></jkfResultDetail></resultList></jkfResult></list></body></mo>"
-    #xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><mo version=\"1.0.0\"><head><businessType>RESULT</businessType></head><body><list><jkfResult><companyCode>1234567890</companyCode><businessNo>6751406356998</businessNo><businessType>IMPORTORDER</businessType><declareType>1</declareType><chkMark>1</chkMark><noticeDate>2014-10-24</noticeDate><noticeTime>09:51</noticeTime><resultList><jkfResultDetail><resultInfo>处理成功</resultInfo></jkfResultDetail></resultList></jkfResult></list></body></mo>" #order
-    #xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><mo version=\"1.0.0\"><head><businessType>RESULT</businessType></head><body><list><jkfResult><companyCode>1234567890</companyCode><businessNo>6751406356998</businessNo><businessType>PERSONAL_GOODS_DECLAR</businessType><declareType>1</declareType><chkMark>1</chkMark><noticeDate>2014-10-24</noticeDate><noticeTime>08:13</noticeTime><resultList><jkfResultDetail><resultInfo>处理成功</resultInfo></jkfResultDetail></resultList></jkfResult><jkfResult><companyCode>1234567890</companyCode><businessNo>7741406357058</businessNo><businessType>PERSONAL_GOODS_DECLAR</businessType><declareType>1</declareType><chkMark>1</chkMark><noticeDate>2014-10-24</noticeDate><noticeTime>08:13</noticeTime><resultList><jkfResultDetail><resultInfo>处理成功</resultInfo></jkfResultDetail></resultList></jkfResult></list></body></mo>"
-    render :xml => xml, :layout=>false
+    @product = Product.includes(:product_description).includes(:hz_product).find 107
+
+    render :xml => @output, :layout=>false
   end
 
   private
+    # 报文XML模板开始 ===========================================
 
+    # 写入文件
+    #filename = "JKF_1SHOO_IMPORTORDER_1_#{@orders.first.order_sn}_#{Time.new.strftime('%Y%m%d%H%M%S')}"
+    #File.open("#{Rails.root}/public/beian/orders/#{filename}.xml",'w'){|f| f.write s}
+
+    def product_xml product
+      @output = ""
+      xml = Builder::XmlMarkup.new(:target => @output, :ident => 1)
+      xml.instruct! :xml, :encoding => "UTF-8",  :version => "1.0"
+      xml.mo(:version=>"1.0.0") do
+        xml.head do
+          xml.businessType("PRODUCT_RECORD")
+        end
+        xml.body do
+          xml.productRecordList do
+            #@products.each do |product|
+              xml.productRecord do
+                xml.jkfSign do
+                  xml.companyCode(HZ_COMPANY_CODE)
+                  xml.businessNo(@product.product_id)
+                  xml.businessType("PRODUCT_RECORD")
+                  xml.declareType("1")
+                  xml.note("")
+                end
+                xml.productRecordDto do
+                  xml.companyCode(HZ_COMPANY_NO) #电商平台备案取得的唯一标示
+                  xml.companyName(HZ_COMPANY_NAME)
+                  xml.postTaxNo(@product.hz_product.post_tax_no) #海关10位行邮税号, 见参数表
+                  xml.goodsType(@product.hz_product.hz_post_tax.item_category)
+                  xml.goodsName(@product.product_description.name)
+                  xml.barCode(@product.hz_product.barcode) #optional
+                  xml.brand(@product.shop.name) #optional
+                  xml.goodsModel(@product.model) #optional
+                  xml.mainElement(@product.hz_product.main_elements) #optional
+                  xml.purpose(@product.hz_product.hz_purpose_code) #optional
+                  xml.standards(@product.hz_product.standard) #optional
+                  xml.productionEnterprise(@product.shop.name) #optional
+                  xml.productionCountry(@product.shop.hz_manufacturer.hz_country.code) #optional
+                  xml.licenceKey("") #optional
+                  xml.categoryCode("1234567890") #optional
+                  xml.materialAddress(@product.hz_product.material_address) #指国检要求提交的产品备案材料，此处指材料的片地址, optional
+                  xml.declareTimeStr(Time.new.strftime("%Y-%m-%d %H:%M:%S")) ##optional yyyy-MM-dd HH:mm:ss
+                end
+              end
+            #end
+          end
+        end
+      end
+      @output
+    end
+
+    def order_xml order
+      @output = ""
+      xml = Builder::XmlMarkup.new(:target => @output, :ident => 1)
+      xml.instruct! :xml, :encoding => "UTF-8",  :version => "1.0"
+      xml.mo(:version=>"1.0.0") do
+        xml.head do
+          xml.businessType("IMPORTORDER")
+        end
+        xml.body do
+          xml.orderInfoList do
+            #@orders.each do |order|
+              xml.orderInfo do
+                xml.jkfSign do
+                  xml.companyCode(HZ_COMPANY_NO)
+                  xml.businessNo(order.order_sn) #order number
+                  xml.businessType("IMPORTORDER")
+                  xml.declareType("1")
+                  xml.note("") #optional
+                end
+                xml.jkfOrderImportHead do
+                  xml.eCommerceCode(HZ_ECOMMERCE_COMPANY_NO)
+                  xml.eCommerceName(HZ_ECOMMERCE_COMPANY_NAME)
+                  xml.ieFlag("I")
+                  xml.payType(order.hz_order.pay_type)
+                  xml.payCompanyCode(order.hz_order.pay_company_code)
+                  xml.payNumber(order.hz_order.pay_number)
+                  xml.orderTotalAmount(order.total)
+                  xml.orderNo(order.order_sn)
+                  xml.orderTaxAmount(order.order_totals.where("code = 'tax'").sum("value").to_f) #according to goods amount, can be 0
+                  xml.orderGoodsAmount(order.order_totals.where("code = 'sub_total'").sum("value").to_f) 
+                  xml.feeAmount(order.order_totals.where("code = 'shipping'").sum("value").to_f) #can be 0, optional
+                  xml.companyName(HZ_COMPANY_NO)
+                  xml.companyCode(HZ_ECOMMERCE_COMPANY_NO)
+                  xml.tradeTime(order.date_added.strftime("%Y-%m-%d %H:%M:%S")) #格式：2014-02-18 20:33:33
+                  xml.currCode(order.hz_order.currency_code) #见参数表
+                  xml.totalAmount(order.total)
+                  xml.consigneeEmail(order.email)
+                  xml.consigneeTel(order.telephone)
+                  xml.consignee(order.firstname)
+                  xml.consigneeAddress("#{order.shipping_country}#{order.shipping_zone}#{order.shipping_city}#{order.shipping_address_1}")
+                  xml.totalCount(order.order_products.sum("oc_order_product.quantity"))
+                  xml.postMode(order.hz_order.post_mode) #见参数表
+                  xml.senderCountry(order.hz_order.sender_country) #见参数表
+                  xml.senderName(order.hz_order.sender_name)
+                  xml.purchaserId(order.customer_id)
+                  xml.logisCompanyName(order.hz_order.logistic_company_name)
+                  xml.logisCompanyCode(order.hz_order.logistic_company_code)
+                  xml.zipCode(order.shipping_postcode) #optional
+                  xml.note("") #optional
+                  xml.wayBills(order.hz_order.way_bills) #optional
+                end
+                xml.jkfOrderDetailList do
+                  n = 1
+                  order.order_products.each do |order_product|
+                    xml.jkfOrderDetail do 
+                      xml.goodsOrder(n)
+                      xml.goodsName(order_product.name)
+                      xml.goodsModel(order_product.model) #optional
+                      xml.codeTs(order_product.product.hz_product.blank? ? "" : order_product.product.hz_product.post_tax_no) #必须已备案，且与 参数说明文档中的行邮税号 中的税号一致
+                                  xml.grossWeight(order_product.product.weight) #optional
+                                  xml.unitPrice(order_product.price)
+                                  xml.goodsUnit(order_product.product.hz_product.blank? ? "" : order_product.product.hz_product.unit_code) #见参数表
+                                  xml.goodsCount(order_product.quantity)
+                      xml.originCountry(order_product.product.shop.hz_manufacturer.hz_country_code) #见参数表
+                    end
+                    n += 1
+                  end
+                end
+                xml.jkfGoodsPurchaser do
+                  xml.id(order.customer_id)
+                  xml.name(order.firstname)
+                  xml.email(order.email) #optional
+                  xml.telNumber(order.telephone)
+                  xml.address("#{order.shipping_country}#{order.shipping_zone}#{order.shipping_city}#{order.shipping_address_1}")
+                  xml.paperType(order.customer.user.blank? ? "" : "0"+order.customer.user.customer_identifications.where("identification_type = '1'").first.identification_type.to_s) 
+                            xml.paperNumber(order.customer.user.blank? ? "" : order.customer.user.customer_identifications.where("identification_type = '1'").first.identification_no)
+                end
+              end
+            #end
+          end
+        end  
+      end
+      @output
+    end
+    def personal_goods_xml order
+      @output = ""
+      xml = Builder::XmlMarkup.new(:target => @output, :ident => 1)
+      xml.instruct! :xml, :encoding => "UTF-8",  :version => "1.0"
+      xml.mo(:version=>"1.0.0") do
+        xml.head do
+          xml.businessType("PERSONAL_GOODS_DECLAR")
+        end
+        xml.body do
+          xml.goodsDeclareModuleList do
+            #@orders.each do |order|
+              xml.goodsDeclareModule do
+                xml.jkfSign do
+                  xml.companyCode(HZ_COMPANY_NO)
+                  xml.businessNo(order.order_sn)
+                  xml.businessType("PERSONAL_GOODS_DECLAR")
+                  xml.declareType("1")
+                  xml.note("") #can be null
+                end
+                xml.goodsDeclare do
+                  xml.accountBookNo("") #optional
+                  xml.ieFlag("I")
+                  xml.preEntryNumber("预录入号码")
+                  xml.importType("0") #0：一般进口, 1：保税进口
+                  xml.inOutDateStr("") #格式：2014-02-18 20:33:33
+                  xml.iePort(order.hz_order.ie_port) #见参数表
+                  xml.destinationPort(order.hz_order.destination_port) #见参数表
+                  xml.trafName("运输工具名称") #包括字母和数字.可以填写中文.转关时填写@+16位转关单号. optional
+                  xml.voyageNo("运输工具航次(班)号") #新增，包括字母和数字，可以有中文. optional
+                  xml.trafMode(order.hz_order.tranf_mode) #参照运输方式代码表(TRANSF)
+                  xml.declareCompanyType("个人委托电商企业申报") #个人委托电商企业申报;个人委托物流企业申报;个人委托第三方申报
+                  xml.declareCompanyCode(HZ_COMPANY_NO) #指委托申报单位代码
+                  xml.declareCompanyName(HZ_COMPANY_NAME) #指委托申报单位名称
+                  xml.eCommerceCode(HZ_ECOMMERCE_COMPANY_NO) 
+                  xml.eCommerceName(HZ_ECOMMERCE_COMPANY_NAME)
+                  xml.orderNo(order.order_sn)
+                  xml.wayBill(order.hz_way_bills.collect{|wb| wb.way_bill_no}.join(","))
+                  xml.tradeCountry(order.shop.hz_manufacturer.hz_country_code) #参照国别代码表(COUNTRY)
+                  xml.packNo(order.order_products.sum("oc_order_product.quantity")) #只能有数字
+                  xml.grossWeight(order.hz_order.gross_weight) 
+                  xml.netWeight("") #optional
+                  xml.warpType(order.hz_order.package_type) #参照包装种类代码表
+                  xml.remark("") #optional
+                  xml.declPort(order.hz_order.decl_port) #对应参数表
+                  xml.enteringPerson(order.hz_order.entering_person) #默认9999
+                  xml.enteringCompanyName(HZ_COMPANY_NAME) #默认9999
+                  xml.declarantNo("") #optional
+                  xml.customsField(order.hz_order.customs_field) #对应参数表
+                  xml.senderName(order.hz_order.sender_name)
+                  xml.consignee(order.firstname)
+                  xml.senderCountry(order.hz_order.sender_country) #参数表
+                  xml.senderCity(order.hz_order.sender_city)
+                  xml.paperType("0" + order.customer.user.customer_identifications.where("identification_type = '1'").first.identification_type.to_s) #身份证（试点时期）
+                  xml.paperNumber(order.customer.user.customer_identifications.where("identification_type = '1'").first.identification_no)
+                  #xml.paperType("") #身份证（试点时期）
+                  #xml.paperNumber("")
+                  xml.worth(order.total) #只有数字，表体所有商品成交总价的和
+                  xml.currCode(order.hz_order.currency_code)  #对应参数表
+                  xml.mainGName(order.order_products.collect{|t| t.name}.join(","))  #可以数字和字母或者中文
+                  xml.internalAreaCompanyNo("") #optional
+                  xml.internalAreaCompanyName("") #optional
+                  xml.applicationFormNo("") #optional
+                  xml.isAuthorize("1")
+                end
+                xml.goodsDeclareDetails do
+                  order.order_products.each do |product|
+                    xml.goodsDeclareDetail do
+                      xml.goodsOrder(product.product_id)
+                      xml.codeTs(product.product.hz_product.post_tax_no)
+                      xml.goodsItemNo(product.product_id)
+                      xml.goodsName(product.name)
+                      xml.goodsModel(product.model)
+                      xml.originCountry(product.product.shop.hz_manufacturer.hz_country_code) #参照国别代码表(COUNTRY)
+                      xml.tradeCurr(order.hz_order.currency_code) #参照币制代码表(CURR)
+                      xml.tradeTotal(order.total) 
+                      xml.declPrice(product.price)
+                      xml.declTotalPrice(product.price*product.quantity)
+                      xml.useTo(product.hz_product.hz_purpose_code) #参照用途代码表
+                      xml.declareCount(product.quantity)
+                      xml.goodsUnit(product.hz_product.unit_code) #参照计量单位代码表(UNIT)
+                      xml.goodsGrossWeight(product.product.weight) #optional
+                      xml.firstUnit(product.hz_product.unit_code) #optional
+                      xml.firstCount(product.quantity) #optional
+                      xml.secondUnit("") #optional
+                      xml.secondCount("") #optional
+                      xml.productRecordNo(product.hz_product.record_code) #通过向国检备案获取
+                      xml.webSite(product.hz_product.url) #optional
+                    end
+                  end
+                end
+              end
+            #end
+          end
+        end
+      end
+      @output
+    end
+    def order_return_xml order
+      @output = ""
+      xml = Builder::XmlMarkup.new(:target => @output, :ident => 1)
+      xml.instruct! :xml, :encoding => "UTF-8",  :version => "1.0"
+      xml.mo(:version=>"1.0.0") do
+        xml.head do
+          xml.businessType("IMPORT_ORDER_RETURN")
+        end
+        xml.body do
+          xml.goodsReturnModuleList do
+            #@orders.each do |order|
+              xml.goodsReturnModule do
+                xml.jkfSign do
+                  xml.companyCode(HZ_COMPANY_NO)
+                  xml.businessNo(order.order_sn)
+                  xml.businessType("IMPORT_ORDER_RETURN")
+                  xml.declareType("1")
+                  xml.note("")
+                end
+                xml.goodsReturn do
+                  xml.appCode("") #退货申报编号
+                  xml.orderNo(order.order_sn)
+                  xml.wayBillNo(order.hz_order.way_bills)
+                  xml.eCommerceCode(HZ_ECOMMERCE_COMPANY_NO)
+                  xml.eCompanyCode(HZ_ECOMMERCE_COMPANY_NAME)
+                  xml.internalAreaCompanyNo("") #仓储企业代码
+                  xml.declareCompanyCode(HZ_COMPANY_NO)
+                  xml.returnWayBillNo("") #退货运单号
+                  xml.declareTimeStr(Time.new.strftime("%Y-%m-%d %H:%M:%S"))
+                  xml.customsField(order.hz_order.customsField)
+                  xml.declPort(order.hz_order.decl_port)
+                  xml.packType(order.hz_order.package_type)
+                  xml.packNo(order.order_products.collect{|t| t.quantity}.inject{|sum,x| sum + x })
+                  xml.mainGName(order.order_products.collect{|t| t.name}.join(","))
+                end
+                n=1
+                xml.goodsReturnDetails do
+                  order.order_products.each do |product|
+                    xml.goodsReturnDetail do
+                      xml.goodsOrder(n)
+                      xml.codeTs(product.hz_product.post_tax_no)
+                      xml.goodsItemNo(product.product_id)
+                      xml.goodsName(product.product.product_description.name)
+                      xml.goodsModel(product.product.model)
+                      xml.originCountry(product.product.shop.hz_manufacturer.hz_country_code)
+                      xml.tradeCurr(order.hz_order.currency_code)
+                      xml.tradeTotal(order.total)
+                      xml.declarePrice(product.price)
+                      xml.declareTotalPrice(product.total)
+                      xml.useTo(product.hz_product.hz_purpose_code)
+                      xml.declareCount(product.quantity)
+                      xml.goodsUnit(product.hz_product.unit_code)
+                      xml.goodsGrossWeight(product.product.weight)
+                    end
+                    n+=1
+                  end
+                end
+              end
+            #end
+          end
+        end
+      end
+      @output
+    end
+
+    # 报文XML模板结束 ===========================================
     def save_result doc
       record_status = doc.at_css("body chkMark").content
       record_comment = doc.at_css("body note").content
