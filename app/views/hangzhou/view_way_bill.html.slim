@@ -1,0 +1,79 @@
+div class="modal-content"
+	div class="modal-header"
+		button type="button" class="close" data-dismiss="modal"
+        		span aria-hidden="true"
+        			| &times;
+    			span class="sr-only"
+    				| Close
+		h4 class="modal-title"
+			| 运单信息
+	div class="modal-body"
+		h6 
+			| Order ID: 
+			= @way_bill.order_id
+		form id="add_order_info"
+			div class="row"
+				div class="col-lg-4"
+					label 毛重（公斤）: 
+					= @way_bill.gross_weight
+				div class="col-lg-4"
+					label 包装 :
+					= @way_bill.package_type
+				div class="col-lg-4"
+					label 运单号 :
+					= @way_bill.way_bill_no
+				div class="col-lg-4"
+					label 税额 :
+					= @way_bill.tax_amount
+				div class="col-lg-4"
+					label 是否收税 :
+					= @way_bill.is_tax_needed
+				div class="col-lg-4"
+					label 申报结果 :
+					= @way_bill.pg_approve_result
+				div class="col-lg-4"
+					label 申报结果时间 :
+					= @way_bill.pg_approve_time
+				div class="col-lg-4"
+					label 申报结果记录号 :
+					= @way_bill.personal_goods_form_no
+				div class="col-lg-4"
+					label 港区 :
+					= @way_bill.ie_port
+				div class="col-lg-4"
+					label 关区 :
+					= @way_bill.decl_port
+				div class="col-lg-4"
+					label 运输方式 :
+					= @way_bill.tranf_mode
+				div class="col-lg-4"
+					label 场站代码 :
+					= @way_bill.custom_field
+				div class="col-lg-4"
+					label 发件国 :
+					= @way_bill.sender_country
+				div class="col-lg-4"
+					label 发件方 :
+					= @way_bill.sender_name
+				div class="col-lg-4"
+					label 快递 :
+					= @way_bill.logistic_company_name
+			div class="page-header"
+				| 运单物品
+			div class="row" style="margin-top:20px;"
+				div class="col-lg-12"
+					table class="table"
+						tr style="background:#f7f7f7;"
+							th 商品ID
+							th 商品名称
+							th 型号
+							th 数量
+							th 条形码
+						- @order_products.each do |product|
+							tr
+								td = product.product_id
+								td = product.name
+								td = product.model
+								td = product.quantity
+								td = product.hz_product.barcode unless product.hz_product.blank? 
+						end

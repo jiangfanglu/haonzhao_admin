@@ -72,7 +72,7 @@ class HangzhouController < ApplicationController
     @way_bills.each do |way_bill|
      way_bill.update_attributes(
           ie_port: params[:order_info][:ie_port],
-          customs_field: params[:order_info][:custom_field],
+          custom_field: params[:order_info][:custom_field],
           tranf_mode: params[:order_info][:tranf_mode],
           destination_port: params[:order_info][:destination_port],
           decl_port: params[:order_info][:decl_port],
@@ -117,6 +117,7 @@ class HangzhouController < ApplicationController
     rescue Savon::Error => soap_fault
       print soap_fault.http.body
     end
+    p response.body
     doc = Nokogiri::XML(response.body[:check_received_response][:return])
     record_status = doc.at_css("body list jkfResult chkMark").content
     #record_comment = doc.at_css("body list jkfResult note").content
@@ -127,9 +128,16 @@ class HangzhouController < ApplicationController
   # 添加订单重量与包装方式表单
   def add_order_info
     @packages = HzPackage.all
-    @way_bill = HzWayBill.find_by_way_bill_no params[:wbn]
+    @way_bill = HzWayBill.find params[:wbid]
     @order_products = @way_bill.order.order_products
     @order_products = @order_products.where("order_product_id not in (#{@way_bill.order_product_ids})") unless @way_bill.order_product_ids.blank?
+    render :layout=>false
+  end
+
+  def view_way_bill
+    @way_bill = HzWayBill.find params[:wbid]
+    @order_products = @way_bill.order.order_products
+    @order_products = @order_products.where("order_product_id in (#{@way_bill.order_product_ids})") unless @way_bill.order_product_ids.blank?
     render :layout=>false
   end
 
@@ -139,16 +147,29 @@ class HangzhouController < ApplicationController
     render :layout=>false
   end
 
+  def add_way_bill
+    way_bill = HzWayBill.new
+    way_bill.order_id = params[:id]
+    way_bill.save
+    redirect_to request.referer+"#wb#{way_bill.id}"
+  end
+
+  def remove_way_bill
+    HzWayBill.delete params[:id]
+    redirect_to request.referer
+  end
+
 
   def save_order_extra_info
-    # @way_bill = HzWayBill.find_by_way_bill_no params[:way_bill_no]
-    # @way_bill = HzWayBill.new if @way_bill.blank?
-    # @way_bill.order_id = params[:orderid] if @way_bill.order_id.blank?
-    # @way_bill.package_type = params[:package_type]
-    # @way_bill.gross_weight = params[:gross_weight]
-    # @way_bill.way_bill_no = params[:way_bill_no]
-    # @way_bill.order_product_ids = params[:order_product_ids]
-    # @way_bill.save
+    @way_bill = HzWayBill.find params[:way_bill_id]
+    @way_bill = HzWayBill.new if @way_bill.blank?
+    @way_bill.order_id = params[:orderid] if @way_bill.order_id.blank?
+    @way_bill.package_type = params[:package_type]
+    @way_bill.gross_weight = params[:gross_weight]
+    @way_bill.way_bill_no = params[:way_bill_no]
+    @way_bill.order_product_ids = params[:order_product_ids].collect{|key,value| value[:value]}.join(",")
+    @way_bill.save
+
     render :text => "OK", :layout=>false
   end
 
