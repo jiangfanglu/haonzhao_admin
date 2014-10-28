@@ -71,7 +71,8 @@ class HangzhouController < ApplicationController
     @return_orders = HzOrderReturn.includes(:order).where("id in (?)",params[:tick])
     @return_orders.each do |hz_order_return|
       produc_array = JSON.parse(hz_order_return.return_product_ids)
-      products = OrderProduct.where("product_id in (?)",produc_array.collect{|k,v| k['id']})
+      products = OrderProduct.where("order_product_id in (?)",produc_array.collect{|k,v| k['id'].to_i})
+
       order_return_products = []
       produc_array.each do |pa|
         order_return_products.append({
@@ -175,18 +176,46 @@ class HangzhouController < ApplicationController
   end
 
   # 退单表
+  def new_order_return
+    order_return = HzOrderReturn.new
+    order_return.order_id = params[:id]
+    order_return.save
+    redirect_to request.referer+"#or#{order_return.id}"
+  end
+
+  def remove_order_return
+    HzOrderReturn.delete params[:id]
+    redirect_to request.referer
+  end
+
   def add_order_return_form
     @packages = HzPackage.all
-    @order_products = OrderProduct.where("order_id = ?",params[:orderid])
+    @order_return = HzOrderReturn.includes(:order).find params[:order_return_id]
+
     render :layout=>false
   end
 
   def save_order_return
-    @order_return = HzOrderReturn.new(
-          customs_field: params[:order_info][:custom_field],
-          decl_port: params[:order_info][:decl_port]
+    @order_return = HzOrderReturn.find params[:order_return_id]
+    return_product_ids = []
+    params[:return_quantity].each do |x, y|
+      select = y['value'].split("_")
+      return_product_ids.append({:id=>select[0],:quantity=>select[1]}) if select[1].to_i > 0
+    end
+
+    @order_return.update_attributes(
+          app_code: "1SHOOOR#{@order_return.id}",
+          customs_field: params[:custom_field],
+          decl_port: params[:decl_port],
+          return_way_bill_no: params[:return_way_bill_no],
+          original_way_bill_no: params[:original_way_bill_no],
+          pack_no: return_product_ids.collect{|t| t[:quantity].to_i}.inject{|sum,x| sum + x },
+          pack_type: params[:pack_type],
+          return_product_ids: return_product_ids.to_json,
+          decl_time: Time.new.strftime("%Y-%m-%d %H:%M:%S")
       )
     @order_return.save
+    render :text => "OK", :layout=>false
   end
 
   # 个人物品申报附加信息表单
@@ -532,11 +561,11 @@ class HangzhouController < ApplicationController
                   xml.declareCompanyCode(HZ_COMPANY_NO)
                   xml.returnWayBillNo(hz_order_return.return_way_bill_no) #退货运单号
                   xml.declareTimeStr(hz_order_return.decl_time)
-                  xml.customsField(hz_order_return.customsField)
+                  xml.customsField(hz_order_return.customs_field)
                   xml.declPort(hz_order_return.decl_port)
                   xml.packType(hz_order_return.pack_type)
                   xml.packNo(hz_order_return.pack_no)
-                  xml.mainGName(hz_order_return_products.collect{|t| t.name}.join(","))
+                  xml.mainGName(hz_order_return_products.collect{|t| t[:product].name}.join(","))
                 end
                 n=1
                 xml.goodsReturnDetails do
@@ -551,7 +580,7 @@ class HangzhouController < ApplicationController
                       xml.tradeCurr(hz_order_return.order.hz_order.currency_code)
                       xml.tradeTotal(product[:product].total)
                       xml.declarePrice(product[:product].price)
-                      xml.declareTotalPrice(product[:product].price * product[:quantity])
+                      xml.declareTotalPrice( product[:product].price * product[:quantity].to_f )
                       xml.declareCount(product[:quantity])
                       xml.useTo(product[:product].hz_product.hz_purpose_code)
                       xml.goodsUnit(product[:product].hz_product.unit_code)

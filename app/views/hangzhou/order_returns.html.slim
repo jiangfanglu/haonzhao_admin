@@ -5,41 +5,66 @@ p
   | 全选
   | &nbsp;
   button type="button" class="btn btn-info applyall btn-sm"
-    | 申报订单
+    | 申报退单
   | &nbsp;
   //button type="button" class="btn btn-info checkresultall"
   //  | 查看结果(刷新)
-table class="table table-bordered table-striped"
+table class="table table-bordered"
   thead
     tr
-      th 
+      th colspan="2"
       th Order SN
       th Status
       th Customer Name
       th Total
       th Date
       th Currency
-      th
+      th colspan="2"
       //th
   tbody
     form id="orderapplyform"
       - @orders.each do |order|
-        tr
-          td
-            - unless order.hz_order.blank? 
-              - if order.hz_order.approve_result.to_i != 1
-                input type="checkbox" name="tick[]" value="#{order.order_id}" class="tickbox"
-              end
-            end
+        tr style="background:#eee;"
+          td colspan="2"
           td = order.order_sn
           td = order.order_status.name
           td = "#{order.firstname}#{order.lastname}"
           td = order.total
           td = order.date_added
           td = order.hz_order.currency_code unless order.hz_order.blank?
-          th
-            button type="button" class="btn btn-default add_return_order btn-xs" data-oid="#{order.order_id}"
-              | 添加退单信息
+          td colspan="2" 
+            = link_to "添加退单", {:action=>"new_order_return",:id=>order.order_id},{:class=>"btn btn-default btn-xs"}
+        - if order.hz_order_returns.size > 0
+          tr style="background:#f7f7f7;"
+            td 
+            td 序号
+            td 退货申报编号
+            td 退单运单号
+            td 原运单号
+            td 件数 
+            td 申报时间
+            td 申报结果
+        end
+        - order.hz_order_returns.each do |order_return|
+          tr
+            td 
+              - unless order_return.approve_result.to_i == 1
+                input type="checkbox" name="tick[]" value="#{order_return.id}" class="tickbox"
+              end
+              a id="or#{order_return.id}"
+            td = order_return.id
+            td = order_return.app_code
+            td = order_return.return_way_bill_no
+            td = order_return.original_way_bill_no
+            td = order_return.pack_no
+            td = order_return.approve_time
+            td = order_return.approve_result
+            td
+              button type="button" class="btn btn-default add_return_order btn-xs" data-orid="#{order_return.id}"
+                | 添加退单信息
+            td
+              = link_to '删除退单', {:action=>"remove_order_return",:id=>order_return.id},{ :class=>"btn btn-xs btn-danger delete_order_return" }
+        end
       end
 
 = will_paginate @orders, {:next_label=>"后一页", :previous_label=>"前一页"}
@@ -51,23 +76,7 @@ javascript:
     $('#modal').removeData('bs.modal');
     $('#modal').modal({
           show: true,
-          remote: '/hangzhou/add_order_return_form/?orderid='+obj.data("oid")
-    });
-  });
-  $(".apply_personal_all").click(function(){
-    if($(".tickbox:checked").length < 1){
-      alert("请选择需要申报的订单");
-      return false;
-    }
-    var obj=$(this);
-    var tickedboxes = [];
-    $(".tickbox:checked").each(function(){
-      tickedboxes.push(this.value);
-    });
-    $('#modal').removeData('bs.modal');
-    $('#modal').modal({
-          show: true,
-          remote: '/hangzhou/apply_personal_goods_form/?orderids='+tickedboxes.join(",")
+          remote: '/hangzhou/add_order_return_form/?order_return_id='+obj.data("orid")
     });
   });
   $(".tickboxall").click(function(){
@@ -92,13 +101,26 @@ javascript:
     $(".tickbox:checked").each(function(){
       tickedboxes.push(this.value);
     });
-    $('#modal').removeData('bs.modal');
-    $('#modal').modal({
-          show: true,
-          remote: '/hangzhou/add_order_sender/?orderids='+tickedboxes.join(",")
+    $(this).html("提交中...请耐心等待");
+    $(this).addClass("disabled");
+    $("#mask").show();
+    $.ajax({
+      url: '/hangzhou/add_importorder_return',
+      type: 'post',
+      data: $("#orderapplyform").serializeArray()
+    }).done(function(response){
+      //alert(response);
+      window.location.reload();
     });
 
   });
   $(".checkresultall").click(function(){
 
+  });
+  $(".delete_order_return").click(function(){
+    if(confirm("确认要删除？")){
+      return true;
+    }else{
+      return false;
+    }
   });

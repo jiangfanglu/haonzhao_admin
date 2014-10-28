@@ -6,25 +6,21 @@ div class="modal-content"
     			span class="sr-only"
     				| Close
 		h4 class="modal-title"
-			| 添加运单信息
+			| 退运单信息
 	div class="modal-body"
-		h6 
-			| Order ID: 
-			= @way_bill.order_id
 		form id="add_order_info"
 			div class="row"
-				div class="col-lg-4"
-					label 毛重（公斤）
-					= text_field :order_info, :app_code, :class=>"form-control",:value=>@way_bill.gross_weight
-				div class="col-lg-4"
-					label 毛重（公斤）
-					= text_field :order_info, :gross_weight, :class=>"form-control",:value=>@way_bill.gross_weight
+				= hidden_field :order_info, :decl_port, :value=>"2928"
+				= hidden_field :order_info, :custom_field, :value=>"292801"
 				div class="col-lg-4"
 					label 包装
-					== select("order_info", "package_type", @packages.collect {|t| [ t.name, t.code ] }, {include_blank: "选择包装类别", :selected=>@way_bill.package_type},{:class => 'form-control',:id=>'order_info_package_type'})
+					== select("order_info", "pack_type", @packages.collect {|t| [ t.name, t.code ] }, {include_blank: "选择包装类别", :selected=>@order_return.pack_type},{:class => 'form-control',:id=>'order_info_pack_type'})
 				div class="col-lg-4"
-					label 运单号
-					= text_field :order_info, :way_bill_no, :class=>"form-control",:value=> (@way_bill.way_bill_no)
+					label 退货运单号
+					= text_field :order_info, :return_way_bill_no, :class=>"form-control",:value=> (@order_return.return_way_bill_no)
+				div class="col-lg-4"
+					label 原运单号
+					= text_field :order_info, :original_way_bill_no, :class=>"form-control",:value=> (@order_return.original_way_bill_no)
 			div class="row" style="margin-top:20px;"
 				div class="col-lg-12"
 					table class="table"
@@ -34,9 +30,8 @@ div class="modal-content"
 							th 型号
 							th 数量
 							th 条形码
-							th 添加到该退运单
-							td 退货数量
-						- @order_products.each do |product|
+							th 退货数量
+						- @order_return.order.order_products.each do |product|
 							tr
 								td = product.product_id
 								td = product.name
@@ -44,10 +39,13 @@ div class="modal-content"
 								td = product.quantity
 								td = product.hz_product.barcode unless product.hz_product.blank? 
 								td 
-									| 选择&nbsp;
-									input type="checkbox" name="selected_product" value="#{product.order_product_id}"
-								td 
-									input name="return_quantity[]" class="form-class input-sm"
+									select name="return_quantity" class="form-control input-sm"
+										-- n=0
+										- while n <= product.quantity.to_i
+											option value="#{product.order_product_id}_#{n}"
+												= n
+											-- n+=1
+										end
 						end
 			br	
 			button type="button" class="btn btn-default saveorderinfo"
@@ -56,15 +54,16 @@ div class="modal-content"
 javascript:
 	$(".saveorderinfo").click(function(){
 		$.ajax({
-	      url: '/hangzhou/save_order_extra_info',
+	      url: '/hangzhou/save_order_return',
 	      type: 'post',
 	      data: {
-	      	orderid: $("#order_info_order_id").val(),
-	      	package_type: $("#order_info_package_type").val(),
-	      	gross_weight: $("#order_info_gross_weight").val(),
-	      	way_bill_no: $("#order_info_way_bill_no").val(),
-	      	way_bill_id: '#{@way_bill.id}',
-	      	order_product_ids: $('input[name="selected_product"]:checked').serializeArray()
+	      	order_return_id: '#{@order_return.id}',
+	      	pack_type: $("#order_info_pack_type").val(),
+	      	decl_port: $("#order_info_decl_port").val(),
+	      	custom_field: $("#order_info_custom_field").val(),
+	      	original_way_bill_no: $("#order_info_original_way_bill_no").val(),
+	      	return_way_bill_no: $("#order_info_return_way_bill_no").val(),
+	      	return_quantity: $('select[name="return_quantity"]').serializeArray()
 	      	}
 	    }).done(function(response){
 	      //alert(response);
