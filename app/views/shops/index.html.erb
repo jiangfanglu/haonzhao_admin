@@ -33,13 +33,13 @@
         <td><%= shop.shipping_option_id %></td>
 				<td><%= shop.date_added.strftime('%Y-%m-%d') %></td>
         <td><%= t shop.status %></td>
-        <td><%= link_to '查看', shop, class: 'btn btn-default' %></td>
+        <td><%= link_to '查看', shop, class: 'btn btn-default btn-xs' %></td>
         <!-- <td><%#= link_to 'Edit', edit_shop_path(shop) %></td> -->
         <td>
 					<% if shop.close? %>
-						<a class="closed btn btn-default" style='color: green;' data-id="<%= shop.manufacturer_id %>">允许</a>
+						<a class="closed btn btn-default btn-xs" style='color: green;' data-id="<%= shop.manufacturer_id %>">允许</a>
 					<% else %>
-						<a class="allowed btn btn-default" style='color: red;' data-id="<%= shop.manufacturer_id %>">关闭</a>
+						<a class="allowed btn btn-default btn-xs" style='color: red;' data-id="<%= shop.manufacturer_id %>">关闭</a>
 					<% end %>
 					<%#= link_to 'Destroy', shop, method: :delete, data: { confirm: 'Are you sure?' } %>
 				</td>

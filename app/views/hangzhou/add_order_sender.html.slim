@@ -1,0 +1,49 @@
+div class="modal-content"
+	div class="modal-header"
+		button type="button" class="close" data-dismiss="modal"
+        		span aria-hidden="true"
+        			| &times;
+    			span class="sr-only"
+    				| Close
+		h4 class="modal-title"
+			| 添加申报相关信息
+	div class="modal-body"
+		form id="personal_good_form"
+			= hidden_field :order_info, :order_ids, :value=>params[:orderids]
+			div class="row"
+				div class="col-lg-3"
+					label 发件方
+					== select("order_info", "sender_name", @sender_names.collect {|t| t }, {include_blank: "选择发件方"},{:class => 'form-control',:id=>'order_info_sender_name'})
+				div class="col-lg-3"
+					label 发件国家
+					== select("order_info", "sender_country", @countries.collect {|t| [ t.name, t.code ] }, {include_blank: "选择发件国家"},{:class => 'form-control',:id=>'order_info_sender_country'})
+				div class="col-lg-3"
+					label 运输方式
+					== select("order_info", "tranf_mode", @post_modes.collect {|t| [ t.name, t.code ] }, {include_blank: "选择运输方式"},{:class => 'form-control',:id=>'order_info_tranf_mode'})
+
+			br
+			button type="button" class="btn btn-default saveorderinfoandapply"
+				| 保存并提交申报
+
+javascript:
+	var processing = false;
+	$(".saveorderinfoandapply").click(function(){
+		processing = true;
+		$("#mask").show();
+		$(this).addClass("disabled");
+		$(this).html("提交中...请耐心等待");
+		$.ajax({
+	      url: '/hangzhou/apply_for_order_record',
+	      type: 'post',
+	      data: $("#personal_good_form").serializeArray()
+	    }).done(function(response){
+	      //alert(response);
+	      processing = false;
+	      window.location.reload();
+	    });
+	});
+	$(window).bind('beforeunload', function(){
+		if(processing){
+			return '正在处理中，您确定要离开本页？';
+		}
+	});

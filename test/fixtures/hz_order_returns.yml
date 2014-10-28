@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  app_code: MyString
+  order_id: 1
+  return_way_bill_no: MyString
+  original_way_bill_no: MyString
+  pack_no: 1
+  pack_type: MyString
+  decl_port: MyString
+  customs_field: MyString
+  decl_time: 2014-10-28 15:16:09
+
+two:
+  app_code: MyString
+  order_id: 1
+  return_way_bill_no: MyString
+  original_way_bill_no: MyString
+  pack_no: 1
+  pack_type: MyString
+  decl_port: MyString
+  customs_field: MyString
+  decl_time: 2014-10-28 15:16:09

@@ -4,11 +4,11 @@ p
   input type="checkbox" name="tickall" class="tickboxall"
   | 全选
   | &nbsp;
-  button type="button" class="btn btn-info apply_personal_all"
+  button type="button" class="btn btn-info btn-sm apply_personal_all"
     | 申报个人物品(商品入库)
   | &nbsp;
-  button type="button" class="btn btn-info checkresultall"
-    | 查看结果(刷新)
+  //button type="button" class="btn btn-info btn-sm checkresultall"
+  //  | 查看结果(刷新)
 table class="table table-bordered"
   thead
     tr
@@ -25,8 +25,10 @@ table class="table table-bordered"
     form id="orderapplyform"
       - @orders.each do |order|
         tr style="background:#eee;"
-          td 
-            input type="checkbox" name="tick[]" value="#{order.order_id}" class="tickbox"
+          td
+            - unless order.hz_order.blank?
+              input type="checkbox" name="tick[]" value="#{order.order_id}" class="tickbox"
+            end
           td = order.order_sn
           td = "#{order.firstname}#{order.lastname}"
           td = order.total

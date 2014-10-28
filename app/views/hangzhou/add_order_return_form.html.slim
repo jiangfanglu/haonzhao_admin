@@ -1,0 +1,73 @@
+div class="modal-content"
+	div class="modal-header"
+		button type="button" class="close" data-dismiss="modal"
+        		span aria-hidden="true"
+        			| &times;
+    			span class="sr-only"
+    				| Close
+		h4 class="modal-title"
+			| 添加运单信息
+	div class="modal-body"
+		h6 
+			| Order ID: 
+			= @way_bill.order_id
+		form id="add_order_info"
+			div class="row"
+				div class="col-lg-4"
+					label 毛重（公斤）
+					= text_field :order_info, :app_code, :class=>"form-control",:value=>@way_bill.gross_weight
+				div class="col-lg-4"
+					label 毛重（公斤）
+					= text_field :order_info, :gross_weight, :class=>"form-control",:value=>@way_bill.gross_weight
+				div class="col-lg-4"
+					label 包装
+					== select("order_info", "package_type", @packages.collect {|t| [ t.name, t.code ] }, {include_blank: "选择包装类别", :selected=>@way_bill.package_type},{:class => 'form-control',:id=>'order_info_package_type'})
+				div class="col-lg-4"
+					label 运单号
+					= text_field :order_info, :way_bill_no, :class=>"form-control",:value=> (@way_bill.way_bill_no)
+			div class="row" style="margin-top:20px;"
+				div class="col-lg-12"
+					table class="table"
+						tr style="background:#f7f7f7;"
+							th 商品ID
+							th 商品名称
+							th 型号
+							th 数量
+							th 条形码
+							th 添加到该退运单
+							td 退货数量
+						- @order_products.each do |product|
+							tr
+								td = product.product_id
+								td = product.name
+								td = product.model
+								td = product.quantity
+								td = product.hz_product.barcode unless product.hz_product.blank? 
+								td 
+									| 选择&nbsp;
+									input type="checkbox" name="selected_product" value="#{product.order_product_id}"
+								td 
+									input name="return_quantity[]" class="form-class input-sm"
+						end
+			br	
+			button type="button" class="btn btn-default saveorderinfo"
+				| 保存
+
+javascript:
+	$(".saveorderinfo").click(function(){
+		$.ajax({
+	      url: '/hangzhou/save_order_extra_info',
+	      type: 'post',
+	      data: {
+	      	orderid: $("#order_info_order_id").val(),
+	      	package_type: $("#order_info_package_type").val(),
+	      	gross_weight: $("#order_info_gross_weight").val(),
+	      	way_bill_no: $("#order_info_way_bill_no").val(),
+	      	way_bill_id: '#{@way_bill.id}',
+	      	order_product_ids: $('input[name="selected_product"]:checked').serializeArray()
+	      	}
+	    }).done(function(response){
+	      //alert(response);
+	      window.location.reload();
+	    });
+	});

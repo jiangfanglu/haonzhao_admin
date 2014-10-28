@@ -53,6 +53,7 @@
 		    <li><a href='/hangzhou/products'>商品备案</a></li>
 		    <li><a href='/hangzhou/orders'>管理申报订单</a></li>
 		    <li><a href='/hangzhou/personals'>管理申报个人物品</a></li>
+        <li><a href='/hangzhou/order_returns'>管理退单</a></li>
 		<!--     <li><a href='/hangzhou/personals'>管理个人物品申报</a></li> -->
 		    <!-- <li><a href='/hz_companies'>企业申请</a></li> -->
 		  </ul>
@@ -83,7 +84,7 @@
         <button type="submit" class="btn btn-default">Submit</button>
       </form> -->
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">退出</a></li>
+        <li><%=link_to "退出", logout_shops_path %></li>
         <li><a href="#">设置</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->

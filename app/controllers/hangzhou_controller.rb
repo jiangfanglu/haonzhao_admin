@@ -23,10 +23,13 @@ class HangzhouController < ApplicationController
     @products = Product.includes(:product_description).includes(:hz_product).where("hz_products.approve_result <> '1' or hz_products.approve_result is null").order('oc_product.product_id DESC').paginate page: params[:page], per_page: 20
   end
   def orders
-    @orders = Order.includes(:hz_order).includes(:order_status).where("hz_orders.approve_result <> '1' or hz_orders.approve_result is null").order('oc_order.order_id DESC').paginate page: params[:page], per_page: 20
+    @orders = Order.includes(:hz_order).includes(:order_status).where("hz_orders.approve_result <> '1' or hz_orders.approve_result is null").references(:hz_order).order('oc_order.order_id DESC').paginate page: params[:page], per_page: 20
   end
   def personals
-    @orders = Order.includes(:hz_order).includes(:order_status).order('oc_order.order_id DESC').references(:hz_order).paginate page: params[:page], per_page: 20
+    @orders = Order.includes(:hz_order).includes(:hz_way_bills).where("hz_way_bills.out_state <> '1' or  hz_way_bills.out_state is null").order('oc_order.order_id DESC').references(:hz_order).paginate page: params[:page], per_page: 20
+  end
+  def order_returns
+    @orders = Order.includes(:hz_order).includes(:hz_way_bills).order('oc_order.order_id DESC').references(:hz_order).paginate page: params[:page], per_page: 20
   end
   # 列表清单结束 ==============================
 
@@ -45,8 +48,15 @@ class HangzhouController < ApplicationController
   end
 
   def apply_for_order_record
-    @orders = Order.includes(:order_products).includes(:hz_order).where("order_id in (?)",params[:tick])
+    @orderids = params[:order_info][:order_ids].split(",")
+    @orders = Order.includes(:order_products).includes(:hz_order).where("order_id in (?)",@orderids)
     @orders.each do |order|
+      order.hz_order.update_attributes(
+        :sender_name=> params[:order_info][:sender_name], 
+        :sender_country=> params[:order_info][:sender_country], 
+        :post_mode=> params[:order_info][:tranf_mode]
+      )
+
       response = post_to_interface(order_xml(order), "IMPORTORDER")
       order.hz_order.update_attributes(
         approve_result: response[0], 
@@ -58,10 +68,26 @@ class HangzhouController < ApplicationController
   end
 
   def add_importorder_return
-    @orders = Order.includes(:order_products).includes(:hz_order).where("order_id in (?)",params[:tick])
-    s = render_to_string :file => 'hangzhou/order_return.xml'
-    response = post_to_interface(s, "IMPORT_ORDER_RETURN")
-    p response.body
+    @return_orders = HzOrderReturn.includes(:order).where("id in (?)",params[:tick])
+    @return_orders.each do |hz_order_return|
+      produc_array = JSON.parse(hz_order_return.return_product_ids)
+      products = OrderProduct.where("product_id in (?)",produc_array.collect{|k,v| k['id']})
+      order_return_products = []
+      produc_array.each do |pa|
+        order_return_products.append({
+            :product=> products.where("order_product_id = ?", pa['id']).first,
+            :quantity=>pa['quantity']
+          })
+      end
+
+      response = post_to_interface(order_return_xml(hz_order_return, order_return_products), "IMPORT_ORDER_RETURN")
+
+      hz_order_return.update_attributes(
+        approve_result: response[0], 
+        approve_comment: response[1], 
+        approve_time: response[2] 
+      ) if response[0].to_i == 1
+    end
     render :text=>"OK",:layout=>false
   end
 
@@ -134,11 +160,33 @@ class HangzhouController < ApplicationController
     render :layout=>false
   end
 
+  def add_order_sender
+    @countries = HzCountry.all.order("name asc")
+    @post_modes = HzLogisticMode.all
+    @sender_names = ['一树网络科技有限公司（澳洲）']
+    render :layout=>false
+  end
+
   def view_way_bill
     @way_bill = HzWayBill.find params[:wbid]
     @order_products = @way_bill.order.order_products
     @order_products = @order_products.where("order_product_id in (#{@way_bill.order_product_ids})") unless @way_bill.order_product_ids.blank?
     render :layout=>false
+  end
+
+  # 退单表
+  def add_order_return_form
+    @packages = HzPackage.all
+    @order_products = OrderProduct.where("order_id = ?",params[:orderid])
+    render :layout=>false
+  end
+
+  def save_order_return
+    @order_return = HzOrderReturn.new(
+          customs_field: params[:order_info][:custom_field],
+          decl_port: params[:order_info][:decl_port]
+      )
+    @order_return.save
   end
 
   # 个人物品申报附加信息表单
@@ -316,8 +364,8 @@ class HangzhouController < ApplicationController
                   xml.senderCountry(order.hz_order.sender_country) #见参数表
                   xml.senderName(order.hz_order.sender_name)
                   xml.purchaserId(order.customer_id)
-                  xml.logisCompanyName(order.hz_order.logistic_company_name)
-                  xml.logisCompanyCode(order.hz_order.logistic_company_code)
+                  xml.logisCompanyName("浙江顺丰速运有限公司")
+                  xml.logisCompanyCode("3301980093")
                   xml.zipCode(order.shipping_postcode) #optional
                   xml.note("") #optional
                   xml.wayBills(order.hz_way_bills.collect{|wb| wb.way_bill_no}.join(",")) #optional
@@ -334,7 +382,7 @@ class HangzhouController < ApplicationController
                                   xml.unitPrice(order_product.price)
                                   xml.goodsUnit(order_product.product.hz_product.blank? ? "" : order_product.product.hz_product.unit_code) #见参数表
                                   xml.goodsCount(order_product.quantity)
-                      xml.originCountry(order_product.product.shop.hz_manufacturer.hz_country_code) #见参数表
+                      xml.originCountry(order_product.hz_product.sender_country_code) #见参数表
                     end
                     n += 1
                   end
@@ -385,8 +433,8 @@ class HangzhouController < ApplicationController
                   xml.inOutDateStr("") #格式：2014-02-18 20:33:33
                   xml.iePort(way_bill.ie_port) #见参数表
                   xml.destinationPort(way_bill.destination_port) #见参数表
-                  xml.trafName("运输工具名称") #包括字母和数字.可以填写中文.转关时填写@+16位转关单号. optional
-                  xml.voyageNo("运输工具航次(班)号") #新增，包括字母和数字，可以有中文. optional
+                  xml.trafName("") # 运输工具名称 :包括字母和数字.可以填写中文.转关时填写@+16位转关单号. optional
+                  xml.voyageNo("") # 运输工具航次(班)号 : 新增，包括字母和数字，可以有中文. optional
                   xml.trafMode(way_bill.tranf_mode) #参照运输方式代码表(TRANSF)
                   xml.declareCompanyType("个人委托电商企业申报") #个人委托电商企业申报;个人委托物流企业申报;个人委托第三方申报
                   xml.declareCompanyCode(HZ_COMPANY_NO) #指委托申报单位代码
@@ -430,7 +478,7 @@ class HangzhouController < ApplicationController
                       xml.goodsItemNo(product.product_id)
                       xml.goodsName(product.name)
                       xml.goodsModel(product.model)
-                      xml.originCountry(product.product.shop.hz_manufacturer.hz_country_code) #参照国别代码表(COUNTRY)
+                      xml.originCountry(product.hz_product.sender_country_code) #参照国别代码表(COUNTRY)
                       xml.tradeCurr(hz_order.currency_code) #参照币制代码表(CURR)
                       xml.tradeTotal(order.total) 
                       xml.declPrice(product.price)
@@ -455,7 +503,7 @@ class HangzhouController < ApplicationController
       end
       @output
     end
-    def order_return_xml order
+    def order_return_xml hz_order_return, hz_order_return_products
       @output = ""
       xml = Builder::XmlMarkup.new(:target => @output, :ident => 1)
       xml.instruct! :xml, :encoding => "UTF-8",  :version => "1.0"
@@ -469,45 +517,45 @@ class HangzhouController < ApplicationController
               xml.goodsReturnModule do
                 xml.jkfSign do
                   xml.companyCode(HZ_COMPANY_NO)
-                  xml.businessNo(order.order_sn)
+                  xml.businessNo(hz_order_return.app_code)
                   xml.businessType("IMPORT_ORDER_RETURN")
                   xml.declareType("1")
                   xml.note("")
                 end
                 xml.goodsReturn do
-                  xml.appCode("") #退货申报编号
-                  xml.orderNo(order.order_sn)
-                  xml.wayBillNo(order.hz_order.way_bills)
+                  xml.appCode(hz_order_return.app_code) #退货申报编号
+                  xml.orderNo(hz_order_return.order.order_sn)
+                  xml.wayBillNo(hz_order_return.original_way_bill_no)
                   xml.eCommerceCode(HZ_ECOMMERCE_COMPANY_NO)
                   xml.eCompanyCode(HZ_ECOMMERCE_COMPANY_NAME)
                   xml.internalAreaCompanyNo("") #仓储企业代码
                   xml.declareCompanyCode(HZ_COMPANY_NO)
-                  xml.returnWayBillNo("") #退货运单号
-                  xml.declareTimeStr(Time.new.strftime("%Y-%m-%d %H:%M:%S"))
-                  xml.customsField(order.hz_order.customsField)
-                  xml.declPort(order.hz_order.decl_port)
-                  xml.packType(order.hz_order.package_type)
-                  xml.packNo(order.order_products.collect{|t| t.quantity}.inject{|sum,x| sum + x })
-                  xml.mainGName(order.order_products.collect{|t| t.name}.join(","))
+                  xml.returnWayBillNo(hz_order_return.return_way_bill_no) #退货运单号
+                  xml.declareTimeStr(hz_order_return.decl_time)
+                  xml.customsField(hz_order_return.customsField)
+                  xml.declPort(hz_order_return.decl_port)
+                  xml.packType(hz_order_return.pack_type)
+                  xml.packNo(hz_order_return.pack_no)
+                  xml.mainGName(hz_order_return_products.collect{|t| t.name}.join(","))
                 end
                 n=1
                 xml.goodsReturnDetails do
-                  order.order_products.each do |product|
+                  hz_order_return_products.each do |product|
                     xml.goodsReturnDetail do
                       xml.goodsOrder(n)
-                      xml.codeTs(product.hz_product.post_tax_no)
-                      xml.goodsItemNo(product.product_id)
-                      xml.goodsName(product.product.product_description.name)
-                      xml.goodsModel(product.product.model)
-                      xml.originCountry(product.product.shop.hz_manufacturer.hz_country_code)
-                      xml.tradeCurr(order.hz_order.currency_code)
-                      xml.tradeTotal(order.total)
-                      xml.declarePrice(product.price)
-                      xml.declareTotalPrice(product.total)
-                      xml.useTo(product.hz_product.hz_purpose_code)
-                      xml.declareCount(product.quantity)
-                      xml.goodsUnit(product.hz_product.unit_code)
-                      xml.goodsGrossWeight(product.product.weight)
+                      xml.codeTs(product[:product].hz_product.post_tax_no)
+                      xml.goodsItemNo("")
+                      xml.goodsName(product[:product].product.product_description.name)
+                      xml.goodsModel(product[:product].model)
+                      xml.originCountry(product[:product].hz_product.sender_country_code)
+                      xml.tradeCurr(hz_order_return.order.hz_order.currency_code)
+                      xml.tradeTotal(product[:product].total)
+                      xml.declarePrice(product[:product].price)
+                      xml.declareTotalPrice(product[:product].price * product[:quantity])
+                      xml.declareCount(product[:quantity])
+                      xml.useTo(product[:product].hz_product.hz_purpose_code)
+                      xml.goodsUnit(product[:product].hz_product.unit_code)
+                      xml.goodsGrossWeight(product[:product].product.weight)
                     end
                     n+=1
                   end
@@ -530,20 +578,26 @@ class HangzhouController < ApplicationController
       when "PRODUCT_RECORD"
         HzProduct.where("product_id = ?", doc.at_css("body list jkfResult businessNo").content.strip).update_all(approve_result: response[0], approve_comment: response[1], process_time: response[2] ) if response[0].to_i == 1
       when "IMPORTORDER"
-        hz_order = HzOrder.joins(:order).where("oc_order.order_sn = ?", doc.at_css("body list jkfResult businessNo").content.strip)
+        hz_order = HzOrder.joins(:order).where("oc_order.order_sn = ?", doc.at_css("body list jkfResult businessNo").content.strip).first
         hz_order.update_attributes(
           approve_result: record_status, 
           approve_comment: record_comment, 
           process_time: record_time
           )
       when "PERSONAL_GOODS_DECLAR"
-        way_bill = HzWayBill.where("way_bill_no = ?", doc.at_css("body list jkfResult businessNo").content.strip)
+        way_bill = HzWayBill.find_by_way_bill_no(doc.at_css("body list jkfResult businessNo").content.strip)
         way_bill.update_attributes(
           pg_result: record_status, 
           pg_comment: record_comment, 
           pg_time: record_time 
           )
       when "IMPORT_ORDER_RETURN"
+        hz_order = HzOrderReturn.find_by_app_code(doc.at_css("body list jkfResult businessNo").content.strip)
+        hz_order.update_attributes(
+          approve_result: record_status, 
+          approve_comment: record_comment, 
+          approve_time: record_time
+          )
       end
     end
     def save_personal_good_result doc

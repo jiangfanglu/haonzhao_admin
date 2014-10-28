@@ -1,18 +1,16 @@
 div class="page-header"
   | 商品申报管理
-
-table class="table table-bordered"
+p
+  input type="checkbox" name="tickall" class="tickboxall"
+    | 全选
+    | &nbsp; 
+    button type="button" class="btn btn-info applyall btn-sm"
+      | 申请备案
+    | &nbsp;
+    //button type="button" class="btn btn-info checkresultall"
+    //  | 查看申报结果(刷新)
+table class="table table-bordered table-striped"
   thead
-    tr
-      th colspan="9"
-        input type="checkbox" name="tickall" class="tickboxall"
-        | 全选
-        | &nbsp; 
-        button type="button" class="btn btn-info applyall"
-          | 申请备案
-        | &nbsp;
-        button type="button" class="btn btn-info checkresultall"
-          | 查看申报结果(刷新)
     tr
       th 
       th ID
@@ -27,8 +25,10 @@ table class="table table-bordered"
     form id="productapplyform"
       - @products.each do |product|
         tr
-          td 
-            input type="checkbox" name="tick[]" value="#{product.product_id}" class="tickbox"
+          td
+            - unless product.hz_product.blank?
+              input type="checkbox" name="tick[]" value="#{product.product_id}" class="tickbox"
+            end
           td = product.product_id
           td = product.product_description.name
           td = product.shop.name
@@ -39,7 +39,7 @@ table class="table table-bordered"
           td = link_to '查看', product,:class=>"btn btn-default btn-xs"
       end
 
-= will_paginate @products
+= will_paginate @products, {:next_label=>"后一页", :previous_label=>"前一页"}
 
 javascript:
   $(".tickboxall").click(function(){

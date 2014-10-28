@@ -1,5 +1,5 @@
 div class="page-header"
-  | 订单申报管理
+  | 退单管理
 p
   input type="checkbox" name="tickall" class="tickboxall"
   | 全选
@@ -19,9 +19,6 @@ table class="table table-bordered table-striped"
       th Total
       th Date
       th Currency
-      //th Origin
-      th 是否已申报
-      th 申报时间
       th
       //th
   tbody
@@ -40,25 +37,21 @@ table class="table table-bordered table-striped"
           td = order.total
           td = order.date_added
           td = order.hz_order.currency_code unless order.hz_order.blank?
-          //td = order.shop.hz_manufacturer.hz_country_code unless order.shop.hz_manufacturer.blank? unless order.shop.blank?
-          td = order.hz_order.approve_result unless order.hz_order.blank?
-          td = order.hz_order.process_time unless order.hz_order.blank?
-          td = link_to '查看', order,:class=>"btn btn-default btn-xs"
-          //th
-          //  button type="button" class="btn btn-info addinfo btn-xs" data-oid="#{order.order_id}"
-          //    | 添加信息
+          th
+            button type="button" class="btn btn-default add_return_order btn-xs" data-oid="#{order.order_id}"
+              | 添加退单信息
       end
 
 = will_paginate @orders, {:next_label=>"后一页", :previous_label=>"前一页"}
 
 == render :partial=>"partials/modal" 
 javascript:
-  $(".addinfo").click(function(){
+  $(".add_return_order").click(function(){
     var obj=$(this);
     $('#modal').removeData('bs.modal');
     $('#modal').modal({
           show: true,
-          remote: '/hangzhou/add_order_info/?orderid='+obj.data("oid")
+          remote: '/hangzhou/add_order_return_form/?orderid='+obj.data("oid")
     });
   });
   $(".apply_personal_all").click(function(){

@@ -31,6 +31,11 @@ class ShopsController < ApplicationController
     
     redirect_to url
   end
+
+  def logout
+    session[:user] = nil
+    redirect_to "/"
+  end
   
   def close
     respond_to do |format|
