@@ -1,3 +1,4 @@
+# encoding: UTF-8
 class HzCompaniesController < ApplicationController
   before_action :set_hz_company, only: [:show, :edit, :update, :destroy]
 
@@ -16,10 +17,28 @@ class HzCompaniesController < ApplicationController
   def new
     @hz_company = HzCompany.new
     @custom = HzDomesticPorts.all
+    @company_types = [
+      {:code=>"1",:name=>"商家"},
+      {:code=>"2",:name=>"平台企业"},
+      {:code=>"3",:name=>"物流企业"},
+      {:code=>"4",:name=>"仓储企业"},
+      {:code=>"5",:name=>"第三方支付企业"},
+      {:code=>"6",:name=>"报关行企业"}
+    ]
+
   end
 
   # GET /hz_companies/1/edit
   def edit
+    @company_types = [
+      {:code=>"1",:name=>"商家"},
+      {:code=>"2",:name=>"平台企业"},
+      {:code=>"3",:name=>"物流企业"},
+      {:code=>"4",:name=>"仓储企业"},
+      {:code=>"5",:name=>"第三方支付企业"},
+      {:code=>"6",:name=>"报关行企业"}
+    ]
+    @custom = HzDomesticPorts.all
   end
 
   # POST /hz_companies

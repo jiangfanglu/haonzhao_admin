@@ -368,8 +368,8 @@ class HangzhouController < ApplicationController
                   xml.note("") #optional
                 end
                 xml.jkfOrderImportHead do
-                  xml.eCommerceCode(HZ_ECOMMERCE_COMPANY_NO)
-                  xml.eCommerceName(HZ_ECOMMERCE_COMPANY_NAME)
+                  xml.eCommerceCode(order.hz_order.hz_company.company_code)
+                  xml.eCommerceName(order.hz_order.hz_company.company_name)
                   xml.ieFlag("I")
                   xml.payType(order.hz_order.pay_type)
                   xml.payCompanyCode(order.hz_order.pay_company_code)
@@ -457,7 +457,7 @@ class HangzhouController < ApplicationController
                 xml.goodsDeclare do
                   xml.accountBookNo("") #optional
                   xml.ieFlag("I")
-                  xml.preEntryNumber("预录入号码")
+                  xml.preEntryNumber("SHYS#{Time.new.strftime("%Y%m%d%H%M%S")}")
                   xml.importType("0") #0：一般进口, 1：保税进口
                   xml.inOutDateStr("") #格式：2014-02-18 20:33:33
                   xml.iePort(way_bill.ie_port) #见参数表
@@ -468,8 +468,8 @@ class HangzhouController < ApplicationController
                   xml.declareCompanyType("个人委托电商企业申报") #个人委托电商企业申报;个人委托物流企业申报;个人委托第三方申报
                   xml.declareCompanyCode(HZ_COMPANY_NO) #指委托申报单位代码
                   xml.declareCompanyName(HZ_COMPANY_NAME) #指委托申报单位名称
-                  xml.eCommerceCode(HZ_ECOMMERCE_COMPANY_NO) 
-                  xml.eCommerceName(HZ_ECOMMERCE_COMPANY_NAME)
+                  xml.eCommerceCode(order.hz_order.hz_company.company_code) 
+                  xml.eCommerceName(order.hz_order.hz_company.company_name)
                   xml.orderNo(order.order_sn)
                   xml.wayBill(way_bill.way_bill_no)
                   xml.tradeCountry(order.shop.hz_manufacturer.hz_country_code) #参照国别代码表(COUNTRY)
@@ -555,8 +555,8 @@ class HangzhouController < ApplicationController
                   xml.appCode(hz_order_return.app_code) #退货申报编号
                   xml.orderNo(hz_order_return.order.order_sn)
                   xml.wayBillNo(hz_order_return.original_way_bill_no)
-                  xml.eCommerceCode(HZ_ECOMMERCE_COMPANY_NO)
-                  xml.eCompanyCode(HZ_ECOMMERCE_COMPANY_NAME)
+                  xml.eCommerceCode(order.hz_order.hz_company.company_code)
+                  xml.eCompanyCode(order.hz_order.hz_company.company_name)
                   xml.internalAreaCompanyNo("") #仓储企业代码
                   xml.declareCompanyCode(HZ_COMPANY_NO)
                   xml.returnWayBillNo(hz_order_return.return_way_bill_no) #退货运单号

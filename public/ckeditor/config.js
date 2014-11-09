@@ -30,7 +30,7 @@ CKEDITOR.editorConfig = function( config ) {
 	// need to have in the Standard(s) toolbar.
 	config.removeButtons = 'Underline,Subscript,Superscript';
 
-	config.filebrowserUploadUrl="/utility/upload_user_account_images";
+	config.filebrowserUploadUrl="/products/upload_user_account_images";
 
 	// Se the most common block elements.
 	config.format_tags = 'p;h1;h2;h3;pre';
@@ -39,6 +39,6 @@ CKEDITOR.editorConfig = function( config ) {
 	config.removeDialogTabs = 'image:advanced;link:advanced';
 
 	config.extraPlugins = 'imagebrowser';
-	config.imageBrowser_listUrl="/utility/browse_user_images";
+	config.imageBrowser_listUrl="/products/browse_user_images";
 	//config.filebrowserImageBrowseUrl="/utility/browse_user_images";
 };

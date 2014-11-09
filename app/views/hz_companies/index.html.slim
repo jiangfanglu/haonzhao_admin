@@ -10,7 +10,7 @@ table class="table"
       th record no
       th approve result
       th
-      //th
+      th
       th
 
   tbody
@@ -23,12 +23,12 @@ table class="table"
         td = hz_company.record_no
         td = hz_company.approve_result
         td = link_to '查看', hz_company,{:class=>"btn btn-xs btn-default"}
-        td
-          - if hz_company.approve_result.blank?
-            button class="btn btn-xs btn-default apply_this_company" data-comid="#{hz_company.id}" 
-              | 提交申请
-          end
-        //td = link_to 'Edit', edit_hz_company_path(hz_company)
+        //td
+        //  - if hz_company.approve_result.blank?
+        //   button class="btn btn-xs btn-default apply_this_company" data-comid="#{hz_company.id}" 
+        //      | 提交申请
+          
+        td = link_to '修改', edit_hz_company_path(hz_company),{:class=>"btn btn-xs btn-default"}
         //td = link_to 'Destroy', hz_company, data: {:confirm => 'Are you sure?'}, :method => :delete
 
 br

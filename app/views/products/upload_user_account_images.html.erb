@@ -1,0 +1,9 @@
+<%if @success%>
+	<script type="text/javascript">
+	window.parent.CKEDITOR.tools.callFunction("<%=@callback%>",'<%=@url%>','');
+	</script>
+<%else%>
+	<script type="text/javascript">
+	window.parent.CKEDITOR.tools.callFunction("<%=@callback%>",'','<%=t :upload_error_happened %>');
+	</script>
+<%end%>

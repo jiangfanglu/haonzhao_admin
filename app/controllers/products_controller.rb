@@ -1,7 +1,7 @@
 class ProductsController < ApplicationController
   include ApplicationHelper
   before_action :set_product, only: [:show, :edit, :update, :destroy, :active, :inactive]
-
+  skip_before_filter  :verify_authenticity_token, only: [:upload_user_account_images]
   # GET /products
   # GET /products.json
   def index
@@ -21,7 +21,7 @@ class ProductsController < ApplicationController
     @attribute_groups = AttributeGroupDescription.order("name asc").all.uniq_by(&:name)
     @countries = HzCountry.all.order("name asc")
     #@product_stock_status = StockStatus.where("name = 'In Stock'").first.stock_status_id
-
+    @hz_companies = HzCompany.all
     @post_taxes = HzPostTax.all
     @units = HzUnit.all
     @purposes = HzPurpose.all
@@ -152,6 +152,20 @@ class ProductsController < ApplicationController
               @shop_category.save
             end
           end
+
+          @hz_product = HzProduct.new(
+              :barcode=>params[:hz][:barcode],
+              :post_tax_no=>params[:hz][:post_tax_no],
+              :material_address=>params[:hz][:material_address],
+              :unit_code=>params[:hz][:unit],
+              :hz_purpose_code=>params[:hz][:purpose],
+              :standard=>params[:hz][:standard],
+              :main_elements=>params[:hz][:main_elements],
+              :product_id=>@product.product_id,
+              :hz_company_id=>params[:hz][:hz_company_id]
+            )
+          @hz_product.save
+
         format.html { redirect_to @product, notice: 'Product was successfully created.' }
         format.json { render action: 'show', status: :created, location: @product }
       else
@@ -197,6 +211,45 @@ class ProductsController < ApplicationController
     end
   end
 
+  def upload_user_account_images
+    @success = true
+    foldername = "#{USER_UPLOADS}#{current_user.id}/"
+    filename = Base64.encode64(Marshal.dump({:user_id=>current_user.id,:date_time=>Time.new.to_i})).gsub(/\n/,'')
+
+    filepath = upload_image_basic_with_filename(params[:upload], filename, foldername)
+    if filepath != "FAILED"
+      uu = UserUpload.new
+      uu.filename = filepath
+      uu.filesize = 0
+      uu.user_id = current_user.id
+      begin
+        uu.save!
+      rescue Exception => e
+        logger.debug e.message
+      end
+      @success = true
+      @url = "#{MEIDIA_SERVER}/#{BUCKET_NAME}/#{foldername}#{filepath}"
+    else
+      @success = false
+    end
+    @callback = params[:CKEditorFuncNum]
+    render :layout=>false
+  end
+
+  def browse_user_images
+    @user_uploads = UserUpload.where("user_id = ?", current_user.id)
+
+    @images = []
+    @user_uploads.each do |uu|
+      @images.append({
+          "image"=> "#{MEIDIA_SERVER}/#{BUCKET_NAME}/#{USER_UPLOADS}#{current_user.id}/#{uu.filename}",
+          "thumb"=> "#{MEIDIA_SERVER}/#{BUCKET_NAME}/#{USER_UPLOADS}#{current_user.id}/#{uu.filename}",
+          "folder"=> "#{MEIDIA_SERVER}/#{BUCKET_NAME}/#{USER_UPLOADS}#{current_user.id}"
+        })
+    end
+    render :json=>@images.to_json, :layout=>false
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_product
@@ -206,5 +259,35 @@ class ProductsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_params
       params.require(:product).permit(:model, :sku, :upc, :ean, :jan, :isbn, :mpn, :location, :quantity, :stock_status_id, :image, :manufacturer_id, :shipping, :price, :points, :tax_class_id, :date_available, :weight, :weight_class_id, :length, :width, :height, :length_class_id, :subtract, :minimum, :sort_order, :status, :date_added, :date_modified, :viewed, :name, :description, :meta_description, :meta_keyword)
+    end
+
+    def upload_image_basic_with_filename(f, filename, foldername)
+      tmp = f.tempfile
+      ext = File.extname(f.original_filename)
+
+      basic_file_name = "#{filename}#{ext}".downcase
+
+      # logger.debug basic_file_name
+
+      image = MiniMagick::Image.open(tmp.path)
+
+      # PUT files to Aliyun OSS code here start
+        store_aliyunoss_fail = false
+        begin
+        response = Aliyun::OSS::OSSObject.store(
+          "#{foldername}#{basic_file_name}",
+          open(tmp.path),
+          BUCKET_NAME)
+      rescue Aliyun::OSS::ResponseError => error
+        puts "#{error.code}:#{error.message}"
+      end
+
+      if not response.success?
+          store_aliyunoss_fail = true
+         return "FAILED"
+    else
+      return basic_file_name
+      end
+      # Aliyun OSS code finish
     end
 end

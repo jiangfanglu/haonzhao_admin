@@ -8,7 +8,8 @@ HaonzhaoAdmin::Application.routes.draw do
       get :inactive, :active
     end
     collection do
-      get :newp, :attributes
+      get :newp, :attributes, :browse_user_images
+      post :upload_user_account_images
     end
   end
 

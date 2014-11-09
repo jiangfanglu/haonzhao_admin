@@ -17,21 +17,7 @@
     = f.text_field :company_name, :class=>"form-control"
   .field
     = f.label :company_type
-    select name="hz_company[company_type]" id="hz_company_company_type" class="form-control"
-      option value=""
-        | 选择公司类别
-      option value="1"
-        | 商家
-      option value="2"
-        | 平台企业
-      option value="3"
-        | 物流企业
-      option value="4"
-        | 仓储企业
-      option value="5"
-        | 第三方支付企业
-      option value="6"
-        | 报关行企业
+    == select("hz_company", "company_type", @company_types.collect {|t| [ t[:name], t[:code] ] }, {include_blank: "企业类型",:selected=>@hz_company.company_type},{:class => 'form-control',:id=>'hz_company_company_type'})
   .field
     = f.label :company_address
     = f.text_field :company_address, :class=>"form-control"
@@ -64,5 +50,5 @@
     = f.text_field :email, :class=>"form-control"
   .field
     = f.label :custom_code
-    == select("hz_company", "custom_code", @custom.collect {|t| [ t.name, t.code ] }, {include_blank: "选择报关行"},{:class => 'form-control',:id=>'hz_company_custom_code'})
+    == select("hz_company", "custom_code", @custom.collect {|t| [ t.name, t.code ] }, {include_blank: "选择报关行",:selected=>@hz_company.custom_code},{:class => 'form-control',:id=>'hz_company_custom_code'})
   .actions = f.submit 'Save'
