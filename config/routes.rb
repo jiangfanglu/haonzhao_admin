@@ -1,6 +1,10 @@
 HaonzhaoAdmin::Application.routes.draw do
 
 
+  resources :pages
+
+  resources :fp_group_products
+
   resources :hz_companies
 
   resources :products do

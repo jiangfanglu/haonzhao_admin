@@ -1,0 +1,2 @@
+module FpGroupProductsHelper
+end

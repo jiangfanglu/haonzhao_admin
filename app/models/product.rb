@@ -15,6 +15,9 @@ class Product < ActiveRecord::Base
   has_many :product_images
   has_many :product_discounts
   has_many :categories, through: :productcategories
+
+  has_many :fp_group_products
+
   belongs_to :shop,:foreign_key=>"manufacturer_id"
 
   has_many :order_products, :primary_key => "product_id", :foreign_key => "product_id"

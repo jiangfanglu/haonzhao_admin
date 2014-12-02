@@ -1,0 +1,23 @@
+h1 Listing fp_group_products
+
+table
+  thead
+    tr
+      th Product
+      th Group
+      th
+      th
+      th
+
+  tbody
+    - @fp_group_products.each do |fp_group_product|
+      tr
+        td = fp_group_product.product_id
+        td = fp_group_product.group_id
+        td = link_to 'Show', fp_group_product
+        td = link_to 'Edit', edit_fp_group_product_path(fp_group_product)
+        td = link_to 'Destroy', fp_group_product, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Fp group product', new_fp_group_product_path

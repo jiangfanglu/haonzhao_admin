@@ -15,9 +15,11 @@
     <li><a href='/featured_shops'>主打品牌</a></li>
   </ul>
 <%end%>
-<%if ['available_custom_categories', 'category_groups', 'categories','shippings','shipping_options','products','orders','custom_categories','templates','template_categories','template_to_shops'].include? params[:controller] %>
+<%if ['available_custom_categories', 'category_groups', 'categories','shippings','shipping_options','products','orders','custom_categories','templates','template_categories','template_to_shops','fp_group_products','pages'].include? params[:controller] %>
   <div class="page-header">内容管理</div>
   <ul class='nav'>
+    <li><a href='/pages'>页面内容管理</a></li>
+    <li><a href='/fp_group_products'>首页推荐分类产品</a></li>
     <li><a href='/available_custom_categories'>提供定制的分类</a></li>
     <li><a href='/category_groups'>管理分类导航</a></li>
     <li><a href='/categories'>分类管理</a></li>

@@ -1,0 +1,12 @@
+p#notice = notice
+
+p
+  strong Product:
+  = @fp_group_product.product_id
+p
+  strong Group:
+  = @fp_group_product.group_id
+
+= link_to 'Edit', edit_fp_group_product_path(@fp_group_product)
+'|
+= link_to 'Back', fp_group_products_path

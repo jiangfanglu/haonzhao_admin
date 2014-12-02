@@ -1,0 +1,15 @@
+= form_for @fp_group_product do |f|
+  - if @fp_group_product.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@fp_group_product.errors.count, "error")} prohibited this fp_group_product from being saved:"
+      ul
+        - @fp_group_product.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :product_id
+    = f.number_field :product_id
+  .field
+    = f.label :group_id
+    = f.number_field :group_id
+  .actions = f.submit 'Save'
