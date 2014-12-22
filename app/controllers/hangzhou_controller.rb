@@ -422,8 +422,8 @@ class HangzhouController < ApplicationController
                   xml.email(order.email) #optional
                   xml.telNumber(order.telephone)
                   xml.address("#{order.shipping_country}#{order.shipping_zone}#{order.shipping_city}#{order.shipping_address_1}")
-                  xml.paperType(order.customer.user.blank? ? "" : "0"+order.customer.user.customer_identifications.where("identification_type = '1'").first.identification_type.to_s) 
-                            xml.paperNumber(order.customer.user.blank? ? "" : order.customer.user.customer_identifications.where("identification_type = '1'").first.identification_no)
+                  xml.paperType(order.customer.user.blank? ? "" : "0"+order.address.customer_identification.identification_type.to_s) 
+                            xml.paperNumber(order.customer.user.blank? ? "" : order.address.customer_identification.identification_no)
                 end
               end
             #end
@@ -487,8 +487,8 @@ class HangzhouController < ApplicationController
                   xml.consignee(order.firstname)
                   xml.senderCountry(way_bill.sender_country) #参数表
                   xml.senderCity(way_bill.sender_city)
-                  xml.paperType(order.customer.user.customer_identifications.where("identification_type = '1'").first.identification_type.to_s) #身份证（试点时期）
-                  xml.paperNumber(order.customer.user.customer_identifications.where("identification_type = '1'").first.identification_no)
+                  xml.paperType(order.address.customer_identification.identification_type.to_s) #身份证（试点时期）
+                  xml.paperNumber(order.address.customer_identification.identification_no)
                   #xml.paperType("") #身份证（试点时期）
                   #xml.paperNumber("")
                   xml.worth(order.total) #只有数字，表体所有商品成交总价的和
