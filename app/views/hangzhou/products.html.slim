@@ -7,19 +7,20 @@ p
     button type="button" class="btn btn-info applyall btn-sm"
       | 申请备案
     | &nbsp;
-    //button type="button" class="btn btn-info checkresultall"
-    //  | 查看申报结果(刷新)
+    button type="button" class="btn btn-info product_shelfing"
+      | 产品上架
 table class="table table-bordered table-striped"
   thead
     tr
       th 
       th ID
-      th Name
-      th manufacturer
-      th model
-      th barcode
-      th recorded
-      th applied
+      th 品名
+      th 品牌
+      th 型号
+      th 条形码
+      th 已上架
+      th 备案时间
+      th 申请时间
       th
   tbody
     form id="productapplyform"
@@ -34,8 +35,13 @@ table class="table table-bordered table-striped"
           td = product.shop.name
           td = product.model
           td = product.hz_product.barcode if !product.hz_product.blank?
+          td class="text-center"
+            - if product.status
+              span class="glyphicon glyphicon-ok"
+            - else
+              span class="glyphicon glyphicon-remove" style="color:red;"
           td = product.hz_product.record_time if !product.hz_product.blank?
-          td = product.hz_product.applied_time if !product.hz_product.blank?
+          td = product.hz_product.process_time if !product.hz_product.blank?
           td = link_to '查看', product,:class=>"btn btn-default btn-xs"
       end
 
@@ -71,6 +77,20 @@ javascript:
       window.location.reload();
     });
   });
-  $(".checkresultall").click(function(){
-
+  $(".product_shelfing").click(function(){
+    if($(".tickbox:checked").length < 1){
+      alert("请选择需要备案的商品");
+      return false;
+    }
+    $(this).html("提交中...请耐心等待");
+    $(this).addClass("disabled");
+    $("#mask").show();
+    $.ajax({
+      url: '/hangzhou/product_shelfing',
+      type: 'post',
+      data: $("#productapplyform").serializeArray()
+    }).done(function(response){
+      //alert(response);
+      window.location.reload();
+    });
   });

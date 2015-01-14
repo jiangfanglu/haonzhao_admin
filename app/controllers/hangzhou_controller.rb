@@ -47,6 +47,16 @@ class HangzhouController < ApplicationController
     render :text=>"OK",:layout=>false
   end
 
+  def product_shelfing
+    @products = Product.where("oc_product.product_id in (?)",params[:tick])
+    @products.each do |product|
+      product.update_attributes(
+        status: 1 
+      )
+    end
+    render :text=>"OK",:layout=>false
+  end
+
   def apply_for_order_record
     @orderids = params[:order_info][:order_ids].split(",")
     @orders = Order.includes(:order_products).includes(:hz_order).where("order_id in (?)",@orderids)
@@ -58,11 +68,15 @@ class HangzhouController < ApplicationController
       )
 
       response = post_to_interface(order_xml(order), "IMPORTORDER")
-      order.hz_order.update_attributes(
-        approve_result: response[0], 
-        approve_comment: response[1], 
-        process_time: response[2] 
-      ) if response[0].to_i == 1
+      if response[0].to_i == 1
+        order.hz_order.update_attributes(
+          approve_result: response[0], 
+          approve_comment: response[1], 
+          process_time: response[2] 
+        ) 
+
+        order.order_status = OrderStatus.where(name: 'Import order Pending').first and save
+      end
     end
     render :text=>"OK",:layout=>false
   end
@@ -613,6 +627,7 @@ class HangzhouController < ApplicationController
           approve_comment: record_comment, 
           process_time: record_time
           )
+        hz_order.order.order_status = OrderStatus.where(name: 'Import Order Approved').first and save
       when "PERSONAL_GOODS_DECLAR"
         way_bill = HzWayBill.find_by_way_bill_no(doc.at_css("body list jkfResult businessNo").content.strip)
         way_bill.update_attributes(
