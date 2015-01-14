@@ -9,6 +9,7 @@ module ApplicationHelper
   	end
   	return text
   end
+  # def 
   def upload_product_image(f,user_id)
 	  	require 'fileutils'
 	  	tmp = f.tempfile

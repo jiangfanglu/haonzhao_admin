@@ -1,0 +1,31 @@
+h1 Listing content_products
+
+table class="table"
+  thead
+    tr
+      th Product
+      th Title
+      th Meta description
+      th Country code
+      th Video
+      th Tags
+      th
+      th
+      th
+
+  tbody
+    - @content_products.each do |content_product|
+      tr
+        td = content_product.product_id
+        td = content_product.title
+        td = content_product.meta_description
+        td = content_product.country_code
+        td = content_product.video
+        td = content_product.tags
+        td = link_to 'Show', content_product
+        td = link_to 'Edit', edit_content_product_path(content_product)
+        td = link_to 'Destroy', content_product, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Content product', new_content_product_path,:class=>"btn btn-default"

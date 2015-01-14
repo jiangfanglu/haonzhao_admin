@@ -1,0 +1,24 @@
+p#notice = notice
+
+p
+  strong Product:
+  = @content_product.product_id
+p
+  strong Title:
+  = @content_product.title
+p
+  strong Meta description:
+  = @content_product.meta_description
+p
+  strong Country code:
+  = @content_product.country_code
+p
+  strong Video:
+  = @content_product.video
+p
+  strong Tags:
+  = @content_product.tags
+
+= link_to 'Edit', edit_content_product_path(@content_product)
+'|
+= link_to 'Back', content_products_path

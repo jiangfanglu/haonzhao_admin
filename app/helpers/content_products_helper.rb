@@ -1,0 +1,2 @@
+module ContentProductsHelper
+end

@@ -96,7 +96,7 @@ class ProductsController < ApplicationController
         :subtract=>params[:product][:subtract], 
         :minimum=>params[:product][:minimum], 
         :sort_order=>params[:product][:sort_order], 
-        :status=>params[:product][:status], 
+        :status=>0, 
         :date_added=>Time.now, 
         :date_modified=>Time.now,
         :viewed=>params[:product][:viewed]
