@@ -76,6 +76,7 @@ class HangzhouController < ApplicationController
         ) 
 
         order.order_status = OrderStatus.where(name: 'Import order Pending').first and save
+        order.write_order_history "Import order Pending", "seller", get_admin.id
       end
     end
     render :text=>"OK",:layout=>false
@@ -628,6 +629,7 @@ class HangzhouController < ApplicationController
           process_time: record_time
           )
         hz_order.order.order_status = OrderStatus.where(name: 'Import Order Approved').first and save
+        order.write_order_history "Import Order Approved", "seller", get_admin.id
       when "PERSONAL_GOODS_DECLAR"
         way_bill = HzWayBill.find_by_way_bill_no(doc.at_css("body list jkfResult businessNo").content.strip)
         way_bill.update_attributes(

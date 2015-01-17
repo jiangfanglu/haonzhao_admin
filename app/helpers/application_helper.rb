@@ -9,6 +9,11 @@ module ApplicationHelper
   	end
   	return text
   end
+
+  def get_admin
+  	User.find_by_username "admin"
+  end
+
   # def 
   def upload_product_image(f,user_id)
 	  	require 'fileutils'

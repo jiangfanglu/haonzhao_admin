@@ -23,4 +23,7 @@ class Order < ActiveRecord::Base
     self.order_status = OrderStatus.where(name: 'Canceled').first and save
   end
   
+  def write_order_history operation_name, operator, uid
+    OrderHistory.create(operation: Operation.find_by_name(operation_name), order_id: self.order_id, order_status_id: self.order_status_id, operator_role: operator, operator_id: uid)
+  end
 end

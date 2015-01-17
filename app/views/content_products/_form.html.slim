@@ -19,8 +19,14 @@
     = f.label :video
     = f.text_field :video
   .field
+    = f.label :max_price
+    = f.text_field :max_price
+  .field
+    = f.label :min_price
+    = f.text_field :min_price
+  .field
     = f.label :tags
-    = f.text_field :tags
+    = f.text_field :tags  
   .field
     = f.label :country_code
     == select("content_product", "country_code", @countries.collect {|t| [ t[:name], t[:code] ] }, {include_blank: "国家代码",:selected=>@content_product.country_code},{:class => 'form-control',:id=>'content_product_country_code'})
