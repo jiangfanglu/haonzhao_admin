@@ -1,0 +1,18 @@
+p#notice = notice
+
+p
+  strong Name:
+  = @tax_free_package.name
+p
+  strong Description:
+  = @tax_free_package.description
+p
+  strong Purchase count:
+  = @tax_free_package.purchase_count
+p
+  strong Viewed:
+  = @tax_free_package.viewed
+
+= link_to 'Edit', edit_tax_free_package_path(@tax_free_package)
+'|
+= link_to 'Back', tax_free_packages_path

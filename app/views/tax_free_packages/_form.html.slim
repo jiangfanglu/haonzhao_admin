@@ -1,0 +1,21 @@
+= form_for @tax_free_package do |f|
+  - if @tax_free_package.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@tax_free_package.errors.count, "error")} prohibited this tax_free_package from being saved:"
+      ul
+        - @tax_free_package.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :description
+    = f.text_area :description
+  .field
+    = f.label :purchase_count
+    = f.number_field :purchase_count
+  .field
+    = f.label :viewed
+    = f.number_field :viewed
+  .actions = f.submit 'Save'

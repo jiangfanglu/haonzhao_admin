@@ -1,0 +1,27 @@
+h1 Listing tax_free_packages
+
+table
+  thead
+    tr
+      th Name
+      th Description
+      th Purchase count
+      th Viewed
+      th
+      th
+      th
+
+  tbody
+    - @tax_free_packages.each do |tax_free_package|
+      tr
+        td = tax_free_package.name
+        td = tax_free_package.description
+        td = tax_free_package.purchase_count
+        td = tax_free_package.viewed
+        td = link_to 'Show', tax_free_package
+        td = link_to 'Edit', edit_tax_free_package_path(tax_free_package)
+        td = link_to 'Destroy', tax_free_package, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Tax free package', new_tax_free_package_path

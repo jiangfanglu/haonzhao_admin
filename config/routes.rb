@@ -1,6 +1,10 @@
 HaonzhaoAdmin::Application.routes.draw do
 
 
+  resources :product_to_tax_free_packages
+
+  resources :tax_free_packages
+
   resources :content_products
 
   resources :pages

@@ -1,0 +1,12 @@
+p#notice = notice
+
+p
+  strong Package:
+  = @product_to_tax_free_package.package_id
+p
+  strong Product:
+  = @product_to_tax_free_package.product_id
+
+= link_to 'Edit', edit_product_to_tax_free_package_path(@product_to_tax_free_package)
+'|
+= link_to 'Back', product_to_tax_free_packages_path

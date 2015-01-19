@@ -5,7 +5,9 @@
       ul
         - @content_product.errors.full_messages.each do |message|
           li = message
-
+  .field
+    = f.label :package_id
+    = f.text_field :package_id, :value=>0
   .field
     = f.label :alias
     = f.text_field :alias
