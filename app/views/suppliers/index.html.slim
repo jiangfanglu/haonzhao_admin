@@ -1,0 +1,41 @@
+h1 Listing suppliers
+
+table
+  thead
+    tr
+      th Name
+      th Identification
+      th Address
+      th Country code
+      th Contact
+      th Contact no
+      th Email
+      th Website
+      th Wechat
+      th Qq
+      th Grade
+      th
+      th
+      th
+
+  tbody
+    - @suppliers.each do |supplier|
+      tr
+        td = supplier.name
+        td = supplier.identification
+        td = supplier.address
+        td = supplier.country_code
+        td = supplier.contact
+        td = supplier.contact_no
+        td = supplier.email
+        td = supplier.website
+        td = supplier.wechat
+        td = supplier.qq
+        td = supplier.grade
+        td = link_to 'Show', supplier
+        td = link_to 'Edit', edit_supplier_path(supplier)
+        td = link_to 'Destroy', supplier, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Supplier', new_supplier_path

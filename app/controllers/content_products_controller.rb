@@ -28,13 +28,15 @@ class ContentProductsController < ApplicationController
   def create
     # @content_product = ContentProduct.new(content_product_params)
     @content_product = ContentProduct.new(
-        :product_id=>params[:content_product][:product_id], 
+        :package_id=>params[:content_product][:package_id], 
         :title=>params[:content_product][:title], 
         :meta_description=>params[:content_product][:meta_description], 
         :country_code=>params[:content_product][:country_code], 
         :video=>params[:content_product][:video], 
         :tags=>params[:content_product][:tags], 
-        :alias=>params[:content_product][:alias]
+        :alias=>params[:content_product][:alias],
+        :min_price=>params[:content_product][:min_price],
+        :max_price=>params[:content_product][:max_price]
       )
 
     respond_to do |format|
@@ -44,11 +46,11 @@ class ContentProductsController < ApplicationController
             n=0
             params[:product_images].each do |f|
               filename = Base64.encode64(Marshal.dump({:user_id=>@content_product.id,:date_time=>Time.new.to_i})).gsub(/\n/,'')
-              uploaded_response = upload_image_basic_with_filename(f,"featured",filename)
+              uploaded_response = upload_image_basic_with_filename(f,filename,"featured/")
               unless uploaded_response == "FAILED"
                   @product_image = ContentProductImage.new(
                       :content_product_id=>@content_product.id,
-                      :image => filename,
+                      :image => uploaded_response,
                       :sort_order => n
                     )
                   @product_image.save

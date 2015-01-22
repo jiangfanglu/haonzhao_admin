@@ -1,6 +1,8 @@
 HaonzhaoAdmin::Application.routes.draw do
 
 
+  resources :suppliers
+
   resources :product_to_tax_free_packages
 
   resources :tax_free_packages

@@ -16,7 +16,7 @@ table class="table"
   tbody
     - @content_products.each do |content_product|
       tr
-        td = content_product.product_id
+        td = content_product.package_id
         td = content_product.title
         td = content_product.meta_description
         td = content_product.country_code

@@ -1,0 +1,39 @@
+p#notice = notice
+
+p
+  strong Name:
+  = @supplier.name
+p
+  strong Identification:
+  = @supplier.identification
+p
+  strong Address:
+  = @supplier.address
+p
+  strong Country code:
+  = @supplier.country_code
+p
+  strong Contact:
+  = @supplier.contact
+p
+  strong Contact no:
+  = @supplier.contact_no
+p
+  strong Email:
+  = @supplier.email
+p
+  strong Website:
+  = @supplier.website
+p
+  strong Wechat:
+  = @supplier.wechat
+p
+  strong Qq:
+  = @supplier.qq
+p
+  strong Grade:
+  = @supplier.grade
+
+= link_to 'Edit', edit_supplier_path(@supplier)
+'|
+= link_to 'Back', suppliers_path
