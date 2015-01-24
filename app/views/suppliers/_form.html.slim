@@ -5,7 +5,9 @@
       ul
         - @supplier.errors.full_messages.each do |message|
           li = message
-
+  .field
+    = f.label :shop_id
+    = f.text_field :shop_id
   .field
     = f.label :name
     = f.text_field :name
