@@ -28,6 +28,14 @@ class SuppliersController < ApplicationController
 
     respond_to do |format|
       if @supplier.save
+	  
+		@hz_manufacturer = HzManufacturer.new
+		@hz_manufacturer.address=params[:supplier][:address]
+		@hz_manufacturer.manufacturer_id=params[:supplier][:shop_id]
+		@hz_manufacturer.tel=params[:supplier][:contact_no]
+		@hz_manufacturer.hz_country_code=params[:supplier][:country_code]
+		@hz_manufacturer.save
+	  
         format.html { redirect_to @supplier, notice: 'Supplier was successfully created.' }
         format.json { render action: 'show', status: :created, location: @supplier }
       else
@@ -42,6 +50,14 @@ class SuppliersController < ApplicationController
   def update
     respond_to do |format|
       if @supplier.update(supplier_params)
+		
+		@hz_manufacturer = HzManufacturer.find_by_manufacturer_id @supplier.shop_id
+		@hz_manufacturer.address=params[:supplier][:address]
+		@hz_manufacturer.manufacturer_id=params[:supplier][:shop_id]
+		@hz_manufacturer.tel=params[:supplier][:contact_no]
+		@hz_manufacturer.hz_country_code=params[:supplier][:country_code]
+		@hz_manufacturer.save
+	  
         format.html { redirect_to @supplier, notice: 'Supplier was successfully updated.' }
         format.json { head :no_content }
       else
