@@ -16,7 +16,7 @@ class ProductsController < ApplicationController
   # # GET /products/new
   def new
     @product = Product.new
-    @shops = Shop.where("register_type = 2")
+    @shops = Supplier.all
     @categories = Category.includes(:category_description).where("status = 1")
     @attribute_groups = AttributeGroupDescription.order("name asc").all.uniq_by(&:name)
     @countries = HzCountry.all.order("name asc")

@@ -1,6 +1,6 @@
 div class="field"
 	label 品牌
-	== select("product", "manufacturer_id", @shops.collect {|t| [ t.name, t.manufacturer_id ] }, {},{:class => 'form-control',:id=>'product_manufacturer_id'})
+	== select("product", "manufacturer_id", @shops.collect {|t| [ t.name, t.shop_id ] }, {},{:class => 'form-control',:id=>'product_manufacturer_id'})
 
 div class="field"
 	label 产品主视图
