@@ -69,6 +69,6 @@ class TaxFreePackagesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def tax_free_package_params
-      params.require(:tax_free_package).permit(:name, :description, :purchase_count, :viewed)
+      params.require(:tax_free_package).permit(:description, :name, :purchase_count, :viewed,:supplier_id,:meta_desctiption)
     end
 end
