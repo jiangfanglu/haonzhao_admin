@@ -21,6 +21,7 @@ class ContentProductsController < ApplicationController
 
   # GET /content_products/1/edit
   def edit
+	@countries = HzCountry.all.order("name asc")
   end
 
   # POST /content_products
